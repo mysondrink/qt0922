@@ -1,4 +1,7 @@
+from func.infoPage import infoMessage
 from gui.home import *
+from inf.probeThread import MyProbe
+
 
 class homePage(Ui_Form, QWidget):
     next_page = Signal(str)
@@ -12,6 +15,22 @@ class homePage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        # self.startProbeMem()
+
+    """
+    # 开始存储探测
+    def startProbeMem(self):
+        self.myprobe = MyProbe()
+        self.myprobe.update_progress.connect(self.memWarning)
+        self.myprobe.start()
+
+    # 存储满警告
+    def memWarning(self):
+        m_title = "警告"
+        m_info = "存储已经占满，请清理图片！！！"
+        infoMessage(m_info, m_title)
+        return
+    """
 
     @Slot()
     def on_btnPower_clicked(self):

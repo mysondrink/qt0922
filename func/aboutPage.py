@@ -1,3 +1,4 @@
+from func.infoPage import infoMessage
 from gui.about import *
 
 
@@ -15,9 +16,23 @@ class aboutPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
+    def uploadFromUSB(self):
+        m_title = ""
+        m_info = "上传完成！"
+        infoMessage(m_info, m_title)
+
     @Slot()
-    def on_btnConfirm_clicked(self):
-        pass
+    def on_btnUpload_clicked(self):
+        m_title = ""
+        m_info = "上传中！"
+        infoMessage(m_info, m_title)
+        # 创建定时器
+        self.change_timer = QTimer()
+        self.change_timer.timeout.connect(self.uploadFromUSB())
+        # 设置定时器延迟时间，单位为毫秒
+        # 延迟2秒跳转
+        delay_time = 2000
+        self.change_timer.start(delay_time)
 
     @Slot()
     def on_btnReturn_clicked(self):

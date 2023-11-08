@@ -16,6 +16,7 @@ class testPage(Ui_Form, QWidget):
     next_page = Signal(str)
     def __init__(self):
         super().__init__()
+        self.genderCb = None
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
@@ -28,9 +29,25 @@ class testPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.ui.stackedWidget.setCurrentIndex(0)
+        self.genderCb = QButtonGroup()
+        self.genderCb.addButton(self.ui.radioButton)
+        self.genderCb.addButton(self.ui.radioButton_2)
+        self.genderCb.setId(self.ui.radioButton, 0)
+        self.genderCb.setId(self.ui.radioButton_2, 1)
+
+        self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
 
         self.setFocusWidget()
         self.installEvent()
+        self.setReagentCb()
+        self.mytest()
+
+    def mytest(self):
+        self.ui.nameLine.setText("123")
+        self.ui.docCb.setText("123")
+        self.ui.ageLine.setText("123")
+        self.ui.departCb.setText("123")
 
     def installEvent(self):
         for item in self.focuswidget:
@@ -227,7 +244,13 @@ class testPage(Ui_Form, QWidget):
 
         patient_name = self.ui.nameLine.text()
         patient_age = self.ui.ageLine.text()
-        patient_gender = self.ui.genderCb.currentText()
+        id_num = self.genderCb.checkedId()
+        if id_num == 0:
+            patient_gender = "男"
+        else:
+            patient_gender = "女"
+
+        # patient_gender = self.ui.genderCb.currentText()
 
         item_type = self.ui.modeBox_1.currentText()
         pic_name = name_pic
@@ -238,7 +261,8 @@ class testPage(Ui_Form, QWidget):
         doctor = self.ui.docCb.text()
         depart = self.ui.departCb.text()
         age = self.ui.ageLine.text()
-        gender = self.ui.genderCb.currentText()
+        gender = patient_gender
+        # gender = self.ui.genderCb.currentText()
         name = self.ui.nameLine.text()
 
         matrix = self.ui.typeLabel.text()
@@ -270,6 +294,7 @@ class testPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
+    # 获取试剂卡的信息
     def setReagentCb(self):
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
@@ -296,24 +321,24 @@ class testPage(Ui_Form, QWidget):
             self.reagent_matrix_info.append(x[3])
 
         self.ui.modeBox_1.clear()
-        self.ui.modeBox_3.clear()
+        # self.ui.modeBox_3.clear()
         self.ui.modeBox_1.addItems(self.reagent_type)
         self.ui.modeBox_1.setCurrentIndex(-1)
         self.ui.typeLabel.setText("")
-        self.ui.modeBox_3.addItems(self.reagent_type)
-        self.ui.modeBox_3.setCurrentIndex(-1)
+        # self.ui.modeBox_3.addItems(self.reagent_type)
+        # self.ui.modeBox_3.setCurrentIndex(-1)
 
-        self.ui.deleteCb.clear()
-        self.ui.deleteCb.addItems(self.reagent_type)
-        self.ui.editCb.clear()
-        self.ui.editCb.addItems(self.reagent_type)
+        # self.ui.deleteCb.clear()
+        # self.ui.deleteCb.addItems(self.reagent_type)
+        # self.ui.editCb.clear()
+        # self.ui.editCb.addItems(self.reagent_type)
 
         # 释放内存
         cursor.close()
         connection.close()
 
     def changeType(self):
-        super().changeType()
+        # super().changeType()
         if self.ui.modeBox_1.currentText() == '':
             return
         text = self.reagent_matrix[self.reagent_type.index(self.ui.modeBox_1.currentText())]
@@ -326,7 +351,7 @@ class testPage(Ui_Form, QWidget):
 
     def memWarning(self):
         m_title = "警告"
-        m_info = "存储已经占满，请清理图片！！！"
+        m_info = "存储已经占满，请清理图片！"
         infoMessage(m_info, m_title)
         self.ui.btnData.setEnabled(False)
         # self.ui.btnHistory.setEnabled(False)
@@ -345,14 +370,14 @@ class testPage(Ui_Form, QWidget):
             self.ui.stackedWidget.setCurrentIndex(0)
     @Slot()
     def on_btnConfirm_clicked(self):
-        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine == "" or self.ui.ageLine == "" or \
-                self.ui.genderCb.currentIndex() == -1 or self.ui.departCb == "" or self.ui.docCb == "":
+        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine == "" or self.ui.ageLine == "" \
+                or self.ui.departCb == "" or self.ui.docCb == "":
             m_title = ""
             m_info = "请填写完信息！"
             infoMessage(m_info, m_title)
             return
 
-        self.setTabelView()
+        self.setTableView()
 
         self.ui.stackedWidget.setCurrentIndex(1)
         self.ui.btnExe.show()
@@ -360,13 +385,24 @@ class testPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnExe_clicked(self):
+        m_title = ""
+        m_info = "照片生成中！"
+        infoMessage(m_info, m_title)
+        # 创建定时器
+        self.change_timer = QTimer()
+        self.change_timer.timeout.connect(self.btnExe_clicked())
+        # 设置定时器延迟时间，单位为毫秒
+        # 延迟2秒跳转
+        delay_time = 2000
+        self.change_timer.start(delay_time)
+
+    def btnExe_clicked(self):
         self.ui.btnExe.hide()
         self.ui.btnSwitch.show()
         self.ui.btnPrint.show()
         self.ui.stackedWidget.setCurrentIndex(2)
         self.ui.btnReturn.setGeometry(539, 10, 254, 80)
         self.takePicture()
-
 
     @Slot()
     def on_btnSwitch_clicked(self):

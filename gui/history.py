@@ -89,7 +89,7 @@ class Ui_Form(object):
 "QCalendarWidget QSpinBox::down-arrow\n"
 " { width:56px;  height:56px; }")
         self.dateBox.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
-        self.dateBox.setDateTime(QDateTime(QDate(2019, 12, 27), QTime(0, 0, 0)))
+        self.dateBox.setDateTime(QDateTime(QDate(2019, 12, 26), QTime(16, 0, 0)))
         self.label_2 = QLabel(self.page)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(160, 70, 136, 67))
@@ -233,7 +233,7 @@ class Ui_Form(object):
 "")
         self.btnReport = QPushButton(self.frame)
         self.btnReport.setObjectName(u"btnReport")
-        self.btnReport.setGeometry(QRect(275, 10, 254, 80))
+        self.btnReport.setGeometry(QRect(404, 10, 187, 80))
         self.btnReport.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -246,8 +246,21 @@ class Ui_Form(object):
 "")
         self.btnPrint = QPushButton(self.frame)
         self.btnPrint.setObjectName(u"btnPrint")
-        self.btnPrint.setGeometry(QRect(10, 10, 254, 80))
+        self.btnPrint.setGeometry(QRect(207, 10, 187, 80))
         self.btnPrint.setStyleSheet(u"QPushButton {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:#05abc2;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(255, 0, 0);\n"
+"}\n"
+"")
+        self.btnDownload = QPushButton(self.frame)
+        self.btnDownload.setObjectName(u"btnDownload")
+        self.btnDownload.setGeometry(QRect(10, 10, 187, 80))
+        self.btnDownload.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color:#05abc2;\n"
@@ -276,5 +289,6 @@ class Ui_Form(object):
         self.btnDetail.setText(QCoreApplication.translate("Form", u"\u8be6\u60c5", None))
         self.btnReport.setText(QCoreApplication.translate("Form", u"\u62a5\u544a\u5355", None))
         self.btnPrint.setText(QCoreApplication.translate("Form", u"\u6253\u5370", None))
+        self.btnDownload.setText(QCoreApplication.translate("Form", u"\u4e0b\u8f7d", None))
     # retranslateUi
 

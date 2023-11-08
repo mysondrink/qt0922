@@ -4,6 +4,7 @@ from func.infoPage import infoMessage
 import pymysql
 import math
 import frozen
+from utils.report import MyReport
 
 header_list = ["试剂卡编号", "采样时间",  "病人编号" , "病人姓名"]
 
@@ -20,14 +21,19 @@ class historyPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.dateBox.setCalendarPopup(True)
+        self.ui.dateBox.setDateTime(QDateTime.currentDateTime())
 
         self.resetBtn_3()
+        self.ui.btnDownload.hide()
         self.ui.btnPrint.hide()
         self.ui.btnReport.hide()
+        self.setReagentCb()
+        self.setTableWidget()
 
     def resetBtn(self):
         self.ui.btnReport.setText('报告单')
         self.ui.btnReport.hide()
+        self.ui.btnDownload.hide()
         self.ui.btnPrint.hide()
         self.ui.stackedWidget.setCurrentIndex(1)
 
@@ -53,7 +59,7 @@ class historyPage(Ui_Form, QWidget):
                 m_title = "错误"
                 m_title = ""
                 m_info = "已经是第一页"
-                super().infoMessageBox(m_info, m_title)
+                infoMessage(m_info, m_title)
                 return
             self.current_page -= 1
         elif cur_page == 3:
@@ -61,7 +67,7 @@ class historyPage(Ui_Form, QWidget):
                 m_title = "错误"
                 m_title = ""
                 m_info = "已经是最后一页"
-                super().infoMessageBox(m_info, m_title)
+                infoMessage(m_info, m_title)
                 return
             self.current_page += 1
         min_page = self.current_page * self.page_size
@@ -226,10 +232,13 @@ class historyPage(Ui_Form, QWidget):
                 a = frozen.app_path()
                 b = self.time_list[num][:10]
                 c = i[0]
-                self.ui.picLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(%s/img/%s/%s.jpeg); "
-                                         "font: 20pt; "
-                                         "color: rgb(255,0,0);}"%(a, b, c))
+
+                self.ui.picLabel.setPixmap(QPixmap("./img/%s/%s.jpeg"%(b, c)))  # windows环境
+
+                # self.ui.picLabel.setStyleSheet("QLabel{"
+                #                          "border-image: url(%s/img/%s/%s.jpeg); "
+                #                          "font: 20pt; "
+                #                          "color: rgb(255,0,0);}"%(a, b, c))
             # 提交事务
             connection.commit()
         except Exception as e:
@@ -241,11 +250,74 @@ class historyPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
+    # 获取试剂卡的信息
+    def setReagentCb(self):
+        connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
+                                     charset='utf8')
+        # MySQL语句
+        sql = 'SELECT * FROM matrix_table'
+        # 获取标记
+        cursor = connection.cursor()
+        try:
+            # 执行SQL语句
+            cursor.execute(sql)
+            # 提交事务
+            connection.commit()
+        except Exception as e:
+            # print(str(e))
+            # 有异常，回滚事务
+            connection.rollback()
+        self.reagent_type = []
+        self.reagent_matrix = []
+        self.reagent_matrix_info = []
+
+        for x in cursor.fetchall():
+            self.reagent_type.append(x[1])
+            self.reagent_matrix.append(x[2])
+            self.reagent_matrix_info.append(x[3])
+
+        # self.ui.modeBox_1.clear()
+        self.ui.modeBox_3.clear()
+        # self.ui.modeBox_1.addItems(self.reagent_type)
+        # self.ui.modeBox_1.setCurrentIndex(-1)
+        # self.ui.typeLabel.setText("")
+        self.ui.modeBox_3.addItems(self.reagent_type)
+        self.ui.modeBox_3.setCurrentIndex(-1)
+
+        # self.ui.deleteCb.clear()
+        # self.ui.deleteCb.addItems(self.reagent_type)
+        # self.ui.editCb.clear()
+        # self.ui.editCb.addItems(self.reagent_type)
+
+        # 释放内存
+        cursor.close()
+        connection.close()
+
+    # 设置UI页面
+    def setTableWidget(self):
+        v = QVBoxLayout()
+        text = MyReport().gethtml()
+        self.myreport = QTextEdit()
+
+        str_list = []
+        for i in range(16):
+            str_list.append(str(i))
+        self.myreport.setHtml(text % tuple(str_list))
+
+        v.addWidget(self.myreport)
+        self.ui.tableWidget.setLayout(v)
+
+    def downLoadToUSB(self):
+        m_title = "错误"
+        m_title = ""
+        m_info = "下载完成！"
+        infoMessage(m_info, m_title)
+
     @Slot()
     def on_btnConfirm_clicked(self):
         if self.ui.modeBox_3.currentIndex() == -1:
             m_title = ""
-            m_info = "未选择试剂卡规格，请选择后执行该操作！"
+            m_info = "未选择试剂卡规格！"
             infoMessage(m_info, m_title)
         else:
             self.resetBtn_2()
@@ -268,11 +340,21 @@ class historyPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnDetail_clicked(self):
-        self.resetBtn_3()
-        self.ui.btnReturn.setGeometry(539, 10, 254, 80)
-        self.ui.btnReport.show()
-        self.ui.btnPrint.show()
-        self.ui.stackedWidget.setCurrentIndex(2)
+        if self.ui.historyTable.currentIndex().row() == -1:
+            m_title = "错误"
+            m_title = ""
+            m_info = "未选择试剂卡！"
+            infoMessage(m_info, m_title)
+            return
+        else:
+            self.resetBtn_3()
+            # self.ui.btnReturn.setGeometry(539, 10, 254, 80)
+            self.ui.btnReturn.setGeometry(601, 10, 187, 80)
+            self.ui.btnReport.show()
+            self.ui.btnDownload.show()
+            self.ui.btnPrint.show()
+            self.ui.stackedWidget.setCurrentIndex(2)
+            self.changePhoto()
 
     @Slot()
     def on_btnPrint_clicked(self):
@@ -303,3 +385,17 @@ class historyPage(Ui_Form, QWidget):
         elif self.ui.stackedWidget.currentIndex() == 3:
             self.resetBtn()
             self.resetBtn_2()
+
+    @Slot()
+    def on_btnDownload_clicked(self):
+        m_title = "错误"
+        m_title = ""
+        m_info = "下载中！"
+        infoMessage(m_info, m_title)
+        # 创建定时器
+        self.change_timer = QTimer()
+        self.change_timer.timeout.connect(self.downLoadToUSB())
+        # 设置定时器延迟时间，单位为毫秒
+        # 延迟2秒跳转
+        delay_time = 2000
+        self.change_timer.start(delay_time)

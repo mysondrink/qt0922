@@ -171,24 +171,6 @@ class Ui_Form(object):
 "color: rgb(0, 0, 0);\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "")
-        self.genderCb = QComboBox(self.page)
-        self.genderCb.setObjectName(u"genderCb")
-        self.genderCb.setGeometry(QRect(516, 189, 230, 40))
-        self.genderCb.setStyleSheet(u"QComboBox::drop-down{\n"
-"width:56px;  height:56px;\n"
-"}\n"
-"\n"
-"QComboBox{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"color: rgb(255, 255, 255);\n"
-"background-color: rgb(0, 0, 0);\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView {\n"
-"	background-color: rgb(0, 0, 0);/*\u80cc\u666f\u989c\u8272*/\n"
-"    padding: 1px 2px 1px 2px;  /*\u9488\u5bf9\u4e8e\u7ec4\u5408\u6846\u4e2d\u7684\u6587\u672c\u5185\u5bb9*/\n"
-"	color: rgb(255,255,255)\n"
-"}")
         self.pushButton = QPushButton(self.page)
         self.pushButton.setObjectName(u"pushButton")
         self.pushButton.setEnabled(False)
@@ -263,6 +245,14 @@ class Ui_Form(object):
         self.typeLabel.setObjectName(u"typeLabel")
         self.typeLabel.setGeometry(QRect(166, 110, 129, 31))
         self.typeLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.radioButton = QRadioButton(self.page)
+        self.radioButton.setObjectName(u"radioButton")
+        self.radioButton.setGeometry(QRect(530, 190, 95, 40))
+        self.radioButton.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.radioButton_2 = QRadioButton(self.page)
+        self.radioButton_2.setObjectName(u"radioButton_2")
+        self.radioButton_2.setGeometry(QRect(650, 190, 95, 40))
+        self.radioButton_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -374,6 +364,9 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
+        self.stackedWidget.setCurrentIndex(2)
+
+
         QMetaObject.connectSlotsByName(Form)
     # setupUi
 
@@ -400,7 +393,9 @@ class Ui_Form(object):
         self.label_8.setText(QCoreApplication.translate("Form", u"\u5e74\u9f84*", None))
         self.label_12.setText(QCoreApplication.translate("Form", u"\u53c2\u6570(\u9009\u586b)", None))
         self.typeLabel.setText("")
-        self.pic_info_label.setText(QCoreApplication.translate("Form", u"\u7167\u7247\u751f\u6210\u4e2d\u3002\u3002\u3002", None))
+        self.radioButton.setText(QCoreApplication.translate("Form", u"\u7537", None))
+        self.radioButton_2.setText(QCoreApplication.translate("Form", u"\u5973", None))
+        self.pic_info_label.setText("")
         self.label_16.setText(QCoreApplication.translate("Form", u"\u53c2\u65704", None))
         self.label_14.setText(QCoreApplication.translate("Form", u"\u53c2\u65702", None))
         self.label_13.setText(QCoreApplication.translate("Form", u"\u53c2\u65701", None))

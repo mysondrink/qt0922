@@ -104,7 +104,7 @@ background-color: rgb(255, 0, 0);
      <string>返回</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnConfirm">
+   <widget class="QPushButton" name="btnUpload">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -126,7 +126,7 @@ background-color: rgb(255, 0, 0);
 </string>
     </property>
     <property name="text">
-     <string>确认</string>
+     <string>上传</string>
     </property>
    </widget>
   </widget>

@@ -49,10 +49,10 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
-        self.btnConfirm = QPushButton(self.frame)
-        self.btnConfirm.setObjectName(u"btnConfirm")
-        self.btnConfirm.setGeometry(QRect(10, 360, 380, 80))
-        self.btnConfirm.setStyleSheet(u"QPushButton {\n"
+        self.btnUpload = QPushButton(self.frame)
+        self.btnUpload.setObjectName(u"btnUpload")
+        self.btnUpload.setGeometry(QRect(10, 360, 380, 80))
+        self.btnUpload.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color:#05abc2;\n"
@@ -74,6 +74,6 @@ class Ui_Form(object):
         self.label_35.setText(QCoreApplication.translate("Form", u"\u4eea\u5668\u578b\u53f7", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u5173\u4e8e\u4eea\u5668", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
-        self.btnConfirm.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
+        self.btnUpload.setText(QCoreApplication.translate("Form", u"\u4e0a\u4f20", None))
     # retranslateUi
 

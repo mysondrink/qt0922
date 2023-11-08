@@ -26,7 +26,8 @@ class loginPage(Ui_Form, QWidget):
         # h, w = self.width(), self.height()
         # self.setGeometry(screen.left(), screen.top() + screen_top, h, w)
         # self.showMaximized()
-
+        self.ui.nameLine.setText("test")
+        self.ui.numLine.setText("123456")
         self.setFocusWidget()
         self.installEvent()
 

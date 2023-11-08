@@ -1,3 +1,4 @@
+from func.infoPage import infoMessage
 from gui.set import *
 
 
@@ -14,10 +15,13 @@ class setPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.ui.modeBox_4.addItems(["5000x4000", "3000x2000"])
 
     @Slot()
     def on_btnConfirm_clicked(self):
-        pass
+        m_title = ""
+        m_info = "成功！"
+        infoMessage(m_info, m_title)
 
     @Slot()
     def on_btnReturn_clicked(self):
