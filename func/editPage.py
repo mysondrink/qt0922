@@ -333,7 +333,7 @@ class editPage(Ui_Form, QWidget):
         elif self.ui.stackedWidget.currentIndex() == 2:
             # 删除
             m_title = ""
-            m_info = "确认中！"
+            m_info = "确认中..."
             infoMessage(m_info, m_title)
             # 创建定时器
             self.change_timer = QTimer()

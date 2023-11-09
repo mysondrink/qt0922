@@ -34,10 +34,10 @@
    <widget class="QLabel" name="label_36">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>155</y>
+      <x>360</x>
+      <y>110</y>
       <width>311</width>
-      <height>91</height>
+      <height>60</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -50,10 +50,10 @@
    <widget class="QLabel" name="label_35">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>170</y>
+      <x>180</x>
+      <y>110</y>
       <width>121</width>
-      <height>61</height>
+      <height>60</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -127,6 +127,38 @@ background-color: rgb(255, 0, 0);
     </property>
     <property name="text">
      <string>上传</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>220</y>
+      <width>141</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+    </property>
+    <property name="text">
+     <string>软件版本号</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="version_label">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>220</y>
+      <width>311</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+    </property>
+    <property name="text">
+     <string>V1.0.1</string>
     </property>
    </widget>
   </widget>

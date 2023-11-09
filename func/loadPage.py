@@ -36,7 +36,7 @@ class loadPage(Ui_Form, QMainWindow):
         self.ui.title_label.setText('荧光判读仪器')
         self.ui.retry_icon_label.hide()
         self.ui.btnRetry.hide()
-        self.ui.textEdit.setEnabled(False)
+        # self.ui.textEdit.setEnabled(False)
         # self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)

@@ -281,39 +281,11 @@ class Ui_Form(object):
         self.page_3.setObjectName(u"page_3")
         self.pic_info_label = QLabel(self.page_3)
         self.pic_info_label.setObjectName(u"pic_info_label")
-        self.pic_info_label.setGeometry(QRect(30, 10, 351, 31))
+        self.pic_info_label.setGeometry(QRect(30, 10, 91, 31))
         self.pic_info_label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.label_16 = QLabel(self.page_3)
-        self.label_16.setObjectName(u"label_16")
-        self.label_16.setGeometry(QRect(30, 210, 80, 30))
-        self.label_16.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.para_4 = QLineEdit(self.page_3)
-        self.para_4.setObjectName(u"para_4")
-        self.para_4.setGeometry(QRect(130, 210, 230, 40))
-        self.para_4.setStyleSheet(u"QLineEdit{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"background-color:rgba(0,0,0,255);\n"
-"color: rgb(255,255,255);\n"
-"}")
-        self.label_14 = QLabel(self.page_3)
-        self.label_14.setObjectName(u"label_14")
-        self.label_14.setGeometry(QRect(30, 110, 80, 30))
-        self.label_14.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.label_13 = QLabel(self.page_3)
-        self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(30, 60, 80, 30))
-        self.label_13.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.para_3 = QLineEdit(self.page_3)
-        self.para_3.setObjectName(u"para_3")
-        self.para_3.setGeometry(QRect(130, 160, 230, 40))
-        self.para_3.setStyleSheet(u"QLineEdit{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"background-color:rgba(0,0,0,255);\n"
-"color: rgb(255,255,255);\n"
-"}")
         self.photoLabel = QLabel(self.page_3)
         self.photoLabel.setObjectName(u"photoLabel")
-        self.photoLabel.setGeometry(QRect(400, 10, 351, 331))
+        self.photoLabel.setGeometry(QRect(230, 10, 351, 331))
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -323,48 +295,11 @@ class Ui_Form(object):
         self.photoLabel.setMaximumSize(QSize(351, 331))
         self.photoLabel.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";")
         self.photoLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
-        self.label_17 = QLabel(self.page_3)
-        self.label_17.setObjectName(u"label_17")
-        self.label_17.setGeometry(QRect(30, 260, 80, 30))
-        self.label_17.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.para_2 = QLineEdit(self.page_3)
-        self.para_2.setObjectName(u"para_2")
-        self.para_2.setGeometry(QRect(130, 110, 230, 40))
-        self.para_2.setStyleSheet(u"QLineEdit{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"background-color:rgba(0,0,0,255);\n"
-"color: rgb(255,255,255);\n"
-"}")
-        self.para_1 = QLineEdit(self.page_3)
-        self.para_1.setObjectName(u"para_1")
-        self.para_1.setGeometry(QRect(130, 60, 230, 40))
-        self.para_1.setStyleSheet(u"QLineEdit{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"background-color:rgba(0,0,0,255);\n"
-"color: rgb(255,255,255);\n"
-"}")
-        self.label_15 = QLabel(self.page_3)
-        self.label_15.setObjectName(u"label_15")
-        self.label_15.setGeometry(QRect(30, 160, 80, 30))
-        self.label_15.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.para_5 = QLineEdit(self.page_3)
-        self.para_5.setObjectName(u"para_5")
-        self.para_5.setGeometry(QRect(130, 260, 230, 40))
-        self.para_5.setStyleSheet(u"QLineEdit{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"background-color:rgba(0,0,0,255);\n"
-"color: rgb(255,255,255);\n"
-"}")
-        self.pushButton_8 = QPushButton(self.page_3)
-        self.pushButton_8.setObjectName(u"pushButton_8")
-        self.pushButton_8.setGeometry(QRect(190, 310, 200, 40))
-        self.pushButton_8.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";\n"
-"background-color: rgb(5, 171, 194);")
         self.stackedWidget.addWidget(self.page_3)
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -396,12 +331,6 @@ class Ui_Form(object):
         self.radioButton.setText(QCoreApplication.translate("Form", u"\u7537", None))
         self.radioButton_2.setText(QCoreApplication.translate("Form", u"\u5973", None))
         self.pic_info_label.setText("")
-        self.label_16.setText(QCoreApplication.translate("Form", u"\u53c2\u65704", None))
-        self.label_14.setText(QCoreApplication.translate("Form", u"\u53c2\u65702", None))
-        self.label_13.setText(QCoreApplication.translate("Form", u"\u53c2\u65701", None))
         self.photoLabel.setText("")
-        self.label_17.setText(QCoreApplication.translate("Form", u"\u53c2\u65705", None))
-        self.label_15.setText(QCoreApplication.translate("Form", u"\u53c2\u65703", None))
-        self.pushButton_8.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
     # retranslateUi
 

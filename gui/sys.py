@@ -154,7 +154,7 @@ class Ui_Form(object):
         self.wifi_icon_label.setText("")
         self.label.setText(QCoreApplication.translate("Form", u"\u7cfb\u7edf\u8bbe\u7f6e", None))
         self.clear_icon_label.setText("")
-        self.btnSet.setText(QCoreApplication.translate("Form", u"     \u56fe\u50cf\u53c2\u6570\u8bbe\u7f6e", None))
+        self.btnSet.setText(QCoreApplication.translate("Form", u"   \u8bbe\u5907\u8bbe\u7f6e", None))
         self.btnClear.setText(QCoreApplication.translate("Form", u"  \u6e05\u9664\u7f13\u5b58", None))
         self.about_icon_label.setText("")
         self.btnWifi.setText(QCoreApplication.translate("Form", u"  wifi\u8bbe\u7f6e", None))

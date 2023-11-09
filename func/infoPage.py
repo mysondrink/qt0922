@@ -26,18 +26,18 @@ class infoMessage(QWidget):
         # btnOk.animateClick(timetosleep)
         btnOk.setText(" ")
         btnOk.setFixedSize(1, 1)
-        btnOk.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";" \
+        btnOk.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";" \
                             "border:4px solid rgb(0,0,0);" \
                             "background-color:#05abc2;")
 
         stylesheet = "QMessageBox{" \
-                     "font: 50pt \"\u5e7c\u5706\";" \
+                     "font: 20pt \"\u5b8b\u4f53\";" \
                      "border:4px solid rgb(0,0,0);" \
                      "background-color:#05abc2;\
                      }"
         m_box.setStyleSheet(stylesheet)
         m_box.setWindowFlags(Qt.FramelessWindowHint)
         # m_box.setFixedSize(400, 400)
-        m_box.setGeometry(100, 100, 400, 400)
+        m_box.setGeometry(230, 200, 400, 400)
         m_box.buttonClicked.connect(lambda: self.checkBoxInfo(m_title))
         m_box.exec_()

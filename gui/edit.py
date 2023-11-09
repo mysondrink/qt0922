@@ -27,7 +27,7 @@ class Ui_Form(object):
         self.page.setObjectName(u"page")
         self.delete_icon_label = QLabel(self.page)
         self.delete_icon_label.setObjectName(u"delete_icon_label")
-        self.delete_icon_label.setGeometry(QRect(310, 130, 80, 80))
+        self.delete_icon_label.setGeometry(QRect(310, 240, 80, 80))
         self.delete_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -36,7 +36,7 @@ class Ui_Form(object):
 "")
         self.btnAdd = QPushButton(self.page)
         self.btnAdd.setObjectName(u"btnAdd")
-        self.btnAdd.setGeometry(QRect(310, 30, 220, 80))
+        self.btnAdd.setGeometry(QRect(310, 40, 280, 80))
         self.btnAdd.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -50,7 +50,7 @@ class Ui_Form(object):
 "")
         self.btnModify = QPushButton(self.page)
         self.btnModify.setObjectName(u"btnModify")
-        self.btnModify.setGeometry(QRect(310, 230, 220, 80))
+        self.btnModify.setGeometry(QRect(310, 140, 280, 80))
         self.btnModify.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -68,7 +68,7 @@ class Ui_Form(object):
         self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.add_icon_label = QLabel(self.page)
         self.add_icon_label.setObjectName(u"add_icon_label")
-        self.add_icon_label.setGeometry(QRect(310, 30, 80, 80))
+        self.add_icon_label.setGeometry(QRect(310, 40, 80, 80))
         self.add_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -77,7 +77,7 @@ class Ui_Form(object):
 "")
         self.btnDelete = QPushButton(self.page)
         self.btnDelete.setObjectName(u"btnDelete")
-        self.btnDelete.setGeometry(QRect(310, 130, 220, 80))
+        self.btnDelete.setGeometry(QRect(310, 240, 280, 80))
         self.btnDelete.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -91,7 +91,7 @@ class Ui_Form(object):
 "")
         self.edit_icon_label = QLabel(self.page)
         self.edit_icon_label.setObjectName(u"edit_icon_label")
-        self.edit_icon_label.setGeometry(QRect(310, 230, 80, 80))
+        self.edit_icon_label.setGeometry(QRect(310, 140, 80, 80))
         self.edit_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -114,11 +114,11 @@ class Ui_Form(object):
         self.label_5.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.label_3 = QLabel(self.page2)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(190, 110, 151, 44))
+        self.label_3.setGeometry(QRect(190, 200, 151, 44))
         self.label_3.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.nameLine = QLineEdit(self.page2)
         self.nameLine.setObjectName(u"nameLine")
-        self.nameLine.setGeometry(QRect(390, 30, 230, 70))
+        self.nameLine.setGeometry(QRect(390, 90, 230, 70))
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -129,7 +129,7 @@ class Ui_Form(object):
 "background-color: rgb(0, 0, 0);")
         self.rowCb = QComboBox(self.page2)
         self.rowCb.setObjectName(u"rowCb")
-        self.rowCb.setGeometry(QRect(390, 110, 230, 70))
+        self.rowCb.setGeometry(QRect(390, 190, 230, 70))
         self.rowCb.setStyleSheet(u"QComboBox::drop-down{\n"
 "width:56px;  height:56px;\n"
 "}\n"
@@ -147,7 +147,7 @@ class Ui_Form(object):
 "}")
         self.label_2 = QLabel(self.page2)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(130, 40, 211, 44))
+        self.label_2.setGeometry(QRect(130, 100, 211, 44))
         self.label_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.stackedWidget.addWidget(self.page2)
         self.page3 = QWidget()
@@ -188,7 +188,7 @@ class Ui_Form(object):
         self.page4.setObjectName(u"page4")
         self.editCb = QComboBox(self.page4)
         self.editCb.setObjectName(u"editCb")
-        self.editCb.setGeometry(QRect(340, 110, 230, 70))
+        self.editCb.setGeometry(QRect(380, 140, 230, 70))
         sizePolicy1.setHeightForWidth(self.editCb.sizePolicy().hasHeightForWidth())
         self.editCb.setSizePolicy(sizePolicy1)
         self.editCb.setStyleSheet(u"QComboBox::drop-down{\n"
@@ -208,7 +208,7 @@ class Ui_Form(object):
 "}")
         self.label_9 = QLabel(self.page4)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setGeometry(QRect(90, 110, 180, 70))
+        self.label_9.setGeometry(QRect(140, 140, 180, 70))
         self.label_9.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.label_8 = QLabel(self.page4)
         self.label_8.setObjectName(u"label_8")
@@ -273,7 +273,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -282,11 +282,11 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.delete_icon_label.setText("")
-        self.btnAdd.setText(QCoreApplication.translate("Form", u"  \u6dfb\u52a0", None))
-        self.btnModify.setText(QCoreApplication.translate("Form", u"  \u4fee\u6539", None))
+        self.btnAdd.setText(QCoreApplication.translate("Form", u"  \u6dfb\u52a0\u8bd5\u5242\u5361", None))
+        self.btnModify.setText(QCoreApplication.translate("Form", u"  \u4fee\u6539\u8bd5\u5242\u5361", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u68c0\u75ab\u8bbe\u7f6e", None))
         self.add_icon_label.setText("")
-        self.btnDelete.setText(QCoreApplication.translate("Form", u"  \u5220\u9664", None))
+        self.btnDelete.setText(QCoreApplication.translate("Form", u"  \u5220\u9664\u8bd5\u5242\u5361", None))
         self.edit_icon_label.setText("")
         self.label_5.setText(QCoreApplication.translate("Form", u"\u6dfb\u52a0\u8bd5\u5242\u5361", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u89c4\u683c", None))

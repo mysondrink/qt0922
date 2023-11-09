@@ -180,6 +180,11 @@ class testPage(Ui_Form, QWidget):
 
         img_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_final.jpeg')
 
+        # 测试
+        gray_aver = img_final[0]
+        gray_row = 5
+        gray_column = 8
+
         name_pic = time_now
 
         save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '.jpeg'
@@ -187,10 +192,16 @@ class testPage(Ui_Form, QWidget):
         flag_bool = cv.imwrite(save_path, img_final)
         self.ui.photoLabel.setScaledContents(False)  # 是否拉伸窗口
 
+        # 测试
         self.ui.photoLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(%s/img/%s/%s.jpeg); "
+                                         "border-image: url(%s/inf/img_out/img_final.jpeg); "
                                          "font: 20pt; "
-                                         "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # 设置拍照图片显示
+                                         "color: rgb(255,0,0);}" % (frozen.app_path()))
+
+        # self.ui.photoLabel.setStyleSheet("QLabel{"
+        #                                  "border-image: url(%s/img/%s/%s.jpeg); "
+        #                                  "font: 20pt; "
+        #                                  "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # 设置拍照图片显示
 
         flag = 0
 
@@ -407,7 +418,7 @@ class testPage(Ui_Form, QWidget):
     @Slot()
     def on_btnExe_clicked(self):
         m_title = ""
-        m_info = "照片生成中！"
+        m_info = "照片生成中..."
         infoMessage(m_info, m_title)
         # 创建定时器
         self.change_timer = QTimer()

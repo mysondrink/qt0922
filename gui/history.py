@@ -30,7 +30,7 @@ class Ui_Form(object):
         self.label_3.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.dateBox = QDateEdit(self.page)
         self.dateBox.setObjectName(u"dateBox")
-        self.dateBox.setGeometry(QRect(190, 80, 230, 70))
+        self.dateBox.setGeometry(QRect(340, 80, 230, 70))
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -89,15 +89,15 @@ class Ui_Form(object):
 "QCalendarWidget QSpinBox::down-arrow\n"
 " { width:56px;  height:56px; }")
         self.dateBox.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
-        self.dateBox.setDateTime(QDateTime(QDate(2019, 12, 26), QTime(8, 0, 0)))
+        self.dateBox.setDateTime(QDateTime(QDate(2019, 12, 26), QTime(0, 0, 0)))
         self.label_2 = QLabel(self.page)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(20, 80, 136, 67))
+        self.label_2.setGeometry(QRect(170, 80, 136, 67))
         self.label_2.setMinimumSize(QSize(0, 0))
         self.label_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.modeBox_3 = QComboBox(self.page)
         self.modeBox_3.setObjectName(u"modeBox_3")
-        self.modeBox_3.setGeometry(QRect(190, 210, 230, 70))
+        self.modeBox_3.setGeometry(QRect(340, 210, 230, 70))
         sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -120,30 +120,10 @@ class Ui_Form(object):
 "}")
         self.label = QLabel(self.page)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(20, 210, 161, 67))
+        self.label.setGeometry(QRect(170, 210, 161, 67))
         sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy1)
         self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.label_4 = QLabel(self.page)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(440, 80, 111, 67))
-        self.label_4.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.label_5 = QLabel(self.page)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(440, 210, 141, 67))
-        self.label_5.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.textEdit = QTextEdit(self.page)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setGeometry(QRect(580, 80, 200, 70))
-        self.textEdit.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";\n"
-"color: rgb(255, 255, 255);\n"
-"background-color: rgb(0, 0, 0);")
-        self.textEdit_2 = QTextEdit(self.page)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        self.textEdit_2.setGeometry(QRect(580, 210, 200, 70))
-        self.textEdit_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";\n"
-"color: rgb(255, 255, 255);\n"
-"background-color: rgb(0, 0, 0);")
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -293,6 +273,9 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
+        self.stackedWidget.setCurrentIndex(0)
+
+
         QMetaObject.connectSlotsByName(Form)
     # setupUi
 
@@ -301,8 +284,6 @@ class Ui_Form(object):
         self.label_3.setText(QCoreApplication.translate("Form", u"\u5386\u53f2\u8bb0\u5f55\u67e5\u8be2", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"\u65f6\u95f4*", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u578b\u53f7*", None))
-        self.label_4.setText(QCoreApplication.translate("Form", u"\u75c5\u4eba\u7f16\u53f7", None))
-        self.label_5.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u7f16\u53f7", None))
         self.picLabel.setText("")
         self.btnConfirm.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))

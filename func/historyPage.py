@@ -99,7 +99,7 @@ class historyPage(Ui_Form, QWidget):
             if self.current_page == 0:
                 m_title = "错误"
                 m_title = ""
-                m_info = "已经是第一页"
+                m_info = "已经是第一页!"
                 infoMessage(m_info, m_title)
                 return
             self.current_page -= 1
@@ -107,7 +107,7 @@ class historyPage(Ui_Form, QWidget):
             if self.current_page == self.total_page - 1:
                 m_title = "错误"
                 m_title = ""
-                m_info = "已经是最后一页"
+                m_info = "已经是最后一页!"
                 infoMessage(m_info, m_title)
                 return
             self.current_page += 1
@@ -353,7 +353,13 @@ class historyPage(Ui_Form, QWidget):
         target_dir = '/media/xiao/'
 
         # 获取U盘设备路径
-        filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+        try:
+            filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+        except Exception as e:
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
+            return
 
         # 检查U盘是否已插入
         if os.path.exists(filename):
@@ -425,7 +431,7 @@ class historyPage(Ui_Form, QWidget):
         myEm5822_Print = Em5822_Print(test_time, time_now)
         myEm5822_Print.em5822_print()
         m_title = ""
-        m_info = "输出表格成功。。。"
+        m_info = "输出表格成功!"
         infoMessage(m_title, m_info)
 
     @Slot()
@@ -458,7 +464,7 @@ class historyPage(Ui_Form, QWidget):
     def on_btnDownload_clicked(self):
         m_title = "错误"
         m_title = ""
-        m_info = "下载中！"
+        m_info = "下载中..."
         infoMessage(m_info, m_title)
         # 创建定时器
         self.change_timer = QTimer()

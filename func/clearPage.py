@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+import datetime
 
 import frozen
 from func.infoPage import infoMessage
@@ -78,7 +78,7 @@ class clearPage(Ui_Form, QWidget):
     # 存储满警告
     def memWarning(self):
         m_title = "警告"
-        m_info = "存储已经占满，请清理图片！！！"
+        m_info = "存储已经占满，请清理图片！"
         infoMessage(m_info, m_title)
         return
 
@@ -128,7 +128,7 @@ class clearPage(Ui_Form, QWidget):
         # self.deletePicFile(pic_path)
         m_title = "确认"
         m_title = ""
-        m_info = "已经完成清理"
+        m_info = "已经完成清理!"
         infoMessage(m_info, m_title)
         # self.ui.btnData.setEnabled(True)
         # self.ui.btnHistory.setEnabled(True)

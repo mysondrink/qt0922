@@ -1,4 +1,7 @@
+import pymysql
+
 import frozen
+from func.infoPage import infoMessage
 from gui.register import *
 from keyboard.keyboard import KeyBoard
 
@@ -42,6 +45,10 @@ class registerPage(Ui_Form, QWidget):
                 # print(obj.setText("hello"))
                 self.setKeyBoard(obj)
 
+    def getKeyBoardText(self, msg):
+        self.focusWidget().setText(msg)
+        self.focusWidget().clearFocus()
+
     def setKeyBoard(self, obj):
         self.keyboardtext = KeyBoard()
         self.keyboardtext.text_msg.connect(self.getKeyBoardText)
@@ -56,9 +63,50 @@ class registerPage(Ui_Form, QWidget):
             self.keyboardtext.nameLabel.setText("再次输入")
         self.keyboardtext.showWindow()
 
-    def getKeyBoardText(self, msg):
-        self.focusWidget().setText(msg)
-        self.focusWidget().clearFocus()
+    # 用户名检测
+    def checkName(self):
+        if self.ui.lineEdit_3.text() == "" or self.ui.lineEdit.text() == "" or self.ui.lineEdit_4.text() == "" :
+            m_title = "错误"
+            m_title = ""
+            m_info = "请输入用户名或密码！"
+            infoMessage(m_info, m_title)
+        elif self.ui.lineEdit_3.text() != self.ui.lineEdit_4.text():
+            m_title = "错误"
+            m_title = ""
+            m_info = "两次输入不正确！"
+            infoMessage(m_info, m_title)
+        else:
+            self.insertUser()
+            self.setUserDict()
+            m_title = ""
+            m_info = "操作成功！"
+            infoMessage(m_info, m_title)
+            page_msg = 'loginPage'
+            self.next_page.emit(page_msg)
+
+    # 注册用户写入数据库
+    def insertUser(self):
+        user_name = self.ui.lineEdit.text()
+        user_code = self.ui.lineEdit_3.text()
+        connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
+                                     charset='utf8')
+        # MySQL语句
+        sql = 'INSERT INTO user_table(user_name, user_code) VALUES (%s,%s)'
+
+        # 获取标记
+        cursor = connection.cursor()
+        try:
+            # 执行SQL语句
+            cursor.execute(sql, [user_name, user_code])
+            # 提交事务
+            connection.commit()
+        except Exception as e:
+            # print(str(e))
+            # 有异常，回滚事务
+            connection.rollback()
+        # 释放内存
+        cursor.close()
+        connection.close()
 
     @Slot()
     def on_btnReturn_clicked(self):
@@ -67,5 +115,5 @@ class registerPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnConfirm_clicked(self):
-        page_msg = 'loginPage'
-        self.next_page.emit(page_msg)
+        self.checkName()
+

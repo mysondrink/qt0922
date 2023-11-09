@@ -25,6 +25,9 @@
      <height>350</height>
     </rect>
    </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label_3">
      <property name="geometry">
@@ -45,7 +48,7 @@
     <widget class="QDateEdit" name="dateBox">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>340</x>
        <y>80</y>
        <width>230</width>
        <height>70</height>
@@ -115,7 +118,7 @@ QCalendarWidget QSpinBox::down-arrow
      </property>
      <property name="dateTime">
       <datetime>
-       <hour>8</hour>
+       <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
        <year>2019</year>
@@ -127,7 +130,7 @@ QCalendarWidget QSpinBox::down-arrow
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>170</x>
        <y>80</y>
        <width>136</width>
        <height>67</height>
@@ -149,7 +152,7 @@ QCalendarWidget QSpinBox::down-arrow
     <widget class="QComboBox" name="modeBox_3">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>340</x>
        <y>210</y>
        <width>230</width>
        <height>70</height>
@@ -182,7 +185,7 @@ QComboBox QAbstractItemView {
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>170</x>
        <y>210</y>
        <width>161</width>
        <height>67</height>
@@ -199,68 +202,6 @@ QComboBox QAbstractItemView {
      </property>
      <property name="text">
       <string>试剂卡型号*</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>440</x>
-       <y>80</y>
-       <width>111</width>
-       <height>67</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
-     </property>
-     <property name="text">
-      <string>病人编号</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>440</x>
-       <y>210</y>
-       <width>141</width>
-       <height>67</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
-     </property>
-     <property name="text">
-      <string>试剂卡编号</string>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>80</y>
-       <width>200</width>
-       <height>70</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;宋体&quot;;
-color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="textEdit_2">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>210</y>
-       <width>200</width>
-       <height>70</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;宋体&quot;;
-color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </widget>

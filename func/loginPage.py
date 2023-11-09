@@ -130,14 +130,14 @@ class loginPage(Ui_Form, QWidget):
         if self.ui.nameLine.text() == "" or self.ui.numLine.text() == "":
             m_title = "错误"
             m_title = ""
-            m_info = "用户名或密码未填写！！！"
+            m_info = "用户名或密码未填写！"
             infoMessage(m_info, m_title)
         else:
             if self.user_dict.get(self.ui.nameLine.text()) is None or self.user_dict.get(
                     self.ui.nameLine.text()) != self.ui.numLine.text():
                 m_title = "错误"
                 m_title = ""
-                m_info = "用户名或编号错误"
+                m_info = "用户名或编号错误!"
                 infoMessage(m_info, m_title)
             else:
                 # page_msg = homePage()

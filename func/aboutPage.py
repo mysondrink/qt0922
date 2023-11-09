@@ -32,9 +32,15 @@ class aboutPage(Ui_Form, QWidget):
         target_dir = '/media/xiao/'
 
         # 获取U盘设备路径
-        filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+        try:
+            filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+        except Exception as e:
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
+            return
 
-        # 检查U盘是否已插入
+            # 检查U盘是否已插入
         if os.path.exists(filename):
             # 在U盘根目录下查找指定文件
             file_path = os.path.join(filename, "example.txt")
@@ -48,18 +54,18 @@ class aboutPage(Ui_Form, QWidget):
             else:
                 # print("文件不存在")
                 m_title = ""
-                m_info = "文件不存在"
+                m_info = "文件不存在!"
                 infoMessage(m_info, m_title)
         else:
             # print("U盘未插入或无法访问")
             m_title = ""
-            m_info = "U盘未插入或无法访问"
+            m_info = "U盘未插入或无法访问!"
             infoMessage(m_info, m_title)
 
     @Slot()
     def on_btnUpload_clicked(self):
         m_title = ""
-        m_info = "上传中！"
+        m_info = "上传中..."
         infoMessage(m_info, m_title)
         # 创建定时器
         self.change_timer = QTimer()

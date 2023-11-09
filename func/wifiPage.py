@@ -31,6 +31,10 @@ class wifiPage(Ui_Form, QWidget):
 
         self.setFocusWidget()
         self.installEvent()
+        self.mytest()
+
+    def mytest(self):
+        self.ui.wifiCb.addItems(["cqgkyg","cqgkyg2023"])
 
     def installEvent(self):
         for item in self.focuswidget:
@@ -73,34 +77,40 @@ class wifiPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnConfirm_clicked(self):
-        flag = -100
-        self.wifiPwd = self.ui.pwdLine.text()
-        self.wifiSSID = self.ui.wifiCb.currentText()
-        if self.wifiPwd != '':
-            cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s password %s' % (
-            'orangepi', self.wifiSSID, self.wifiPwd)
-        else:
-            cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s' % ('orangepi', self.wifiSSID)
-        result = os.popen(cmd_wifi)
-        info = 'Error'
-        for i in result:
-            flag = i.find(info)
-            if flag != -1:
-                break
-        if flag == -1:
-            m_title = "确认"
-            m_title = ""
-            m_info = "wifi连接成功！"
-            infoMessage(m_info, m_title)
-            cmd_date = 'echo %s | sudo ntpdate cn.pool.ntp.org' % ('orangepi')
-            os.system(cmd_date)
-        else:
+        try:
+            flag = -100
+            self.wifiPwd = self.ui.pwdLine.text()
+            self.wifiSSID = self.ui.wifiCb.currentText()
+            if self.wifiPwd != '':
+                cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s password %s' % (
+                'orangepi', self.wifiSSID, self.wifiPwd)
+            else:
+                cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s' % ('orangepi', self.wifiSSID)
+            result = os.popen(cmd_wifi)
+            info = 'Error'
+            for i in result:
+                flag = i.find(info)
+                if flag != -1:
+                    break
+            if flag == -1:
+                m_title = "确认"
+                m_title = ""
+                m_info = "wifi连接成功！"
+                infoMessage(m_info, m_title)
+                cmd_date = 'echo %s | sudo ntpdate cn.pool.ntp.org' % ('orangepi')
+                os.system(cmd_date)
+            else:
+                m_title = "确认"
+                m_title = ""
+                m_info = "wifi连接失败！"
+                infoMessage(m_info, m_title)
+
+            time.sleep(1)
+        except Exception as e:
             m_title = "确认"
             m_title = ""
             m_info = "wifi连接失败！"
             infoMessage(m_info, m_title)
-
-        time.sleep(1)
 
     @Slot()
     def on_btnReturn_clicked(self):

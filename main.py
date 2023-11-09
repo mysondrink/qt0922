@@ -4,7 +4,7 @@ from func.editPage import *
 
 def main():
     app = QApplication()
-    w = editPage()
+    w = loadPage()
     w.show()
     sys.exit(app.exec_())
 

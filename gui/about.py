@@ -26,11 +26,11 @@ class Ui_Form(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.label_36 = QLabel(self.frame)
         self.label_36.setObjectName(u"label_36")
-        self.label_36.setGeometry(QRect(350, 155, 311, 91))
+        self.label_36.setGeometry(QRect(360, 110, 311, 60))
         self.label_36.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.label_35 = QLabel(self.frame)
         self.label_35.setObjectName(u"label_35")
-        self.label_35.setGeometry(QRect(200, 170, 121, 61))
+        self.label_35.setGeometry(QRect(180, 110, 121, 60))
         self.label_35.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.label_3 = QLabel(self.frame)
         self.label_3.setObjectName(u"label_3")
@@ -62,6 +62,14 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
+        self.label = QLabel(self.frame)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(180, 220, 141, 60))
+        self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.version_label = QLabel(self.frame)
+        self.version_label.setObjectName(u"version_label")
+        self.version_label.setGeometry(QRect(360, 220, 311, 60))
+        self.version_label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
 
         self.retranslateUi(Form)
 
@@ -75,5 +83,7 @@ class Ui_Form(object):
         self.label_3.setText(QCoreApplication.translate("Form", u"\u5173\u4e8e\u4eea\u5668", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
         self.btnUpload.setText(QCoreApplication.translate("Form", u"\u4e0a\u4f20", None))
+        self.label.setText(QCoreApplication.translate("Form", u"\u8f6f\u4ef6\u7248\u672c\u53f7", None))
+        self.version_label.setText(QCoreApplication.translate("Form", u"V1.0.1", None))
     # retranslateUi
 

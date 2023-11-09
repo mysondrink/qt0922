@@ -29,14 +29,14 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="delete_icon_label">
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>130</y>
+       <y>240</y>
        <width>80</width>
        <height>80</height>
       </rect>
@@ -57,8 +57,8 @@ border-radius: 35px;
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>30</y>
-       <width>220</width>
+       <y>40</y>
+       <width>280</width>
        <height>80</height>
       </rect>
      </property>
@@ -76,15 +76,15 @@ background-color: rgb(255, 0, 0);
 </string>
      </property>
      <property name="text">
-      <string>  添加</string>
+      <string>  添加试剂卡</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btnModify">
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>230</y>
-       <width>220</width>
+       <y>140</y>
+       <width>280</width>
        <height>80</height>
       </rect>
      </property>
@@ -102,7 +102,7 @@ background-color: rgb(255, 0, 0);
 </string>
      </property>
      <property name="text">
-      <string>  修改</string>
+      <string>  修改试剂卡</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -125,7 +125,7 @@ background-color: rgb(255, 0, 0);
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>30</y>
+       <y>40</y>
        <width>80</width>
        <height>80</height>
       </rect>
@@ -146,8 +146,8 @@ border-radius: 35px;
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>130</y>
-       <width>220</width>
+       <y>240</y>
+       <width>280</width>
        <height>80</height>
       </rect>
      </property>
@@ -165,14 +165,14 @@ background-color: rgb(255, 0, 0);
 </string>
      </property>
      <property name="text">
-      <string>  删除</string>
+      <string>  删除试剂卡</string>
      </property>
     </widget>
     <widget class="QLabel" name="edit_icon_label">
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>230</y>
+       <y>140</y>
        <width>80</width>
        <height>80</height>
       </rect>
@@ -218,7 +218,7 @@ border-radius: 35px;
      <property name="geometry">
       <rect>
        <x>190</x>
-       <y>110</y>
+       <y>200</y>
        <width>151</width>
        <height>44</height>
       </rect>
@@ -234,7 +234,7 @@ border-radius: 35px;
      <property name="geometry">
       <rect>
        <x>390</x>
-       <y>30</y>
+       <y>90</y>
        <width>230</width>
        <height>70</height>
       </rect>
@@ -255,7 +255,7 @@ background-color: rgb(0, 0, 0);</string>
      <property name="geometry">
       <rect>
        <x>390</x>
-       <y>110</y>
+       <y>190</y>
        <width>230</width>
        <height>70</height>
       </rect>
@@ -282,7 +282,7 @@ QComboBox QAbstractItemView {
      <property name="geometry">
       <rect>
        <x>130</x>
-       <y>40</y>
+       <y>100</y>
        <width>211</width>
        <height>44</height>
       </rect>
@@ -366,8 +366,8 @@ QComboBox QAbstractItemView {
     <widget class="QComboBox" name="editCb">
      <property name="geometry">
       <rect>
-       <x>340</x>
-       <y>110</y>
+       <x>380</x>
+       <y>140</y>
        <width>230</width>
        <height>70</height>
       </rect>
@@ -399,8 +399,8 @@ QComboBox QAbstractItemView {
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>110</y>
+       <x>140</x>
+       <y>140</y>
        <width>180</width>
        <height>70</height>
       </rect>
