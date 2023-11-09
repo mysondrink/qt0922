@@ -1,4 +1,5 @@
 from gui.test import *
+from inf.picThread import MyPicThread
 from keyboard.keyboard import KeyBoard
 from func.infoPage import infoMessage
 from inf.probeThread import MyProbe
@@ -36,6 +37,7 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.setId(self.ui.radioButton_2, 1)
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
+        self.mypicthread = MyPicThread()
 
         self.setFocusWidget()
         self.installEvent()
