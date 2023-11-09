@@ -175,8 +175,10 @@ class testPage(Ui_Form, QWidget):
         time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
-
-        gray_aver = self.mypicthread.takePicture(time_now)
+        try:
+            gray_aver = self.mypicthread.takePicture(time_now)
+        except Exception as e:
+            print(e)
         gray_row = len(gray_aver)
         gray_column = len(gray_aver[0])
 
