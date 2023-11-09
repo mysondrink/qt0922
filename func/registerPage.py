@@ -65,19 +65,19 @@ class registerPage(Ui_Form, QWidget):
 
     # 用户名检测
     def checkName(self):
-        if self.ui.lineEdit_3.text() == "" or self.ui.lineEdit.text() == "" or self.ui.lineEdit_4.text() == "" :
+        if self.ui.pwdLine.text() == "" or self.ui.nameLine.text() == "" or self.ui.pwdLine_2.text() == "" :
             m_title = "错误"
             m_title = ""
             m_info = "请输入用户名或密码！"
             infoMessage(m_info, m_title)
-        elif self.ui.lineEdit_3.text() != self.ui.lineEdit_4.text():
+        elif self.ui.pwdLine.text() != self.ui.pwdLine_2.text():
             m_title = "错误"
             m_title = ""
             m_info = "两次输入不正确！"
             infoMessage(m_info, m_title)
         else:
             self.insertUser()
-            self.setUserDict()
+            # self.setUserDict()
             m_title = ""
             m_info = "操作成功！"
             infoMessage(m_info, m_title)
@@ -86,8 +86,8 @@ class registerPage(Ui_Form, QWidget):
 
     # 注册用户写入数据库
     def insertUser(self):
-        user_name = self.ui.lineEdit.text()
-        user_code = self.ui.lineEdit_3.text()
+        user_name = self.ui.nameLine.text()
+        user_code = self.ui.pwdLine.text()
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
         # MySQL语句

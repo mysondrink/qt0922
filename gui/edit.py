@@ -273,7 +273,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -282,11 +282,11 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.delete_icon_label.setText("")
-        self.btnAdd.setText(QCoreApplication.translate("Form", u"  \u6dfb\u52a0\u8bd5\u5242\u5361", None))
-        self.btnModify.setText(QCoreApplication.translate("Form", u"  \u4fee\u6539\u8bd5\u5242\u5361", None))
+        self.btnAdd.setText(QCoreApplication.translate("Form", u"    \u6dfb\u52a0\u8bd5\u5242\u5361", None))
+        self.btnModify.setText(QCoreApplication.translate("Form", u"    \u4fee\u6539\u8bd5\u5242\u5361", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u68c0\u75ab\u8bbe\u7f6e", None))
         self.add_icon_label.setText("")
-        self.btnDelete.setText(QCoreApplication.translate("Form", u"  \u5220\u9664\u8bd5\u5242\u5361", None))
+        self.btnDelete.setText(QCoreApplication.translate("Form", u"   \u5220\u9664\u8bd5\u5242\u5361", None))
         self.edit_icon_label.setText("")
         self.label_5.setText(QCoreApplication.translate("Form", u"\u6dfb\u52a0\u8bd5\u5242\u5361", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u89c4\u683c", None))
