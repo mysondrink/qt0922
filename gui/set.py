@@ -26,11 +26,11 @@ class Ui_Form(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(70, 110, 272, 67))
+        self.label.setGeometry(QRect(100, 140, 272, 67))
         self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.modeBox_4 = QComboBox(self.frame)
         self.modeBox_4.setObjectName(u"modeBox_4")
-        self.modeBox_4.setGeometry(QRect(390, 110, 230, 70))
+        self.modeBox_4.setGeometry(QRect(400, 140, 230, 70))
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -90,7 +90,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u50cf\u7d20\u8bbe\u7f6e", None))
-        self.label_2.setText(QCoreApplication.translate("Form", u"\u56fe\u50cf\u50cf\u7d20\u8bbe\u7f6e", None))
+        self.label_2.setText(QCoreApplication.translate("Form", u"\u8d28\u91cf\u63a7\u5236", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
         self.btnConfirm.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
     # retranslateUi

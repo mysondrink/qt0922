@@ -34,8 +34,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>110</y>
+      <x>100</x>
+      <y>140</y>
       <width>272</width>
       <height>67</height>
      </rect>
@@ -50,8 +50,8 @@
    <widget class="QComboBox" name="modeBox_4">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>110</y>
+      <x>400</x>
+      <y>140</y>
       <width>230</width>
       <height>70</height>
      </rect>
@@ -93,7 +93,7 @@ QComboBox QAbstractItemView {
      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
     </property>
     <property name="text">
-     <string>图像像素设置</string>
+     <string>质量控制</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnReturn">

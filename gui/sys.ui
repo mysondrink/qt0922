@@ -112,7 +112,7 @@ background-color: rgb(255, 0, 0);
 </string>
     </property>
     <property name="text">
-     <string>   设备设置</string>
+     <string>   质量控制</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnClear">
