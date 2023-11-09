@@ -1,3 +1,6 @@
+import os
+from datetime import time
+
 import frozen
 from gui.power import *
 
@@ -44,3 +47,15 @@ class powerPage(Ui_Form, QWidget):
     def on_btnLogout_clicked(self):
         page_msg = 'loginPage'
         self.next_page.emit(page_msg)
+
+    @Slot()
+    def on_btnShutdown_clicked(self):
+        m_title = "提示"
+        m_title = ""
+        m_info = "请关闭电源！"
+        timer = 1
+        self.infoMessageBox(m_info, m_title, timer)
+        time.sleep(1000)
+        # order_str = "sudo shutdown -h now"
+        order_str = 'echo %s | sudo %s' % ('orangepi', 'shutdown -h now')
+        os.system(order_str)

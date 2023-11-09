@@ -2,6 +2,7 @@ import pymysql
 
 import frozen
 from func.infoPage import infoMessage
+from func.testPage import allergen
 from gui.edit import *
 page_dict = {'page': 0, 'page2': 1, 'page3': 2, 'page4': 3, 'page5': 4}
 from keyboard.keyboard import KeyBoard
@@ -10,6 +11,7 @@ class editPage(Ui_Form, QWidget):
     next_page = Signal(str)
     def __init__(self):
         super().__init__()
+        self.reagent_num = None
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
@@ -23,9 +25,53 @@ class editPage(Ui_Form, QWidget):
         self.resetBtn()
 
         self.setBtnIcon()
+        self.ui.reagentTable.verticalHeader().setVisible(False)
+        self.ui.reagentTable.horizontalHeader().setVisible(False)
+        self.ui.reagentTable.setShowGrid(True)
 
         self.setFocusWidget()
         self.installEvent()
+
+    # 设置过敏原表格
+    def setReagentTable(self, row, column, num):
+        if num == 1:
+            self.row_reagent_table = row
+            self.column_reagent_table = column
+            self.pix_reagent_table_model = QStandardItemModel(self.row_reagent_table + int(self.row_reagent_table / 2), self.column_reagent_table)
+            self.ui.reagentTable.setModel(self.pix_reagent_table_model)
+
+            self.ui.reagentTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            self.ui.reagentTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            for i in range(0, self.row_reagent_table + int(self.row_reagent_table / 2)):
+                if i % 3 == 0:
+                    for j in range(0, self.column_reagent_table):
+                        content_cb = QComboBox(self)
+                        content_cb.addItems(allergen)
+                        content_cb.setCurrentIndex(0)
+                        # content_cb.setStyleSheet(self.cb_style_sheet)
+                        self.ui.reagentTable.setIndexWidget(self.pix_reagent_table_model.index(i, j), content_cb)
+        else:
+            self.row_reagent_table = row
+            self.column_reagent_table = column
+            self.pix_reagent_table_model = QStandardItemModel(self.row_reagent_table + int(self.row_reagent_table / 2),
+                                                              self.column_reagent_table)
+            self.ui.reagentTable.setModel(self.pix_reagent_table_model)
+
+            self.ui.reagentTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            self.ui.reagentTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+            str_num = self.reagent_matrix_info[self.reagent_type.index(self.ui.editCb.currentText())]
+
+            for i in range(0, self.row_reagent_table + int(self.row_reagent_table / 2)):
+                if i % 3 == 0:
+                    for j in range(0, self.column_reagent_table):
+                        content_cb = QComboBox(self)
+                        content_cb.addItems(allergen)
+                        num = int(str_num[j + (i % 3) * self.row_reagent_table])
+                        content_cb.setCurrentIndex(num)
+                        # content_cb.setStyleSheet(self.cb_style_sheet)
+                        self.ui.reagentTable.setIndexWidget(self.pix_reagent_table_model.index(i, j), content_cb)
+
 
     def setBtnIcon(self):
         confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
@@ -146,12 +192,98 @@ class editPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
+    """
+    读取表格内容，同时以list形式保存到数据库
+    """
+    def readPixtableNum(self, num):
+        str_num = ""
+        if num == 1:
+            return
+        else:
+            for i in range(self.row_reagent_table + int(self.row_reagent_table / 2)):
+                # row_list = []
+                if i % 3 == 0:
+                    for j in range(self.column_reagent_table):
+                        index = self.ui.reagentTable.model().index(i, j)  # 获取单元格的 QModelIndex 对象
+                        combo_box = self.ui.reagentTable.indexWidget(index)  # 获取该单元格中的 QComboBox 对象
+                        data_index = combo_box.currentIndex()
+                        # current_text = combo_box.currentText()  # 获取 QComboBox 当前选中的文本
+                        str_num = str_num + str(data_index)
+        return str_num
+
+    """
+    插入数据库
+    """
+    def insertMatrix(self, name, item_type):
+        matrix = self.readPixtableNum(2)
+        connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
+                                     charset='utf8')
+        # MySQL语句
+        sql = 'INSERT INTO matrix_table(reagent_type, reagent_matrix, reagent_matrix_info) VALUES (%s,%s,%s)'
+
+        # 获取标记
+        cursor = connection.cursor()
+        try:
+            # 执行SQL语句
+            cursor.execute(sql, [name, item_type, matrix])
+            # 提交事务
+            connection.commit()
+        except Exception as e:
+            # print(str(e))
+            # 有异常，回滚事务
+            connection.rollback()
+        # 释放内存
+        cursor.close()
+        connection.close()
+
     def edit(self):
-        m_title = ""
-        m_info = "成功！"
-        infoMessage(m_info, m_title)
+        if self.reagent_num == 1:
+            self.insertMatrix(self.add_name, self.add_matrix_type)
+            self.setReagentCb()
+            # m_title = ""
+            # m_info = "成功！"
+            # infoMessage(m_info, m_title)
+            self.resetBtn()
+            self.ui.stackedWidget.setCurrentIndex(0)
+        elif self.reagent_num == 2:
+            item_type = self.reagent_matrix[self.reagent_type.index(self.ui.editCb.currentText())]
+            str_name = self.ui.editCb.currentText()
+            self.updateReagentDB(str_name, item_type)
+            self.setReagentCb()
+            # m_title = ""
+            # m_info = "成功！"
+            # infoMessage(m_info, m_title)
+            self.resetBtn()
+            self.ui.stackedWidget.setCurrentIndex(0)
+
+    def deleteItem(self):
+        item = self.ui.deleteCb.currentText()
+        self.deleteReagentDB(item)
         self.resetBtn()
         self.ui.stackedWidget.setCurrentIndex(0)
+
+    # 删除数据库试剂卡
+    def deleteReagentDB(self, item_type):
+        # matrix = self.readPixtableNum(2)
+        connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
+                                     charset='utf8')
+        # MySQL语句
+        sql = 'DELETE FROM matrix_table WHERE reagent_type = %s'
+
+        # 获取标记
+        cursor = connection.cursor()
+        try:
+            # 执行SQL语句
+            cursor.execute(sql, item_type)
+            # 提交事务
+            connection.commit()
+        except Exception as e:
+            # print(str(e))
+            # 有异常，回滚事务
+            connection.rollback()
+        # 释放内存
+        cursor.close()
+        connection.close()
 
     @Slot()
     def on_btnAdd_clicked(self):
@@ -174,23 +306,62 @@ class editPage(Ui_Form, QWidget):
     def on_btnConfirm_clicked(self):
         if self.ui.stackedWidget.currentIndex() == 1:
             # 添加
+            dict_mode = {
+                "2x3": 1,
+                "2x5": 2,
+                "4x5": 3,
+                "8x5": 4,
+            }
+            if dict_mode.get(self.ui.rowCb.currentText()) == 1:
+                row_t = 2
+                column_t = 3
+            elif dict_mode.get(self.ui.rowCb.currentText()) == 2:
+                row_t = 2
+                column_t = 5
+            elif dict_mode.get(self.ui.rowCb.currentText()) == 3:
+                row_t = 4
+                column_t = 5
+            else:
+                row_t = 8
+                column_t = 5
+
+            self.add_matrix_type = self.ui.rowCb.currentText()
+            self.add_name = self.ui.nameLine.text()
+            self.reagent_num = 1
+            self.setReagentTable(row_t, column_t, 1)
             self.ui.stackedWidget.setCurrentIndex(4)
         elif self.ui.stackedWidget.currentIndex() == 2:
-            pass
-        elif self.ui.stackedWidget.currentIndex() == 3:
-            # 修改
-            self.ui.stackedWidget.setCurrentIndex(4)
-        elif self.ui.stackedWidget.currentIndex() == 4:
+            # 删除
             m_title = ""
             m_info = "确认中！"
             infoMessage(m_info, m_title)
             # 创建定时器
             self.change_timer = QTimer()
-            self.change_timer.timeout.connect(self.edit)
+            self.change_timer.timeout.connect(self.deleteItem())
             # 设置定时器延迟时间，单位为毫秒
             # 延迟2秒跳转
             delay_time = 2000
             self.change_timer.start(delay_time)
+        elif self.ui.stackedWidget.currentIndex() == 3:
+            # 修改
+            self.reagent_num = 2
+            str_cb = self.reagent_matrix[self.reagent_type.index(self.ui.editCb.currentText())]
+            row = int(str_cb[0])
+            col = int(str_cb[2])
+            self.setReagentTable(row, col, 2)
+            self.ui.stackedWidget.setCurrentIndex(4)
+        elif self.ui.stackedWidget.currentIndex() == 4:
+            m_title = ""
+            m_info = "成功！"
+            infoMessage(m_info, m_title)
+            self.edit()
+            # # 创建定时器
+            # self.change_timer = QTimer()
+            # self.change_timer.timeout.connect(self.edit)
+            # # 设置定时器延迟时间，单位为毫秒
+            # # 延迟2秒跳转
+            # delay_time = 2000
+            # self.change_timer.start(delay_time)
 
     @Slot()
     def on_btnReturn_clicked(self):

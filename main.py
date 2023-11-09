@@ -1,10 +1,10 @@
 import sys
 from func.loadPage import *
-from func.historyPage import *
+from func.editPage import *
 
 def main():
     app = QApplication()
-    w = loadPage()
+    w = editPage()
     w.show()
     sys.exit(app.exec_())
 

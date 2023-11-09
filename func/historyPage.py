@@ -272,12 +272,12 @@ class historyPage(Ui_Form, QWidget):
                 b = self.time_list[num][:10]
                 c = i[0]
 
-                self.ui.picLabel.setPixmap(QPixmap("./img/%s/%s.jpeg"%(b, c)))  # windows环境
+                # self.ui.picLabel.setPixmap(QPixmap("./img/%s/%s.jpeg"%(b, c)))  # windows环境
 
-                # self.ui.picLabel.setStyleSheet("QLabel{"
-                #                          "border-image: url(%s/img/%s/%s.jpeg); "
-                #                          "font: 20pt; "
-                #                          "color: rgb(255,0,0);}"%(a, b, c))
+                self.ui.picLabel.setStyleSheet("QLabel{"
+                                         "border-image: url(%s/img/%s/%s.jpeg); "
+                                         "font: 20pt; "
+                                         "color: rgb(255,0,0);}"%(a, b, c)) # linux环境
             # 提交事务
             connection.commit()
         except Exception as e:
