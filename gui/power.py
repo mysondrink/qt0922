@@ -66,19 +66,19 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(90, 130, 80, 80))
-        self.label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+        self.shutdown_icon_label = QLabel(self.frame)
+        self.shutdown_icon_label.setObjectName(u"shutdown_icon_label")
+        self.shutdown_icon_label.setGeometry(QRect(90, 130, 80, 80))
+        self.shutdown_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 35px;\n"
 "\n"
 "")
-        self.label_2 = QLabel(self.frame)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(440, 130, 80, 80))
-        self.label_2.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+        self.logout_icon_label = QLabel(self.frame)
+        self.logout_icon_label.setObjectName(u"logout_icon_label")
+        self.logout_icon_label.setGeometry(QRect(440, 130, 80, 80))
+        self.logout_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 35px;\n"
@@ -95,7 +95,7 @@ class Ui_Form(object):
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
         self.btnShutdown.setText(QCoreApplication.translate("Form", u"\u5173\u673a", None))
         self.btnLogout.setText(QCoreApplication.translate("Form", u"\u6ce8\u9500", None))
-        self.label.setText("")
-        self.label_2.setText("")
+        self.shutdown_icon_label.setText("")
+        self.logout_icon_label.setText("")
     # retranslateUi
 
