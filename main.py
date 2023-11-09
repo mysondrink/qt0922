@@ -1,6 +1,6 @@
 import sys
 from func.loadPage import *
-from func.setPage import *
+from func.historyPage import *
 
 def main():
     app = QApplication()

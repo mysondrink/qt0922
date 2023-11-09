@@ -1,3 +1,4 @@
+import frozen
 from gui.login import *
 # from func.homePage import homePage
 # from func.registerPage import registerPage
@@ -26,10 +27,35 @@ class loginPage(Ui_Form, QWidget):
         # h, w = self.width(), self.height()
         # self.setGeometry(screen.left(), screen.top() + screen_top, h, w)
         # self.showMaximized()
-        self.ui.nameLine.setText("test")
-        self.ui.numLine.setText("123456")
+        self.setBtnIcon()
+        self.mytest()
         self.setFocusWidget()
         self.installEvent()
+
+    def mytest(self):
+        self.ui.nameLine.setText("test")
+        self.ui.numLine.setText("123456")
+
+    def setBtnIcon(self):
+        login_icon_path = frozen.app_path() + r"/res/icon/login.png"
+        pixImg = self.mySetIconSize(login_icon_path)
+        self.ui.login_icon_label.setPixmap(pixImg)
+        self.ui.login_icon_label.setAlignment(Qt.AlignCenter)
+
+        register_icon_path = frozen.app_path() + r"/res/icon/register.png"
+        pixImg = self.mySetIconSize(register_icon_path)
+        self.ui.register_icon_label.setPixmap(pixImg)
+        self.ui.register_icon_label.setAlignment(Qt.AlignCenter)
+
+    # 设置按钮图标比例
+    def mySetIconSize(self, path):
+        img = QImage(path)  # 创建图片实例
+        mgnWidth = 50
+        mgnHeight = 50  # 缩放宽高尺寸
+        size = QSize(mgnWidth, mgnHeight)
+        pixImg = QPixmap.fromImage(
+            img.scaled(size, Qt.IgnoreAspectRatio))  # 修改图片实例大小并从QImage实例中生成QPixmap实例以备放入QLabel控件中
+        return pixImg
 
     def installEvent(self):
         for item in self.focuswidget:

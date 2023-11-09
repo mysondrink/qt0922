@@ -1,3 +1,4 @@
+import frozen
 from gui.register import *
 from keyboard.keyboard import KeyBoard
 
@@ -14,6 +15,14 @@ class registerPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnConfirm.setIconSize(QSize(32, 32))
+        self.ui.btnConfirm.setIcon(QIcon(confirm_icon_path))
+
+        return_icon_path = frozen.app_path() + r"/res/icon/return.png"
+        self.ui.btnReturn.setIconSize(QSize(32, 32))
+        self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
         self.setFocusWidget()
         self.installEvent()

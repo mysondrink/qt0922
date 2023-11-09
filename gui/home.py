@@ -24,10 +24,10 @@ class Ui_Form(object):
         self.frame.setGeometry(QRect(0, 0, 800, 450))
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
-        self.label_2 = QLabel(self.frame)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(410, 100, 80, 80))
-        self.label_2.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+        self.history_icon_label = QLabel(self.frame)
+        self.history_icon_label.setObjectName(u"history_icon_label")
+        self.history_icon_label.setGeometry(QRect(410, 100, 80, 80))
+        self.history_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 35px;\n"
@@ -47,19 +47,19 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
-        self.label_4 = QLabel(self.frame)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(410, 220, 80, 80))
-        self.label_4.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+        self.sys_icon_label = QLabel(self.frame)
+        self.sys_icon_label.setObjectName(u"sys_icon_label")
+        self.sys_icon_label.setGeometry(QRect(410, 220, 80, 80))
+        self.sys_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 35px;\n"
 "\n"
 "")
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(100, 100, 80, 80))
-        self.label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+        self.reagent_icon_label = QLabel(self.frame)
+        self.reagent_icon_label.setObjectName(u"reagent_icon_label")
+        self.reagent_icon_label.setGeometry(QRect(100, 100, 80, 80))
+        self.reagent_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 35px;\n"
@@ -92,10 +92,10 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
-        self.label_3 = QLabel(self.frame)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(100, 220, 80, 80))
-        self.label_3.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+        self.reagent_set_icon_label = QLabel(self.frame)
+        self.reagent_set_icon_label.setObjectName(u"reagent_set_icon_label")
+        self.reagent_set_icon_label.setGeometry(QRect(100, 220, 80, 80))
+        self.reagent_set_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 35px;\n"
@@ -130,14 +130,14 @@ class Ui_Form(object):
 "}\n"
 "")
         self.btnData.raise_()
-        self.label.raise_()
+        self.reagent_icon_label.raise_()
         self.btnSet.raise_()
         self.btnPower.raise_()
-        self.label_3.raise_()
+        self.reagent_set_icon_label.raise_()
         self.btnHistory.raise_()
         self.btnPara.raise_()
-        self.label_4.raise_()
-        self.label_2.raise_()
+        self.sys_icon_label.raise_()
+        self.history_icon_label.raise_()
 
         self.retranslateUi(Form)
 
@@ -146,13 +146,13 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.label_2.setText("")
+        self.history_icon_label.setText("")
         self.btnData.setText(QCoreApplication.translate("Form", u"  \u8367\u5149\u68c0\u75ab", None))
-        self.label_4.setText("")
-        self.label.setText("")
+        self.sys_icon_label.setText("")
+        self.reagent_icon_label.setText("")
         self.btnSet.setText(QCoreApplication.translate("Form", u"  \u68c0\u75ab\u8bbe\u7f6e", None))
         self.btnPower.setText(QCoreApplication.translate("Form", u"\u7535\u6e90", None))
-        self.label_3.setText("")
+        self.reagent_set_icon_label.setText("")
         self.btnPara.setText(QCoreApplication.translate("Form", u"  \u7cfb\u7edf\u8bbe\u7f6e", None))
         self.btnHistory.setText(QCoreApplication.translate("Form", u"  \u5386\u53f2\u8bb0\u5f55", None))
     # retranslateUi

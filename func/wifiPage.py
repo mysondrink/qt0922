@@ -1,3 +1,8 @@
+import os
+from datetime import time
+
+import frozen
+from func.infoPage import infoMessage
 from gui.wifi import *
 from keyboard.keyboard import KeyBoard
 from utils.wifi import wifisearch
@@ -15,6 +20,14 @@ class wifiPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnConfirm.setIconSize(QSize(32, 32))
+        self.ui.btnConfirm.setIcon(QIcon(confirm_icon_path))
+
+        return_icon_path = frozen.app_path() + r"/res/icon/return.png"
+        self.ui.btnReturn.setIconSize(QSize(32, 32))
+        self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
         self.setFocusWidget()
         self.installEvent()
@@ -78,14 +91,14 @@ class wifiPage(Ui_Form, QWidget):
             m_title = "确认"
             m_title = ""
             m_info = "wifi连接成功！"
-            self.infoMessageBox(m_info, m_title)
+            infoMessage(m_info, m_title)
             cmd_date = 'echo %s | sudo ntpdate cn.pool.ntp.org' % ('orangepi')
             os.system(cmd_date)
         else:
             m_title = "确认"
             m_title = ""
             m_info = "wifi连接失败！"
-            self.infoMessageBox(m_info, m_title)
+            infoMessage(m_info, m_title)
 
         time.sleep(1)
 

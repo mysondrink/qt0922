@@ -1,5 +1,6 @@
 import pymysql
 
+import frozen
 from func.infoPage import infoMessage
 from gui.edit import *
 page_dict = {'page': 0, 'page2': 1, 'page3': 2, 'page4': 3, 'page5': 4}
@@ -17,11 +18,48 @@ class editPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.ui.stackedWidget.setCurrentIndex(0)
         self.ui.rowCb.addItems(["2x3", "2x5", "4x5", "8x5"])
         self.resetBtn()
 
+        self.setBtnIcon()
+
         self.setFocusWidget()
         self.installEvent()
+
+    def setBtnIcon(self):
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnConfirm.setIconSize(QSize(32, 32))
+        self.ui.btnConfirm.setIcon(QIcon(confirm_icon_path))
+
+        return_icon_path = frozen.app_path() + r"/res/icon/return.png"
+        self.ui.btnReturn.setIconSize(QSize(32, 32))
+        self.ui.btnReturn.setIcon(QIcon(return_icon_path))
+
+        add_icon_path = frozen.app_path() + r"/res/icon/add.png"
+        pixImg = self.mySetIconSize(add_icon_path)
+        self.ui.add_icon_label.setPixmap(pixImg)
+        self.ui.add_icon_label.setAlignment(Qt.AlignCenter)
+
+        delete_icon_path = frozen.app_path() + r"/res/icon/delete.png"
+        pixImg = self.mySetIconSize(delete_icon_path)
+        self.ui.delete_icon_label.setPixmap(pixImg)
+        self.ui.delete_icon_label.setAlignment(Qt.AlignCenter)
+
+        edit_icon_path = frozen.app_path() + r"/res/icon/edit.png"
+        pixImg = self.mySetIconSize(edit_icon_path)
+        self.ui.edit_icon_label.setPixmap(pixImg)
+        self.ui.edit_icon_label.setAlignment(Qt.AlignCenter)
+
+    # 设置按钮图标比例
+    def mySetIconSize(self, path):
+        img = QImage(path)  # 创建图片实例
+        mgnWidth = 50
+        mgnHeight = 50  # 缩放宽高尺寸
+        size = QSize(mgnWidth, mgnHeight)
+        pixImg = QPixmap.fromImage(
+            img.scaled(size, Qt.IgnoreAspectRatio))  # 修改图片实例大小并从QImage实例中生成QPixmap实例以备放入QLabel控件中
+        return pixImg
 
     def installEvent(self):
         for item in self.focuswidget:

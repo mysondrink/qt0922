@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from gui.history import *
 page_dict = {'page': 0, 'page_2': 1, 'page_3': 2, 'page_4': 3}
 from func.infoPage import infoMessage
@@ -5,6 +7,8 @@ import pymysql
 import math
 import frozen
 from utils.report import MyReport
+from inf.print import Em5822_Print
+
 
 header_list = ["试剂卡编号", "采样时间",  "病人编号" , "病人姓名"]
 
@@ -23,12 +27,47 @@ class historyPage(Ui_Form, QWidget):
         self.ui.dateBox.setCalendarPopup(True)
         self.ui.dateBox.setDateTime(QDateTime.currentDateTime())
 
+        self.setBtnIcon()
+
         self.resetBtn_3()
         self.ui.btnDownload.hide()
         self.ui.btnPrint.hide()
         self.ui.btnReport.hide()
         self.setReagentCb()
         self.setTableWidget()
+
+    def setBtnIcon(self):
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnConfirm.setIconSize(QSize(32, 32))
+        self.ui.btnConfirm.setIcon(QIcon(confirm_icon_path))
+
+        return_icon_path = frozen.app_path() + r"/res/icon/return.png"
+        self.ui.btnReturn.setIconSize(QSize(32, 32))
+        self.ui.btnReturn.setIcon(QIcon(return_icon_path))
+
+        pre_icon_path = frozen.app_path() + r"/res/icon/pre.png"
+        self.ui.btnPre.setIconSize(QSize(32, 32))
+        self.ui.btnPre.setIcon(QIcon(pre_icon_path))
+
+        next_icon_path = frozen.app_path() + r"/res/icon/next.png"
+        self.ui.btnNext.setIconSize(QSize(32, 32))
+        self.ui.btnNext.setIcon(QIcon(next_icon_path))
+
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnReport.setIconSize(QSize(32, 32))
+        self.ui.btnReport.setIcon(QIcon(confirm_icon_path))
+
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnDetail.setIconSize(QSize(32, 32))
+        self.ui.btnDetail.setIcon(QIcon(confirm_icon_path))
+
+        exe_icon_path = frozen.app_path() + r"/res/icon/compute.png"
+        self.ui.btnDownload.setIconSize(QSize(32, 32))
+        self.ui.btnDownload.setIcon(QIcon(exe_icon_path))
+
+        exe_icon_path = frozen.app_path() + r"/res/icon/exe.png"
+        self.ui.btnPrint.setIconSize(QSize(32, 32))
+        self.ui.btnPrint.setIcon(QIcon(exe_icon_path))
 
     def resetBtn(self):
         self.ui.btnReport.setText('报告单')
@@ -358,7 +397,18 @@ class historyPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnPrint_clicked(self):
-        pass
+        reagent_id = self.ui.historyTable.currentIndex().row() + self.page_size * self.current_page
+
+        time_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # detailwin = childWindow(self.reagent_info[reagent_id], self.time_list[reagent_id], time_now)
+        # reagent_info = self.reagent_info[reagent_id]
+        test_time = self.time_list[reagent_id]
+
+        myEm5822_Print = Em5822_Print(test_time, time_now)
+        myEm5822_Print.em5822_print()
+        m_title = ""
+        m_info = "输出表格成功。。。"
+        infoMessage(m_title, m_info)
 
     @Slot()
     def on_btnReport_clicked(self):

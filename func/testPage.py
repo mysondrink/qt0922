@@ -5,8 +5,7 @@ from inf.probeThread import MyProbe
 import datetime
 import cv2 as cv
 import frozen as frozen
-import func.dirs as dirs
-import math
+import utils.dirs as dirs
 import random
 import pymysql
 
@@ -42,6 +41,28 @@ class testPage(Ui_Form, QWidget):
         self.installEvent()
         self.setReagentCb()
         self.mytest()
+        self.setBtnIcon()
+
+    def setBtnIcon(self):
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnConfirm.setIconSize(QSize(32, 32))
+        self.ui.btnConfirm.setIcon(QIcon(confirm_icon_path))
+
+        exe_icon_path = frozen.app_path() + r"/res/icon/exe.png"
+        self.ui.btnExe.setIconSize(QSize(32, 32))
+        self.ui.btnExe.setIcon(QIcon(exe_icon_path))
+
+        exe_icon_path = frozen.app_path() + r"/res/icon/compute.png"
+        self.ui.btnPrint.setIconSize(QSize(32, 32))
+        self.ui.btnPrint.setIcon(QIcon(exe_icon_path))
+
+        switch_icon_path = frozen.app_path() + r"/res/icon/switch.png"
+        self.ui.btnSwitch.setIconSize(QSize(32, 32))
+        self.ui.btnSwitch.setIcon(QIcon(switch_icon_path))
+
+        return_icon_path = frozen.app_path() + r"/res/icon/return.png"
+        self.ui.btnReturn.setIconSize(QSize(32, 32))
+        self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
     def mytest(self):
         self.ui.nameLine.setText("123")

@@ -1,3 +1,4 @@
+import frozen
 from gui.power import *
 
 class powerPage(Ui_Form, QWidget):
@@ -12,6 +13,27 @@ class powerPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setBtnIcon()
+    def setBtnIcon(self):
+        shutdown_icon_path = frozen.app_path() + r"/res/icon/shutdown.png"
+        pixImg = self.mySetIconSize(shutdown_icon_path)
+        self.ui.shutdown_icon_label.setPixmap(pixImg)
+        self.ui.shutdown_icon_label.setAlignment(Qt.AlignCenter)
+
+        logout_icon_path = frozen.app_path() + r"/res/icon/logout.png"
+        pixImg = self.mySetIconSize(logout_icon_path)
+        self.ui.logout_icon_label.setPixmap(pixImg)
+        self.ui.logout_icon_label.setAlignment(Qt.AlignCenter)
+
+    # 设置按钮图标比例
+    def mySetIconSize(self, path):
+        img = QImage(path)  # 创建图片实例
+        mgnWidth = 50
+        mgnHeight = 50  # 缩放宽高尺寸
+        size = QSize(mgnWidth, mgnHeight)
+        pixImg = QPixmap.fromImage(
+            img.scaled(size, Qt.IgnoreAspectRatio))  # 修改图片实例大小并从QImage实例中生成QPixmap实例以备放入QLabel控件中
+        return pixImg
 
     @Slot()
     def on_btnReturn_clicked(self):

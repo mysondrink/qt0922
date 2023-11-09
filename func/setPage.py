@@ -1,3 +1,4 @@
+import frozen
 from func.infoPage import infoMessage
 from gui.set import *
 
@@ -16,6 +17,14 @@ class setPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.modeBox_4.addItems(["5000x4000", "3000x2000"])
+
+        confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
+        self.ui.btnConfirm.setIconSize(QSize(32, 32))
+        self.ui.btnConfirm.setIcon(QIcon(confirm_icon_path))
+
+        return_icon_path = frozen.app_path() + r"/res/icon/return.png"
+        self.ui.btnReturn.setIconSize(QSize(32, 32))
+        self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
     @Slot()
     def on_btnConfirm_clicked(self):
