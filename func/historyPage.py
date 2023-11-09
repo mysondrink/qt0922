@@ -360,9 +360,10 @@ class historyPage(Ui_Form, QWidget):
             # 在U盘根目录下创建示例文件
             file_path = os.path.join(filename, "example.txt")
             with open(file_path, "w") as f:
-                f.write("检疫报告单-输出")
+                msg = "检疫报告单-输出" + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+                f.write(msg)
             m_title = ""
-            m_info = "上传完成！"
+            m_info = "下载完成！"
             infoMessage(m_info, m_title)
         else:
             m_title = ""
