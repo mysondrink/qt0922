@@ -1,3 +1,5 @@
+import os
+import shutil
 from datetime import datetime
 
 from gui.history import *
@@ -347,10 +349,25 @@ class historyPage(Ui_Form, QWidget):
         self.ui.tableWidget.setLayout(v)
 
     def downLoadToUSB(self):
-        m_title = "错误"
-        m_title = ""
-        m_info = "下载完成！"
-        infoMessage(m_info, m_title)
+        # 指定目标目录
+        target_dir = '/media/xiao/'
+
+        # 获取U盘设备路径
+        filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+
+        # 检查U盘是否已插入
+        if os.path.exists(filename):
+            # 在U盘根目录下创建示例文件
+            file_path = os.path.join(filename, "example.txt")
+            with open(file_path, "w") as f:
+                f.write("检疫报告单-输出")
+            m_title = ""
+            m_info = "上传完成！"
+            infoMessage(m_info, m_title)
+        else:
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
 
     @Slot()
     def on_btnConfirm_clicked(self):

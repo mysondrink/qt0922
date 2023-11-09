@@ -1,6 +1,8 @@
 import frozen
 from func.infoPage import infoMessage
 from gui.about import *
+import os
+import shutil
 
 
 class aboutPage(Ui_Form, QWidget):
@@ -26,9 +28,33 @@ class aboutPage(Ui_Form, QWidget):
         self.ui.btnUpload.setIcon(QIcon(confirm_icon_path))
 
     def uploadFromUSB(self):
-        m_title = ""
-        m_info = "上传完成！"
-        infoMessage(m_info, m_title)
+        # 指定目标目录
+        target_dir = '/media/xiao/'
+
+        # 获取U盘设备路径
+        filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+
+        # 检查U盘是否已插入
+        if os.path.exists(filename):
+            # 在U盘根目录下查找指定文件
+            file_path = os.path.join(filename, "example.txt")
+            if os.path.exists(file_path):
+                # 读取文件内容并打印到控制台
+                with open(file_path, "r") as f:
+                    # print(f.read())
+                    m_title = ""
+                    m_info = f.read()
+                    infoMessage(m_info, m_title)
+            else:
+                # print("文件不存在")
+                m_title = ""
+                m_info = "文件不存在"
+                infoMessage(m_info, m_title)
+        else:
+            # print("U盘未插入或无法访问")
+            m_title = ""
+            m_info = "U盘未插入或无法访问"
+            infoMessage(m_info, m_title)
 
     @Slot()
     def on_btnUpload_clicked(self):
