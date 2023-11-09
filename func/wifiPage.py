@@ -34,7 +34,7 @@ class wifiPage(Ui_Form, QWidget):
         self.mytest()
 
     def mytest(self):
-        self.ui.wifiCb.addItems(["cqgkyg","cqgkyg2023"])
+        self.ui.wifiCb.addItems(["TPLink","TPLink2023"])
 
     def installEvent(self):
         for item in self.focuswidget:

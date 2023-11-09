@@ -1,5 +1,5 @@
 from gui.test import *
-from inf.picThread import MyPicThread
+# from inf.picThread import MyPicThread
 from keyboard.keyboard import KeyBoard
 from func.infoPage import infoMessage
 from inf.probeThread import MyProbe
@@ -37,7 +37,7 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.setId(self.ui.radioButton_2, 1)
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
-        self.mypicthread = MyPicThread()
+        # self.mypicthread = MyPicThread()
 
         self.setFocusWidget()
         self.installEvent()
@@ -175,15 +175,14 @@ class testPage(Ui_Form, QWidget):
         time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
-        try:
-            gray_aver = self.mypicthread.takePicture(time_now)
-        except Exception as e:
-            print(e)
-        gray_row = len(gray_aver)
-        gray_column = len(gray_aver[0])
-
+        # try:
+        #     gray_aver = self.mypicthread.takePicture(time_now)
+        #     gray_row = len(gray_aver)
+        #     gray_column = len(gray_aver[0])
+        # except Exception as e:
+        #     print(e)
         img_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_final.jpeg')
-
+        print(img_final)
         # 测试
         gray_aver = img_final[0]
         gray_row = 5
@@ -209,6 +208,8 @@ class testPage(Ui_Form, QWidget):
 
         flag = 0
 
+        self.pic_para = 1
+
         for i in range(0, self.row_exetable + int(self.row_exetable / 2)):
             if i % 3 != 0:
                 for j in range(0, self.column_exetable):
@@ -216,6 +217,7 @@ class testPage(Ui_Form, QWidget):
                         # item = QStandardItem(str(gray_aver[i - flag][j]))
                         pix_num = int(gray_aver[i - flag][j])
                         pix_num = int(float(gray_aver[i - flag][j]) * self.pic_para)
+                        pix_num = random.randint(15428,16428)
                         item = QStandardItem(str(pix_num))
                     else:
                         item = QStandardItem(str(0))

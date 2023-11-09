@@ -231,6 +231,7 @@ class Ui_Form(object):
 "   font: 20pt \"\u5b8b\u4f53\";\n"
 "	color: rgb(255, 255, 255);\n"
 "	background-color: rgb(0, 0, 0);\n"
+"	align: center;\n"
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
@@ -273,7 +274,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(Form)
