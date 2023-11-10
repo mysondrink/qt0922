@@ -48,6 +48,9 @@ class editPage(Ui_Form, QWidget):
                         content_cb = QComboBox(self)
                         content_cb.addItems(allergen)
                         content_cb.setCurrentIndex(0)
+                        content_cb.setEditable(True)
+                        _lineEdit = content_cb.lineEdit()
+                        _lineEdit.setAlignment(Qt.AlignCenter)
                         # content_cb.setStyleSheet(self.cb_style_sheet)
                         self.ui.reagentTable.setIndexWidget(self.pix_reagent_table_model.index(i, j), content_cb)
         else:
@@ -69,6 +72,9 @@ class editPage(Ui_Form, QWidget):
                         content_cb.addItems(allergen)
                         num = int(str_num[j + (i % 3) * self.row_reagent_table])
                         content_cb.setCurrentIndex(num)
+                        content_cb.setEditable(True)
+                        _lineEdit = content_cb.lineEdit()
+                        _lineEdit.setAlignment(Qt.AlignCenter)
                         # content_cb.setStyleSheet(self.cb_style_sheet)
                         self.ui.reagentTable.setIndexWidget(self.pix_reagent_table_model.index(i, j), content_cb)
 
