@@ -30,7 +30,7 @@ class setPage(Ui_Form, QWidget):
     def on_btnConfirm_clicked(self):
         m_title = ""
         m_info = "成功！"
-        infoMessage(m_info, m_title)
+        infoMessage(m_info, m_title, 400)
 
     @Slot()
     def on_btnReturn_clicked(self):

@@ -3,6 +3,7 @@ from datetime import time
 
 import frozen
 from gui.power import *
+from func.infoPage import infoMessage
 
 class powerPage(Ui_Form, QWidget):
     next_page = Signal(str)
@@ -54,7 +55,7 @@ class powerPage(Ui_Form, QWidget):
         m_title = ""
         m_info = "请关闭电源！"
         timer = 1
-        self.infoMessageBox(m_info, m_title, timer)
+        infoMessage(m_info, m_title, 300)
         time.sleep(1000)
         # order_str = "sudo shutdown -h now"
         order_str = 'echo %s | sudo %s' % ('orangepi', 'shutdown -h now')

@@ -37,7 +37,7 @@ class aboutPage(Ui_Form, QWidget):
         except Exception as e:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 240)
             return
 
             # 检查U盘是否已插入
@@ -55,18 +55,18 @@ class aboutPage(Ui_Form, QWidget):
                 # print("文件不存在")
                 m_title = ""
                 m_info = "文件不存在!"
-                infoMessage(m_info, m_title)
+                infoMessage(m_info, m_title, 300)
         else:
             # print("U盘未插入或无法访问")
             m_title = ""
             m_info = "U盘未插入或无法访问!"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 240)
 
     @Slot()
     def on_btnUpload_clicked(self):
         m_title = ""
         m_info = "上传中..."
-        infoMessage(m_info, m_title)
+        infoMessage(m_info, m_title, 380)
         # 创建定时器
         self.change_timer = QTimer()
         self.change_timer.timeout.connect(self.uploadFromUSB())

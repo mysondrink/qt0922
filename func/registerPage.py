@@ -80,7 +80,7 @@ class registerPage(Ui_Form, QWidget):
             # self.setUserDict()
             m_title = ""
             m_info = "操作成功！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 300)
             page_msg = 'loginPage'
             self.next_page.emit(page_msg)
 
