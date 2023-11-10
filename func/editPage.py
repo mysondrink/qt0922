@@ -363,7 +363,7 @@ class editPage(Ui_Form, QWidget):
             # 删除
             m_title = ""
             m_info = "确认中..."
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 380)
             # 创建定时器
             self.change_timer = QTimer()
             self.change_timer.timeout.connect(self.deleteItem())
@@ -382,7 +382,7 @@ class editPage(Ui_Form, QWidget):
         elif self.ui.stackedWidget.currentIndex() == 4:
             m_title = ""
             m_info = "成功！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 400)
             self.edit()
             # # 创建定时器
             # self.change_timer = QTimer()

@@ -370,7 +370,7 @@ class historyPage(Ui_Form, QWidget):
                 f.write(msg)
             m_title = ""
             m_info = "下载完成！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 300)
         else:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
@@ -381,7 +381,7 @@ class historyPage(Ui_Form, QWidget):
         if self.ui.modeBox_3.currentIndex() == -1:
             m_title = ""
             m_info = "未选择试剂卡规格！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 300)
         else:
             self.resetBtn_2()
             self.ui.btnConfirm.hide()
@@ -407,7 +407,7 @@ class historyPage(Ui_Form, QWidget):
             m_title = "错误"
             m_title = ""
             m_info = "未选择试剂卡！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 300)
             return
         else:
             self.resetBtn_3()
@@ -432,7 +432,7 @@ class historyPage(Ui_Form, QWidget):
         myEm5822_Print.em5822_print()
         m_title = ""
         m_info = "输出表格成功!"
-        infoMessage(m_title, m_info)
+        infoMessage(m_title, m_info, 300)
 
     @Slot()
     def on_btnReport_clicked(self):
@@ -465,7 +465,7 @@ class historyPage(Ui_Form, QWidget):
         m_title = "错误"
         m_title = ""
         m_info = "下载中..."
-        infoMessage(m_info, m_title)
+        infoMessage(m_info, m_title, 380)
         # 创建定时器
         self.change_timer = QTimer()
         self.change_timer.timeout.connect(self.downLoadToUSB())

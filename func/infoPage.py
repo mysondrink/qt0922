@@ -3,8 +3,10 @@ from PySide2.QtCore import QTimer
 from PySide2.QtGui import *
 
 class infoMessage(QWidget):
-    def __init__(self, info, title):
+    def __init__(self, info, title,_x=230,_y=200):
         super().__init__()
+        self.x = _x
+        self.y = _y
         self.m_title = title
         self.m_info = info
         self.InitUI()
@@ -38,6 +40,6 @@ class infoMessage(QWidget):
         m_box.setStyleSheet(stylesheet)
         m_box.setWindowFlags(Qt.FramelessWindowHint)
         # m_box.setFixedSize(400, 400)
-        m_box.setGeometry(230, 200, 400, 400)
+        m_box.setGeometry(self.x, self.y, 400, 400)
         m_box.buttonClicked.connect(lambda: self.checkBoxInfo(m_title))
         m_box.exec_()

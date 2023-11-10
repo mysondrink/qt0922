@@ -415,7 +415,7 @@ class testPage(Ui_Form, QWidget):
                 or self.ui.departCb == "" or self.ui.docCb == "":
             m_title = ""
             m_info = "请填写完信息！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 280)
             return
 
         self.setTableView()
@@ -428,7 +428,7 @@ class testPage(Ui_Form, QWidget):
     def on_btnExe_clicked(self):
         m_title = ""
         m_info = "照片生成中..."
-        infoMessage(m_info, m_title)
+        infoMessage(m_info, m_title, 280)
         # 创建定时器
         self.change_timer = QTimer()
         self.change_timer.timeout.connect(self.btnExe_clicked())

@@ -129,7 +129,7 @@ class clearPage(Ui_Form, QWidget):
         m_title = "确认"
         m_title = ""
         m_info = "已经完成清理!"
-        infoMessage(m_info, m_title)
+        infoMessage(m_info, m_title, 260)
         # self.ui.btnData.setEnabled(True)
         # self.ui.btnHistory.setEnabled(True)
         # self.ui.btnSet.setEnabled(True)

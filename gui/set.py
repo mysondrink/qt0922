@@ -111,8 +111,8 @@ class Ui_Form(object):
         self.label_3.setText(QCoreApplication.translate("Form", u"\u8d28\u91cf\u63a7\u5236", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
         self.btnConfirm.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
-        self.pushButton.setText(QCoreApplication.translate("Form", u"      \u5b9a\u4f4d\u7cbe\u5ea6\u6821\u6b63", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Form", u"      \u8bd5\u5242\u7cbe\u5ea6\u6821\u6b63", None))
+        self.pushButton.setText(QCoreApplication.translate("Form", u"-----  \u5b9a\u4f4d\u7cbe\u5ea6\u6821\u6b63", None))
+        self.pushButton_2.setText(QCoreApplication.translate("Form", u"-----  \u8bd5\u5242\u7cbe\u5ea6\u6821\u6b63", None))
         self.label.setText("")
         self.label_2.setText("")
     # retranslateUi

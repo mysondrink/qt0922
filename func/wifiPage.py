@@ -96,21 +96,21 @@ class wifiPage(Ui_Form, QWidget):
                 m_title = "确认"
                 m_title = ""
                 m_info = "wifi连接成功！"
-                infoMessage(m_info, m_title)
+                infoMessage(m_info, m_title, 280)
                 cmd_date = 'echo %s | sudo ntpdate cn.pool.ntp.org' % ('orangepi')
                 os.system(cmd_date)
             else:
                 m_title = "确认"
                 m_title = ""
                 m_info = "wifi连接失败！"
-                infoMessage(m_info, m_title)
+                infoMessage(m_info, m_title, 280)
 
             time.sleep(1)
         except Exception as e:
             m_title = "确认"
             m_title = ""
             m_info = "wifi连接失败！"
-            infoMessage(m_info, m_title)
+            infoMessage(m_info, m_title, 280)
 
     @Slot()
     def on_btnReturn_clicked(self):
