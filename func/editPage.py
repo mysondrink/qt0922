@@ -291,6 +291,29 @@ class editPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
+    # 修改数据库试剂卡
+    def updateReagentDB(self, name, item_type):
+        matrix = self.readPixtableNum(2)
+        connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
+                                     charset='utf8')
+        # MySQL语句
+        sql = 'UPDATE matrix_table SET reagent_matrix_info = %s WHERE reagent_type= %s AND reagent_matrix = %s'
+
+        # 获取标记
+        cursor = connection.cursor()
+        try:
+            # 执行SQL语句
+            cursor.execute(sql, [matrix, name, item_type])
+            # 提交事务
+            connection.commit()
+        except Exception as e:
+            # print(str(e))
+            # 有异常，回滚事务
+            connection.rollback()
+        # 释放内存
+        cursor.close()
+        connection.close()
+
     @Slot()
     def on_btnAdd_clicked(self):
         self.resetBtn_2()
