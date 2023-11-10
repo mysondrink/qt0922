@@ -1,11 +1,11 @@
 # created by xiao 
 import sys
 from func.loadPage import *
-from func.aboutPage import *
+from func.setPage import *
 
 def main():
     app = QApplication()
-    w = aboutPage()
+    w = loadPage()
     w.show()
     sys.exit(app.exec_())
 
