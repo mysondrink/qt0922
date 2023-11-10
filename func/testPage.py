@@ -164,6 +164,9 @@ class testPage(Ui_Form, QWidget):
                     content_cb.addItems(allergen)
                     num = int(str_num[j + (i % 3) * self.row_exetable])
                     content_cb.setCurrentIndex(num)
+                    content_cb.setEditable(True)
+                    _lineEdit = content_cb.lineEdit()
+                    _lineEdit.setAlignment(Qt.AlignCenter)
                     # content_cb.setStyleSheet(self.cb_style_sheet)
                     self.ui.exeTable.setIndexWidget(self.pix_table_model.index(i, j), content_cb)
 
