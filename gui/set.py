@@ -24,37 +24,10 @@ class Ui_Form(object):
         self.frame.setGeometry(QRect(0, 0, 800, 450))
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(100, 140, 272, 67))
-        self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
-        self.modeBox_4 = QComboBox(self.frame)
-        self.modeBox_4.setObjectName(u"modeBox_4")
-        self.modeBox_4.setGeometry(QRect(400, 140, 230, 70))
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.modeBox_4.sizePolicy().hasHeightForWidth())
-        self.modeBox_4.setSizePolicy(sizePolicy)
-        self.modeBox_4.setStyleSheet(u"QComboBox::drop-down{\n"
-"width:56px;  height:56px;\n"
-"}\n"
-"\n"
-"QComboBox{\n"
-"font: 20pt \"\u5b8b\u4f53\";\n"
-"color: rgb(255, 255, 255);\n"
-"background-color: rgb(0, 0, 0);\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView {\n"
-"	background-color: rgb(0, 0, 0);/*\u80cc\u666f\u989c\u8272*/\n"
-"    padding: 1px 2px 1px 2px;  /*\u9488\u5bf9\u4e8e\u7ec4\u5408\u6846\u4e2d\u7684\u6587\u672c\u5185\u5bb9*/\n"
-"	color: rgb(255,255,255)\n"
-"}")
-        self.label_2 = QLabel(self.frame)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(0, 0, 191, 61))
-        self.label_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.label_3 = QLabel(self.frame)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setGeometry(QRect(0, 0, 191, 61))
+        self.label_3.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.btnReturn = QPushButton(self.frame)
         self.btnReturn.setObjectName(u"btnReturn")
         self.btnReturn.setGeometry(QRect(410, 360, 380, 80))
@@ -81,6 +54,52 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
+        self.pushButton = QPushButton(self.frame)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setGeometry(QRect(260, 90, 280, 80))
+        self.pushButton.setStyleSheet(u"QPushButton {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:#05abc2;\n"
+"border-radius: 35px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(255, 0, 0);\n"
+"}\n"
+"")
+        self.pushButton_2 = QPushButton(self.frame)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setGeometry(QRect(260, 210, 280, 80))
+        self.pushButton_2.setStyleSheet(u"QPushButton {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:#05abc2;\n"
+"border-radius: 35px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(255, 0, 0);\n"
+"}\n"
+"")
+        self.label = QLabel(self.frame)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(260, 90, 80, 80))
+        self.label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color: rgb(255, 255, 255);\n"
+"border-radius: 35px;\n"
+"\n"
+"")
+        self.label_2 = QLabel(self.frame)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(260, 210, 80, 80))
+        self.label_2.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color: rgb(255, 255, 255);\n"
+"border-radius: 35px;\n"
+"\n"
+"")
 
         self.retranslateUi(Form)
 
@@ -89,9 +108,12 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.label.setText(QCoreApplication.translate("Form", u"\u50cf\u7d20\u8bbe\u7f6e", None))
-        self.label_2.setText(QCoreApplication.translate("Form", u"\u8d28\u91cf\u63a7\u5236", None))
+        self.label_3.setText(QCoreApplication.translate("Form", u"\u8d28\u91cf\u63a7\u5236", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
         self.btnConfirm.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
+        self.pushButton.setText(QCoreApplication.translate("Form", u"     \u5b9a\u4f4d\u7cbe\u5ea6\u6821\u6b63", None))
+        self.pushButton_2.setText(QCoreApplication.translate("Form", u"     \u8bd5\u5242\u7cbe\u5ea6\u6821\u6b63", None))
+        self.label.setText("")
+        self.label_2.setText("")
     # retranslateUi
 
