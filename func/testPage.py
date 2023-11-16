@@ -178,18 +178,18 @@ class testPage(Ui_Form, QWidget):
         time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
-        # try:
-        #     gray_aver = self.mypicthread.takePicture(time_now)
-        #     gray_row = len(gray_aver)
-        #     gray_column = len(gray_aver[0])
-        # except Exception as e:
-        #     print(e)
+        try:
+            gray_aver = self.mypicthread.takePicture(time_now)
+            gray_row = len(gray_aver)
+            gray_column = len(gray_aver[0])
+        except Exception as e:
+            print(e)
         img_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_final.jpeg')
-        print(img_final)
+        # print(img_final)
         # 测试
-        gray_aver = img_final[0]
-        gray_row = 5
-        gray_column = 8
+        # gray_aver = img_final[0]
+        # gray_row = 5
+        # gray_column = 8
 
         name_pic = time_now
 
@@ -199,15 +199,15 @@ class testPage(Ui_Form, QWidget):
         self.ui.photoLabel.setScaledContents(False)  # 是否拉伸窗口
 
         # 测试
-        self.ui.photoLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(%s/inf/img_out/img_final.jpeg); "
-                                         "font: 20pt; "
-                                         "color: rgb(255,0,0);}" % (frozen.app_path()))
-
         # self.ui.photoLabel.setStyleSheet("QLabel{"
-        #                                  "border-image: url(%s/img/%s/%s.jpeg); "
+        #                                  "border-image: url(%s/inf/img_out/img_final.jpeg); "
         #                                  "font: 20pt; "
-        #                                  "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # 设置拍照图片显示
+        #                                  "color: rgb(255,0,0);}" % (frozen.app_path()))
+
+        self.ui.photoLabel.setStyleSheet("QLabel{"
+                                         "border-image: url(%s/img/%s/%s.jpeg); "
+                                         "font: 20pt; "
+                                         "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # 设置拍照图片显示
 
         flag = 0
 
