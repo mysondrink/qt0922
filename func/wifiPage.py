@@ -31,10 +31,11 @@ class wifiPage(Ui_Form, QWidget):
 
         self.setFocusWidget()
         self.installEvent()
-        self.mytest()
+        self.setWifiName()
+        # self.mytest()
 
-    def mytest(self):
-        self.ui.wifiCb.addItems(["TPLink","TPLink2023"])
+    # def mytest(self):
+    #     self.ui.wifiCb.addItems(["TPLink","TPLink2023"])
 
     def installEvent(self):
         for item in self.focuswidget:
@@ -72,7 +73,8 @@ class wifiPage(Ui_Form, QWidget):
 
     # 设置wifi选择框
     def setWifiName(self):
-        self.wifiName = wifisearch.getwifiname()
+        mywifi = wifisearch
+        self.wifiName = mywifi.getwifiname()
         self.ui.wifiCb.addItems(self.wifiName)
 
     @Slot()

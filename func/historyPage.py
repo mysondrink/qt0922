@@ -350,11 +350,11 @@ class historyPage(Ui_Form, QWidget):
 
     def downLoadToUSB(self):
         # 指定目标目录
-        target_dir = '/media/xiao/'
+        target_dir = '/media/orangepi/orangepi/'
 
         # 获取U盘设备路径
         try:
-            filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0]
         except Exception as e:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
@@ -430,6 +430,8 @@ class historyPage(Ui_Form, QWidget):
 
         myEm5822_Print = Em5822_Print(test_time, time_now)
         myEm5822_Print.em5822_print()
+        # myEm5822_Print = Em5822_Print()
+        # myEm5822_Print.em5822_print(test_time, time_now)
         m_title = ""
         m_info = "输出表格成功!"
         infoMessage(m_title, m_info, 300)

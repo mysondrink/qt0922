@@ -1,5 +1,5 @@
 from gui.test import *
-# from inf.picThread import MyPicThread
+from inf.picThread import MyPicThread
 from keyboard.keyboard import KeyBoard
 from func.infoPage import infoMessage
 from inf.probeThread import MyProbe
@@ -9,8 +9,49 @@ import frozen as frozen
 import utils.dirs as dirs
 import random
 import pymysql
+from inf.print import Em5822_Print
+from inf.img_acquire import Image_Acquire
+from inf.img_process import Image_Processing
 
 allergen = [' ','花生', '牛奶', '大豆', '桃子']
+
+#   试剂区域圈定区域，可修改
+roi_agentia = [
+    [0, 700], [0, 2500]
+]
+
+#   定位点圈定区域，可修改
+roi_position = [
+    [0, 700], [0, 2500]  # [startY, endY] [StartX, endX]
+]
+
+#   试剂点，相对位置；可修改
+matrix_agentia = [
+    [
+        [260, 310], [590, 310], [920, 310], [1250, 310], [1580, 310]
+    ],
+    [
+        [260, 640], [590, 640], [920, 640], [1250, 640], [1580, 640]
+    ],
+    [
+        [260, 970], [590, 970], [920, 970], [1250, 970], [1580, 970]
+    ],
+    [
+        [260, 1300], [590, 1300], [920, 1300], [1250, 1300], [1580, 1300]
+    ],
+    [
+        [260, 1630], [590, 1630], [920, 1630], [1250, 1630], [1580, 1630]
+    ],
+    [
+        [260, 1960], [590, 1960], [920, 1960], [1250, 1960], [1580, 1960]
+    ],
+    [
+        [260, 2290], [590, 2290], [920, 2290], [1250, 2290], [1580, 2290]
+    ],
+    [
+        [-640, 3320], [-310, 3320], [20, 3320], [350, 3320], [680, 3320]
+    ]
+]
 
 class testPage(Ui_Form, QWidget):
     next_page = Signal(str)
@@ -178,8 +219,33 @@ class testPage(Ui_Form, QWidget):
         time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
+
+        pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
+
+        path_cache = frozen.app_path() + r'/inf/pic_cache/'
+        path_save = frozen.app_path() + r'/inf/picture/'
+        self.imgAcq = Image_Acquire(
+            path_cache=path_cache,
+            path_save=path_save
+        )
+
+        self.imgPro = Image_Processing(
+            roi_position=roi_position
+        )
+
         try:
-            gray_aver = self.mypicthread.takePicture(time_now)
+            print("takepicture")
+            # self.mypicthread.start()
+            # gray_aver = self.mypicthread.takePicture(time_now)
+            self.imgAcq.img_acquire(time_now)
+
+            # pic_name = 'img_final'
+            # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
+            #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+            #                                       radius=40)
+            flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
+                                                path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+                                                radius=40)
             gray_row = len(gray_aver)
             gray_column = len(gray_aver[0])
         except Exception as e:
@@ -219,8 +285,8 @@ class testPage(Ui_Form, QWidget):
                     if i - flag < gray_row and j < gray_column:
                         # item = QStandardItem(str(gray_aver[i - flag][j]))
                         pix_num = int(gray_aver[i - flag][j])
-                        pix_num = int(float(gray_aver[i - flag][j]) * self.pic_para)
-                        pix_num = random.randint(15428,16428)
+                        # pix_num = int(float(gray_aver[i - flag][j]) * self.pic_para)
+                        # pix_num = random.randint(15428,16428)
                         item = QStandardItem(str(pix_num))
                     else:
                         item = QStandardItem(str(0))
@@ -451,3 +517,20 @@ class testPage(Ui_Form, QWidget):
             self.ui.stackedWidget.setCurrentIndex(2)
         elif self.ui.stackedWidget.currentIndex() == 2:
             self.ui.stackedWidget.setCurrentIndex(1)
+
+    @Slot()
+    def on_btnPrint_clicked(self):
+        # reagent_id = self.ui.historyTable.currentIndex().row() + self.page_size * self.current_page
+
+        time_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # detailwin = childWindow(self.reagent_info[reagent_id], self.time_list[reagent_id], time_now)
+        # reagent_info = self.reagent_info[reagent_id]
+        test_time = time_now
+
+        # myEm5822_Print = Em5822_Print()
+        # myEm5822_Print.em5822_print(test_time, time_now)
+        myEm5822_Print = Em5822_Print(test_time, time_now)
+        myEm5822_Print.em5822_print()
+        m_title = ""
+        m_info = "输出表格成功!"
+        infoMessage(m_title, m_info, 300)

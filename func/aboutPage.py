@@ -29,11 +29,11 @@ class aboutPage(Ui_Form, QWidget):
 
     def uploadFromUSB(self):
         # 指定目标目录
-        target_dir = '/media/xiao/'
+        target_dir = '/media/orangepi/orangepi/'
 
         # 获取U盘设备路径
         try:
-            filename = r"/media/xiao/" + os.listdir(target_dir)[0]
+            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0]
         except Exception as e:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
