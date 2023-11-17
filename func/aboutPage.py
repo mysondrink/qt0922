@@ -33,7 +33,7 @@ class aboutPage(Ui_Form, QWidget):
 
         # 获取U盘设备路径
         try:
-            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0]
+            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
         except Exception as e:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
@@ -46,11 +46,14 @@ class aboutPage(Ui_Form, QWidget):
             file_path = os.path.join(filename, "example.txt")
             if os.path.exists(file_path):
                 # 读取文件内容并打印到控制台
-                with open(file_path, "r") as f:
-                    # print(f.read())
-                    m_title = ""
-                    m_info = f.read()
-                    infoMessage(m_info, m_title)
+                f = open(file_path, 'r', encoding="utf-8")
+                lines = f.readlines()
+                for i in range(len(lines)):
+                    num = float(lines[i])
+                    print(num)
+                m_title = ""
+                m_info = "上传成功"
+                infoMessage(m_info, m_title, 300)
             else:
                 # print("文件不存在")
                 m_title = ""

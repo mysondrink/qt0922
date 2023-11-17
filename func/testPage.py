@@ -12,6 +12,7 @@ import pymysql
 from inf.print import Em5822_Print
 from inf.img_acquire import Image_Acquire
 from inf.img_process import Image_Processing
+import time
 
 allergen = [' ','花生', '牛奶', '大豆', '桃子']
 
@@ -78,7 +79,8 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.setId(self.ui.radioButton_2, 1)
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
-        # self.mypicthread = MyPicThread()
+        self.mypicthread = MyPicThread()
+        self.mypicthread.start()
 
         self.setFocusWidget()
         self.installEvent()
@@ -220,32 +222,32 @@ class testPage(Ui_Form, QWidget):
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
 
-        pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
+        # pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
 
-        path_cache = frozen.app_path() + r'/inf/pic_cache/'
-        path_save = frozen.app_path() + r'/inf/picture/'
-        self.imgAcq = Image_Acquire(
-            path_cache=path_cache,
-            path_save=path_save
-        )
+        # path_cache = frozen.app_path() + r'/inf/pic_cache/'
+        # path_save = frozen.app_path() + r'/inf/picture/'
+        # self.imgAcq = Image_Acquire(
+        #     path_cache=path_cache,
+        #     path_save=path_save
+        # )
 
-        self.imgPro = Image_Processing(
-            roi_position=roi_position
-        )
+        # self.imgPro = Image_Processing(
+        #     roi_position=roi_position
+        # )
 
         try:
             print("takepicture")
-            # self.mypicthread.start()
-            # gray_aver = self.mypicthread.takePicture(time_now)
-            self.imgAcq.img_acquire(time_now)
+            self.mypicthread.start()
+            gray_aver = self.mypicthread.takePicture(time_now)
+            # self.imgAcq.img_acquire(time_now)
 
             # pic_name = 'img_final'
             # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
             #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
             #                                       radius=40)
-            flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
-                                                path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
-                                                radius=40)
+            # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
+            #                                     path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+            #                                     radius=40)
             gray_row = len(gray_aver)
             gray_column = len(gray_aver[0])
         except Exception as e:
@@ -278,15 +280,12 @@ class testPage(Ui_Form, QWidget):
         flag = 0
 
         self.pic_para = 1
-
         for i in range(0, self.row_exetable + int(self.row_exetable / 2)):
             if i % 3 != 0:
                 for j in range(0, self.column_exetable):
                     if i - flag < gray_row and j < gray_column:
                         # item = QStandardItem(str(gray_aver[i - flag][j]))
                         pix_num = int(gray_aver[i - flag][j])
-                        # pix_num = int(float(gray_aver[i - flag][j]) * self.pic_para)
-                        # pix_num = random.randint(15428,16428)
                         item = QStandardItem(str(pix_num))
                     else:
                         item = QStandardItem(str(0))
@@ -294,9 +293,11 @@ class testPage(Ui_Form, QWidget):
                     self.pix_table_model.setItem(i, j, item)
             else:
                 flag += 1
-
+        print("insertmysql")
+        print(name_pic)
+        print(cur_time)
         self.insertMysql(name_pic, cur_time)  # 图片数据信息存入数据库
-
+        print("insertmysql-complete")
         # self.ftpServer(base64_data)   #上传图片到服务器
 
     """
@@ -341,8 +342,9 @@ class testPage(Ui_Form, QWidget):
     """
     def insertMysql(self, name_pic, cur_time):
         reagent_matrix_info = str(self.readPixtable())
+        # print(reagent_matrix_info)
 
-        patient_id = random.randint(1000, 1999)
+        patient_id = random.randint(1000, 19999)
 
         # name_id = random.randint(1,199)
         # patient_name = self.name_file[name_id].get("name")
@@ -378,8 +380,8 @@ class testPage(Ui_Form, QWidget):
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
         # MySQL语句
-        sql = 'INSERT INTO patient_copy1(name, patient_id, age, gender) VALUES (%s,%s,%s,%s)'
-        sql_2 = "INSERT INTO reagent_copy1(reagent_type, patient_id, reagent_photo, " \
+        sql = 'INSERT IGNORE INTO patient_copy1(name, patient_id, age, gender) VALUES (%s,%s,%s,%s)'
+        sql_2 = "INSERT IGNORE INTO reagent_copy1(reagent_type, patient_id, reagent_photo, " \
                 "reagent_time, reagent_code, doctor, depart, reagent_matrix, reagent_time_detail, " \
                 "reagent_matrix_info, patient_name, patient_age, patient_gender) " \
                 "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"

@@ -138,7 +138,7 @@ class historyPage(Ui_Form, QWidget):
         for i in range(min_page, max_page):
             for j in range(column_histable):
                 if j == 1:
-                    item = QStandardItem(self.time_list[i])
+                    item = QStandardItem(self.time_list[i][10:])
                 elif j == 2:
                     item = QStandardItem(self.patient_id_list[i])
                 elif j == 3:
@@ -255,6 +255,7 @@ class historyPage(Ui_Form, QWidget):
                                      charset='utf8')
         # MySQL语句
         sql = "SELECT reagent_photo, reagent_type FROM reagent_copy1 WHERE reagent_id = %s"
+        sql_2 = "SELECT * FROM reagent_copy1 WHERE reagent_id = %s"
 
         # 获取标记
         cursor = connection.cursor()
@@ -280,6 +281,9 @@ class historyPage(Ui_Form, QWidget):
                                          "border-image: url(%s/img/%s/%s.jpeg); "
                                          "font: 20pt; "
                                          "color: rgb(255,0,0);}"%(a, b, c)) # linux环境
+            cursor.execute(sql_2, [pic_num])
+            for x in cursor.fetchall():
+                self.userinfo = x
             # 提交事务
             connection.commit()
         except Exception as e:
@@ -354,7 +358,7 @@ class historyPage(Ui_Form, QWidget):
 
         # 获取U盘设备路径
         try:
-            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0]
+            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
         except Exception as e:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
@@ -364,14 +368,28 @@ class historyPage(Ui_Form, QWidget):
         # 检查U盘是否已插入
         if os.path.exists(filename):
             # 在U盘根目录下创建示例文件
-            file_path = os.path.join(filename, "example.txt")
-            with open(file_path, "w") as f:
-                msg = "检疫报告单-输出" + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-                f.write(msg)
-            m_title = ""
-            m_info = "下载完成！"
-            infoMessage(m_info, m_title, 300)
+            file_name = self.searchtime + ".txt"
+            print(filename + file_name)
+            if os.path.exists(filename + file_name):
+                print("exists")
+                # file_path = os.path.join(filename, file_name)
+                with open(file_path, "a") as f:
+                    msg = self.userinfo
+                    f.write(str(msg) + "\n")
+                m_title = ""
+                m_info = "下载完成！"
+                infoMessage(m_info, m_title, 300)
+            else:
+                print("not exists")
+                file_path = os.path.join(filename, file_name)
+                with open(file_path, "w") as f:
+                    msg = self.userinfo
+                    f.write(str(msg) + "\n")
+                m_title = ""
+                m_info = "下载完成！"
+                infoMessage(m_info, m_title, 300)
         else:
+
             m_title = ""
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
@@ -387,11 +405,11 @@ class historyPage(Ui_Form, QWidget):
             self.ui.btnConfirm.hide()
             self.ui.stackedWidget.setCurrentIndex(1)
 
-            time = "%s-%s-%s" % (
+            self.searchtime = "%s-%s-%s" % (
                 self.ui.dateBox.date().year(), self.ui.dateBox.date().month(), self.ui.dateBox.date().day())
             # time = self.ui.dateBox.currentText()
             item_type = self.ui.modeBox_3.currentText()
-            self.selectMysql(time, item_type)
+            self.selectMysql(self.searchtime, item_type)
 
     @Slot()
     def on_btnPre_clicked(self):

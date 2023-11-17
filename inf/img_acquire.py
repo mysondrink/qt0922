@@ -30,16 +30,18 @@ class Image_Acquire:
         #   设置摄像头分辨率
         Width_max = 5496
         Height_max = 3672
-        self.Width_set = 2744  # 5496/2
-        self.Height_set = 2500  # 3672/2
-        self.OffsetX_set = [8, self.Width_set + 8]
-        self.OffsetY_set = [200]
+        self.Width_set = 1368  # 5496/4 = 1374
+        self.Height_set = 1150  # 2300/2 = 1150
+        self.OffsetX_set = [0, self.Width_set, self.Width_set * 2, self.Width_set * 3]
+        self.OffsetY_set = [200, self.Height_set + 200]
         #   设置缓存图片路径
-        self.img_path = [self.pathCa + 'img0.jpeg', self.pathCa + 'img1.jpeg']
+        self.img_path = [self.pathCa + 'img0.jpeg', self.pathCa + 'img1.jpeg',
+                         self.pathCa + 'img2.jpeg', self.pathCa + 'img3.jpeg',
+                         self.pathCa + 'img4.jpeg', self.pathCa + 'img5.jpeg',
+                         self.pathCa + 'img6.jpeg', self.pathCa + 'img7.jpeg']
         # ---------------------------------------------------#
         #   0.1 摄像头配置初始化
         # ---------------------------------------------------#
-       
 
         # ---------------------------------------------------#
         #   0.2 串口配置初始化
@@ -52,7 +54,7 @@ class Image_Acquire:
             for comport in ports_list:
                 print(list(comport)[0], list(comport)[1])
         self.ser = serial.Serial("/dev/ttyUSB0", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
-        # self.ser = serial.Serial("COM5", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
+        # self.ser = serial.Serial("COM9", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
 
     # ---------------------------------------------------#
     #   1 删除缓存图片
@@ -66,7 +68,7 @@ class Image_Acquire:
     #   2 检测缓存图片
     # ---------------------------------------------------#
     def __img_check(self):
-        if len(os.listdir(self.pathCa)) == 2:
+        if len(os.listdir(self.pathCa)) == 8:
             print("图片获取完毕")
             return 1
         else:
@@ -92,17 +94,17 @@ class Image_Acquire:
         # 配置摄像头
         cam.Width.set(self.Width_set)
         cam.Height.set(self.Height_set)
-        cam.OffsetY.set(self.OffsetY_set[0])
         cam.ExposureTime.set(60000.0)
+        # cam.AcquisitionFrameRateMode.set(gx.GxSwitchEntry.ON)
         while (True):
-            write_len = self.ser.write("$810001D".encode('utf-8'))
-            #cam.stream_off()
             # 设置偏移值
-            cam.OffsetX.set(self.OffsetX_set[flag % 2])
+            cam.OffsetX.set(self.OffsetX_set[flag % 4])
+            cam.OffsetY.set(self.OffsetY_set[flag // 4])
+            write_len = self.ser.write("$810001D".encode('utf-8'))
             # 开启采集
             cam.stream_on()
             # 获取一幅图像
-            raw_img = cam.data_stream[0].get_image(timeout=3000)
+            raw_img = cam.data_stream[0].get_image(timeout=10000)
             write_len = self.ser.write("$810011C".encode('utf-8'))
             cam.stream_off()
             # 图像转化
@@ -120,11 +122,11 @@ class Image_Acquire:
             img.save(self.pathCa + "img%s.jpeg" % flag)
             flag += 1
             print(flag, '3成功')
-            if flag == 2 and self.__img_check():
-                write_len = self.ser.write("$810011C".encode('utf-8'))
+            if flag == 8 and self.__img_check():
                 cam.close_device()
+                write_len = self.ser.write("$810011C".encode('utf-8'))
                 break
-            elif flag > 2:
+            elif flag > 8:
                 flag = 0
 
     # ---------------------------------------------------#
@@ -136,8 +138,8 @@ class Image_Acquire:
         # 获取尺寸
         width, height = img.size
         # 九宫格设置
-        target_shape = (2 * width, height)
-        target_shape_new = (2 * width, 2 * width)
+        target_shape = (4 * width, 2 * height)
+        target_shape_new = (4 * width, 4 * width)
         # 创建画布
         background = Image.new('L', target_shape)
         background_new = Image.new('L', target_shape_new)
@@ -147,13 +149,15 @@ class Image_Acquire:
             image = Image.open(img_num)
             # 改变为统一尺寸
             image = image.resize((width, height))
+            #   设置行列
+            row, col = i // 4, i % 4
             # 定位
-            location = (i * width, 0 * height)
+            location = (col * width, row * height)
             # 放置
             background.paste(image, location)
-            background_new.paste(background, (0,0))
+            background_new.paste(background, (0, 0))
         # 保存图像
-        # background.save(self.pathSa + "%s.jpeg" % name)
+        # background_new.save(self.pathSa + "T%s.jpeg" % name)
         background_new.save(self.pathSa + "%s.jpeg" % name)
         img.close()
         self.__clear_cache()
@@ -186,9 +190,14 @@ if __name__ == '__main__':
     now = datetime.datetime.now()
     time_now = now.strftime("%Y_%m_%d_%H_%M_%S")
 
+    start_time = time.perf_counter()
+
     #   初始化
     imgAcq = Image_Acquire(path_cache="./pic_cache/", path_save=path)
 
-    imgAcq.serial_init()
+    # imgAcq.serial_init()
     #   程序调用
     imgAcq.img_acquire(name=time_now)
+
+    end_time = time.perf_counter()
+    print("run time:%s second" % (end_time - start_time))

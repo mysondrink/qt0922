@@ -83,7 +83,7 @@ class loadPage(Ui_Form, QMainWindow):
             print(e)
 
     def showPage(self):
-        print(self.flag_num)
+        # print(self.flag_num)
         if self.flag_num == 0:
             self._v = QVBoxLayout()
             self.cur_page = loginPage()

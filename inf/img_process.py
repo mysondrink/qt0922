@@ -123,7 +123,7 @@ class Image_Processing:
                 gray_sum += img_array[x_InitialPoint + i, y_InitialPoint + 4700 + j]
         #   计算区域内灰度值均值
         gray_ave = gray_sum / gray_number
-        self.gray_round = gray_ave
+        self.gray_round = int(gray_ave * 100) / 100
         num = int(gray_ave / 10) * 10 + 100
 
         return num
@@ -269,7 +269,7 @@ class Image_Processing:
                 else:
                     self.gray_down = num_down
                     print("---------------------")
-                    print("初次获取定位点")
+                    print("* 初次获取定位点")
                     print("区间下移量：", num_down)
                     print("定位点X轴坐标：", circle_x)
                     print("定位点X轴差值：", diff_x2)
@@ -357,7 +357,7 @@ class Image_Processing:
         img_array = np.transpose(np.array(img_gray))
         for j in range(3):
             gray_posi[j] = self.__sum_gray_ave(img_array, int(cir_x[j]), int(cir_y[j]), int(cir_r[j]))
-        gray_ave = (sum(gray_posi) / 3) - 20
+        gray_ave = int((sum(gray_posi) / 3) * 100) / 100 - 20
         print("定位点灰度均值判读阈值：", gray_ave)
 
         #   画图
@@ -386,11 +386,10 @@ class Image_Processing:
         circle_max = cv.HoughCircles(ROI_Max, cv.HOUGH_GRADIENT, 0.5, 400, param1=100, param2=8, minRadius=50,
                                      maxRadius=150)
         print("---------------------")
-        print("判断底部定位点情况")
-        print(circle_min, circle_max)
+        print("* 判断底部定位点情况")
         #   底部定位点均不存在
         if circle_min is None and circle_max is None:
-            print("1底部全部定位点不存在")
+            print("底部全部定位点不存在")
             exit_flag = 3
         #   左侧定位点不存在
         elif circle_min is None:
@@ -432,7 +431,7 @@ class Image_Processing:
                 exit_flag += 1
 
         print("---------------------")
-        print("输出底部存在的定位点", exit_flag)
+        print("* 输出底部存在的定位点")
         #   底部定位点均存在
         if exit_flag == 0:
             x_min = circle_min[0, :][0][0] + min_number - 150
@@ -555,7 +554,7 @@ class Image_Processing:
                 break
             elif judge == 0:
                 print("阈值为%03s" % dst_init + "\t" + "未检测到定位点")
-            elif num_flag >= 10:
+            if num_flag >= 10:
                 cv.imwrite(path_write + 'img_final.jpeg', img_ori)
                 print("**错误：难以准确识别定位点")
                 return 0, gray_aver

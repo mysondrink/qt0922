@@ -225,7 +225,7 @@ class editPage(Ui_Form, QWidget):
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
         # MySQL语句
-        sql = 'INSERT INTO matrix_table(reagent_type, reagent_matrix, reagent_matrix_info) VALUES (%s,%s,%s)'
+        sql = 'INSERT IGNORE INTO matrix_table(reagent_type, reagent_matrix, reagent_matrix_info) VALUES (%s,%s,%s)'
 
         # 获取标记
         cursor = connection.cursor()

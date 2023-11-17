@@ -91,7 +91,7 @@ class registerPage(Ui_Form, QWidget):
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
         # MySQL语句
-        sql = 'INSERT INTO user_table(user_name, user_code) VALUES (%s,%s)'
+        sql = 'INSERT IGNORE INTO user_table(user_name, user_code) VALUES (%s,%s)'
 
         # 获取标记
         cursor = connection.cursor()
