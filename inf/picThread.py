@@ -3,6 +3,7 @@ import frozen as frozen
 import time
 from inf.img_acquire import Image_Acquire
 from inf.img_process import Image_Processing
+import datetime
 
 #   试剂区域圈定区域，可修改
 roi_agentia = [
@@ -47,13 +48,19 @@ class MyPicThread(QThread):
     update_progress = Signal(int)
     update_fail = Signal()
     update_success = Signal()
+    finished = Signal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.gray_aver = []
+        self.imgAcq = None
+        self.imgPro = None
 
     def run(self):
-        pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
+        time.sleep(2)
 
+        pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
+        time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         path_cache = frozen.app_path() + r'/inf/pic_cache/'
         path_save = frozen.app_path() + r'/inf/picture/'
         self.imgAcq = Image_Acquire(
@@ -69,20 +76,18 @@ class MyPicThread(QThread):
         #     time.sleep(0.1)
         # self.update_success.emit()
 
-    def takePicture(self, time_now):
-        try:
-            time.sleep(2)
-        except Exception as e:
-            print(str(e))
-
         self.imgAcq.img_acquire(time_now)
 
         # pic_name = 'img_final'
         # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
         #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
         #                                       radius=40)
-        flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
+        flag, self.gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
                                               path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
                                               radius=40)
-
-        return gray_aver
+        print(self.gray_aver)
+        print("finished!")
+        self.finished.emit(time_now)
+        
+    def getGrayAver(self):
+        return self.gray_aver

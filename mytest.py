@@ -3,73 +3,56 @@ import random
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
+import os
 
 class mymysql():
     def __init__(self) -> None:
         pass
 
     def insertMysql(self, name_pic, cur_time):
-        # reagent_matrix_info = str(self.readPixtable())
-        reagent_matrix_info = "reagent_matrix_info"
+                # 指定目标目录
+        target_dir = '/media/orangepi/orangepi/'
 
-        patient_id = random.randint(1000, 1999)
-
-        # name_id = random.randint(1,199)
-        # patient_name = self.name_file[name_id].get("name")
-        # patient_age = self.name_file[name_id].get("age")
-        # patient_gender = self.name_file[name_id].get("gender")
-
-        patient_name = "patient_name"
-        patient_age = "patient_age"
-        patient_gender = "patient_gender"
-
-        item_type = "item_type"
-        pic_name = name_pic
-
-        # 时间进行切片
-        time = cur_time.split()
-
-        doctor = "doctor"
-        depart = "depart"
-        age = "age"
-        gender = "gender"
-        name = "name"
-
-        matrix = "matrix"
-        code_num = random.randint(1000, 2000)
-
-        connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
-                                        charset='utf8')
-        # MySQL语句
-        sql = 'INSERT IGNORE INTO patient_copy1(name, patient_id, age, gender) VALUES (%s,%s,%s,%s)'
-        sql_2 = "INSERT IGNORE INTO reagent_copy1(reagent_type, patient_id, reagent_photo, " \
-                "reagent_time, reagent_code, doctor, depart, reagent_matrix, reagent_time_detail, " \
-                "reagent_matrix_info, patient_name, patient_age, patient_gender) " \
-                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        
-        # 获取标记
-        cursor = connection.cursor()
+        # 获取U盘设备路径
         try:
-            # 执行SQL语句
-            cursor.execute(sql, [patient_name, patient_id, patient_age, patient_gender])
-            cursor.execute(sql_2, [item_type, patient_id, pic_name, time[0],
-                                    code_num, doctor, depart, matrix, time[1], reagent_matrix_info, name, age, gender])
-            # 提交事务
-            connection.commit()
+            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
         except Exception as e:
-            # print(str(e))
-            # 有异常，回滚事务
-            connection.rollback()
-        # 释放内存
-        cursor.close()
-        connection.close()
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            print(m_info)
+            return
+
+            # 检查U盘是否已插入
+        if os.path.exists(filename):
+            # 在U盘根目录下查找指定文件
+            file_path = os.path.join(filename, "example.txt")
+            if os.path.exists(file_path):
+                # 读取文件内容并打印到控制台
+                f = open(file_path, 'r', encoding="utf-8")
+                lines = f.readlines()
+                for i in range(len(lines)):
+                    num = float(lines[i])
+                    print(num)
+                m_title = ""
+                m_info = "上传成功"
+                # infoMessage(m_info, m_title, 300)
+                print(m_info)
+            else:
+                # print("文件不存在")
+                m_title = ""
+                m_info = "文件不存在!"
+                # infoMessage(m_info, m_title, 300)
+                print(m_info)
+        else:
+            # print("U盘未插入或无法访问")
+            m_title = ""
+            m_info = "U盘未插入或无法访问!"
+            # infoMessage(m_info, m_title, 240)
+            print(m_info)
 
 def main():
     my_mysql = mymysql()
-    for i in range(3):
-        name_pic = "test" + str(i)
-        cur_time = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
-        my_mysql.insertMysql(name_pic, cur_time)
+    my_mysql.insertMysql()
 
 if __name__=="__main__":
     main()

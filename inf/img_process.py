@@ -204,7 +204,7 @@ class Image_Processing:
             #   获取ROI感兴趣区间
             img_ROI = img_dst[(self.__roiPos[0][0] + num_down):(self.__roiPos[0][1] + num_down),
                       self.__roiPos[1][0]:self.__roiPos[1][1]]
-            cv.imwrite('img.jpeg', img_ROI)
+            # cv.imwrite('img.jpeg', img_ROI)
             circle = cv.HoughCircles(img_ROI, cv.HOUGH_GRADIENT, 0.5, 400, param1=100, param2=8, minRadius=50,
                                      maxRadius=150)
             #   当前ROI未找到定位点
@@ -255,7 +255,7 @@ class Image_Processing:
                     if (max_number - min_number) >= 20:
                         exit_flag += 4
                 else:
-                    gray_posi = np.zeros(1 * len(circle.shape[1]))
+                    gray_posi = np.zeros(1 * circle.shape[1])
                     exit_flag += 4
 
                 if exit_flag != 0:
@@ -554,7 +554,7 @@ class Image_Processing:
                 break
             elif judge == 0:
                 print("阈值为%03s" % dst_init + "\t" + "未检测到定位点")
-            if num_flag >= 10:
+            if num_flag >= 10 or dst_init <= 80:
                 cv.imwrite(path_write + 'img_final.jpeg', img_ori)
                 print("**错误：难以准确识别定位点")
                 return 0, gray_aver
@@ -593,5 +593,5 @@ if __name__ == '__main__':
         roi_position=roi_position
     )
 
-    imgPro.process(path_read='picture/1.jpeg', path_write='./img_out/', reagent=(8, 5),
+    imgPro.process(path_read='picture/10.jpeg', path_write='./img_out/', reagent=(8, 5),
                    radius=40)

@@ -80,7 +80,8 @@ class testPage(Ui_Form, QWidget):
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
         self.mypicthread = MyPicThread()
-        self.mypicthread.start()
+        self.mypicthread.finished.connect(self.takePicture)
+        # self.mypicthread.start()
 
         self.setFocusWidget()
         self.installEvent()
@@ -216,49 +217,27 @@ class testPage(Ui_Form, QWidget):
     """
     实现图片提取功能
     """
-    def takePicture(self):
+    def takePicture(self, msg):
         cur_time = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
         time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
+        time_now = msg
+        gray_aver = self.mypicthread.getGrayAver()
+        print(gray_aver)
+        # self.imgAcq.img_acquire(time_now)
 
-        # pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
+        # pic_name = 'img_final'
+        # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
+        #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+        #                                       radius=40)
+        # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
+        #                                     path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+        #                                     radius=40)
+        gray_row = len(gray_aver)
+        gray_column = len(gray_aver[0])
 
-        # path_cache = frozen.app_path() + r'/inf/pic_cache/'
-        # path_save = frozen.app_path() + r'/inf/picture/'
-        # self.imgAcq = Image_Acquire(
-        #     path_cache=path_cache,
-        #     path_save=path_save
-        # )
-
-        # self.imgPro = Image_Processing(
-        #     roi_position=roi_position
-        # )
-
-        try:
-            print("takepicture")
-            self.mypicthread.start()
-            gray_aver = self.mypicthread.takePicture(time_now)
-            # self.imgAcq.img_acquire(time_now)
-
-            # pic_name = 'img_final'
-            # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
-            #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
-            #                                       radius=40)
-            # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
-            #                                     path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
-            #                                     radius=40)
-            gray_row = len(gray_aver)
-            gray_column = len(gray_aver[0])
-        except Exception as e:
-            print(e)
         img_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_final.jpeg')
-        # print(img_final)
-        # 测试
-        # gray_aver = img_final[0]
-        # gray_row = 5
-        # gray_column = 8
-
         name_pic = time_now
 
         save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '.jpeg'
@@ -276,6 +255,11 @@ class testPage(Ui_Form, QWidget):
                                          "border-image: url(%s/img/%s/%s.jpeg); "
                                          "font: 20pt; "
                                          "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # 设置拍照图片显示
+        self.ui.btnExe.hide()
+        self.ui.btnSwitch.show()
+        self.ui.btnPrint.show()
+        self.ui.stackedWidget.setCurrentIndex(2)
+        self.ui.btnReturn.setGeometry(539, 10, 254, 80)
 
         flag = 0
 
@@ -497,21 +481,19 @@ class testPage(Ui_Form, QWidget):
         m_title = ""
         m_info = "照片生成中..."
         infoMessage(m_info, m_title, 280)
-        # 创建定时器
-        self.change_timer = QTimer()
-        self.change_timer.timeout.connect(self.btnExe_clicked())
-        # 设置定时器延迟时间，单位为毫秒
-        # 延迟2秒跳转
-        delay_time = 2000
-        self.change_timer.start(delay_time)
+        time.sleep(1)
+        self.mypicthread.start()
 
+    """
+    # 先跳转后出图
     def btnExe_clicked(self):
         self.ui.btnExe.hide()
         self.ui.btnSwitch.show()
         self.ui.btnPrint.show()
         self.ui.stackedWidget.setCurrentIndex(2)
         self.ui.btnReturn.setGeometry(539, 10, 254, 80)
-        self.takePicture()
+        self.mypicthread.start()
+    """
 
     @Slot()
     def on_btnSwitch_clicked(self):

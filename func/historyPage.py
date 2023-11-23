@@ -10,6 +10,8 @@ import math
 import frozen
 from utils.report import MyReport
 from inf.print import Em5822_Print
+import utils.dirs as dirs
+
 
 
 header_list = ["试剂卡编号", "采样时间",  "病人编号" , "病人姓名"]
@@ -250,6 +252,7 @@ class historyPage(Ui_Form, QWidget):
 
         num = current.row() + self.page_size * self.current_page
         pic_num = self.reagent_id_list[num]
+        self.pic_num = pic_num
 
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
@@ -355,7 +358,6 @@ class historyPage(Ui_Form, QWidget):
     def downLoadToUSB(self):
         # 指定目标目录
         target_dir = '/media/orangepi/orangepi/'
-
         # 获取U盘设备路径
         try:
             filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
@@ -364,32 +366,22 @@ class historyPage(Ui_Form, QWidget):
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
             return
-
         # 检查U盘是否已插入
-        if os.path.exists(filename):
+        save_path = filename + self.searchtime + "/" + self.pic_num + ".txt"
+        save_dir = filename + self.searchtime + "/"
+        dirs.makedir(save_path)
+        if os.path.exists(save_dir):
             # 在U盘根目录下创建示例文件
-            file_name = self.searchtime + ".txt"
-            print(filename + file_name)
-            if os.path.exists(filename + file_name):
-                print("exists")
-                # file_path = os.path.join(filename, file_name)
-                with open(file_path, "a") as f:
-                    msg = self.userinfo
-                    f.write(str(msg) + "\n")
-                m_title = ""
-                m_info = "下载完成！"
-                infoMessage(m_info, m_title, 300)
-            else:
-                print("not exists")
-                file_path = os.path.join(filename, file_name)
-                with open(file_path, "w") as f:
-                    msg = self.userinfo
-                    f.write(str(msg) + "\n")
-                m_title = ""
-                m_info = "下载完成！"
-                infoMessage(m_info, m_title, 300)
+            # print(filename + file_name)
+            # print("exists")
+            # file_path = os.path.join(filename, file_name)
+            with open(save_path, "a") as f:
+                msg = self.userinfo
+                f.write(str(msg) + "\n")
+            m_title = ""
+            m_info = "下载完成！"
+            infoMessage(m_info, m_title, 300)
         else:
-
             m_title = ""
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
