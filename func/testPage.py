@@ -13,46 +13,9 @@ from inf.print import Em5822_Print
 from inf.img_acquire import Image_Acquire
 from inf.img_process import Image_Processing
 import time
+from func.testinfo import MyTestInfo
 
 allergen = [' ','花生', '牛奶', '大豆', '桃子']
-
-#   试剂区域圈定区域，可修改
-roi_agentia = [
-    [0, 700], [0, 2500]
-]
-
-#   定位点圈定区域，可修改
-roi_position = [
-    [0, 700], [0, 2500]  # [startY, endY] [StartX, endX]
-]
-
-#   试剂点，相对位置；可修改
-matrix_agentia = [
-    [
-        [260, 310], [590, 310], [920, 310], [1250, 310], [1580, 310]
-    ],
-    [
-        [260, 640], [590, 640], [920, 640], [1250, 640], [1580, 640]
-    ],
-    [
-        [260, 970], [590, 970], [920, 970], [1250, 970], [1580, 970]
-    ],
-    [
-        [260, 1300], [590, 1300], [920, 1300], [1250, 1300], [1580, 1300]
-    ],
-    [
-        [260, 1630], [590, 1630], [920, 1630], [1250, 1630], [1580, 1630]
-    ],
-    [
-        [260, 1960], [590, 1960], [920, 1960], [1250, 1960], [1580, 1960]
-    ],
-    [
-        [260, 2290], [590, 2290], [920, 2290], [1250, 2290], [1580, 2290]
-    ],
-    [
-        [-640, 3320], [-310, 3320], [20, 3320], [350, 3320], [680, 3320]
-    ]
-]
 
 class testPage(Ui_Form, QWidget):
     next_page = Signal(str)
@@ -80,6 +43,7 @@ class testPage(Ui_Form, QWidget):
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
         self.mypicthread = MyPicThread()
+        self.mypicthread.finished.connect(self.testinfo.closeWin)
         self.mypicthread.finished.connect(self.takePicture)
         # self.mypicthread.start()
 
@@ -478,10 +442,12 @@ class testPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnExe_clicked(self):
-        m_title = ""
-        m_info = "照片生成中..."
-        infoMessage(m_info, m_title, 280)
-        time.sleep(1)
+        # m_title = ""
+        # m_info = "照片生成中..."
+        # infoMessage(m_info, m_title, 280)
+        # time.sleep(1)
+        self.testinfo = MyTestInfo()
+        self.testinfo.show()
         self.mypicthread.start()
 
     """
