@@ -138,7 +138,7 @@ class historyPage(Ui_Form, QWidget):
         for i in range(min_page, max_page):
             for j in range(column_histable):
                 if j == 1:
-                    item = QStandardItem(self.time_list[i])
+                    item = QStandardItem(self.time_list[i][10:])
                 elif j == 2:
                     item = QStandardItem(self.patient_id_list[i])
                 elif j == 3:
@@ -206,6 +206,7 @@ class historyPage(Ui_Form, QWidget):
         """
         for x in cursor.fetchall():
             self.time_list.append(x[3].strftime("%Y-%m-%d") + " " + x[9])
+            print(x[9])
             self.patient_id_list.append(str(x[1]))
             self.reagent_id_list.append(str(x[4]))
             self.reagent_info.append(x[10])

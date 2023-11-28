@@ -1,3 +1,6 @@
+import time
+
+from func.testinfo import MyTestInfo
 from gui.test import *
 # from inf.picThread import MyPicThread
 from keyboard.keyboard import KeyBoard
@@ -200,9 +203,9 @@ class testPage(Ui_Form, QWidget):
 
         # 测试
         self.ui.photoLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(%s/inf/img_out/img_final.jpeg); "
+                                         "border-image: url(./inf/img_out/img_final.jpeg); "
                                          "font: 20pt; "
-                                         "color: rgb(255,0,0);}" % (frozen.app_path()))
+                                         "color: rgb(255,0,0);}")
 
         # self.ui.photoLabel.setStyleSheet("QLabel{"
         #                                  "border-image: url(%s/img/%s/%s.jpeg); "
@@ -210,6 +213,12 @@ class testPage(Ui_Form, QWidget):
         #                                  "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # 设置拍照图片显示
 
         flag = 0
+
+        self.ui.btnExe.hide()
+        self.ui.btnSwitch.show()
+        self.ui.btnPrint.show()
+        self.ui.stackedWidget.setCurrentIndex(2)
+        self.ui.btnReturn.setGeometry(539, 10, 254, 80)
 
         self.pic_para = 1
 
@@ -416,6 +425,9 @@ class testPage(Ui_Form, QWidget):
             m_title = ""
             m_info = "请填写完信息！"
             infoMessage(m_info, m_title, 280)
+            print("now")
+            time.sleep(2)
+            print("then")
             return
 
         self.setTableView()
@@ -426,23 +438,11 @@ class testPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnExe_clicked(self):
-        m_title = ""
-        m_info = "照片生成中..."
-        infoMessage(m_info, m_title, 280)
-        # 创建定时器
-        self.change_timer = QTimer()
-        self.change_timer.timeout.connect(self.btnExe_clicked())
-        # 设置定时器延迟时间，单位为毫秒
-        # 延迟2秒跳转
-        delay_time = 2000
-        self.change_timer.start(delay_time)
-
-    def btnExe_clicked(self):
-        self.ui.btnExe.hide()
-        self.ui.btnSwitch.show()
-        self.ui.btnPrint.show()
-        self.ui.stackedWidget.setCurrentIndex(2)
-        self.ui.btnReturn.setGeometry(539, 10, 254, 80)
+        # m_title = ""
+        # m_info = "照片生成中..."
+        # infoMessage(m_info, m_title, 280)
+        self.testinfo = MyTestInfo()
+        self.testinfo.show()
         self.takePicture()
 
     @Slot()

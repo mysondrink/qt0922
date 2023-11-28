@@ -167,7 +167,7 @@ background-color: rgb(255, 0, 0);
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLineEdit" name="paraLine">
@@ -706,9 +706,9 @@ QComboBox QAbstractItemView {
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>10</y>
-       <width>351</width>
-       <height>331</height>
+       <y>0</y>
+       <width>350</width>
+       <height>350</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -719,14 +719,14 @@ QComboBox QAbstractItemView {
      </property>
      <property name="minimumSize">
       <size>
-       <width>351</width>
-       <height>331</height>
+       <width>350</width>
+       <height>350</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>351</width>
-       <height>331</height>
+       <width>350</width>
+       <height>350</height>
       </size>
      </property>
      <property name="styleSheet">

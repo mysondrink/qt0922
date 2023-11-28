@@ -85,6 +85,7 @@ class loadPage(Ui_Form, QMainWindow):
     def showPage(self):
         print(self.flag_num)
         if self.flag_num == 0:
+            self.change_timer.stop()
             self._v = QVBoxLayout()
             self.cur_page = loginPage()
             self.cur_page.next_page.connect(self.changePage)

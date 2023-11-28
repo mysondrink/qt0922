@@ -286,21 +286,21 @@ class Ui_Form(object):
         self.pic_info_label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.photoLabel = QLabel(self.page_3)
         self.photoLabel.setObjectName(u"photoLabel")
-        self.photoLabel.setGeometry(QRect(230, 10, 351, 331))
+        self.photoLabel.setGeometry(QRect(230, 0, 350, 350))
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.photoLabel.sizePolicy().hasHeightForWidth())
         self.photoLabel.setSizePolicy(sizePolicy1)
-        self.photoLabel.setMinimumSize(QSize(351, 331))
-        self.photoLabel.setMaximumSize(QSize(351, 331))
+        self.photoLabel.setMinimumSize(QSize(350, 350))
+        self.photoLabel.setMaximumSize(QSize(350, 350))
         self.photoLabel.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";")
         self.photoLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
         self.stackedWidget.addWidget(self.page_3)
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(Form)
