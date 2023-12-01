@@ -16,6 +16,7 @@ from func.wifiPage import wifiPage
 from func.clearPage import clearPage
 from func.setPage import setPage
 from func.aboutPage import aboutPage
+from func.dataPage import dataPage
 
 flag_num = 0
 failed_code = 404
@@ -23,15 +24,18 @@ succeed_code = 202
 
 
 class loadPage(Ui_Form, QMainWindow):
+    update_json = Signal(dict)
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
+        self.list_widget = None
+        self.cur_page = None
+        self.flag_num = flag_num
 
     def InitUI(self):
-        self.flag_num = flag_num
-        self.cur_page = None
         self.statusShowTime()
         self.ui.title_label.setText('荧光判读仪器')
         self.ui.retry_icon_label.hide()
@@ -84,33 +88,79 @@ class loadPage(Ui_Form, QMainWindow):
 
     def showPage(self):
         # print(self.flag_num)
+        self.list_widget = []
         if self.flag_num == 0:
-            self._v = QVBoxLayout()
+            self.change_timer.stop()
+            self._s = QStackedLayout()
+            self._h = QHBoxLayout()
             self.cur_page = loginPage()
             self.cur_page.next_page.connect(self.changePage)
+            self.cur_page.update_json.connect(self.getJsonData)
             self.cur_page.setFocus()
-            self._v.addWidget(self.cur_page)
-            self.ui.centerframe.setLayout(self._v)
-            self._v.setSpacing(0)
-            self._v.setContentsMargins(0, 0, 0, 0)
-            self.flag_num = -1
+            self._s.addWidget(self.cur_page)
+            self._h.addLayout(self._s)
+            self.ui.centerframe.setLayout(self._h)
 
+            self._s.setSpacing(0)
+            self._h.setSpacing(0)
+
+            self._s.setContentsMargins(0, 0, 0, 0)
+            self._h.setContentsMargins(0, 0, 0, 0)
+
+            self.flag_num = -1
+            self.list_widget.append(self._s.currentWidget())
+            # 尾指针
+            self.q_ptr = self._s.currentIndex()
+            # 头指针
+            self.p_ptr = self._s.currentIndex()
+
+    """
+    进行页面的跳转
+    获取子页面返回的信号，信号是跳转页面
+    """
     def changePage(self, msg):
         try:
-            if self.cur_page is not None:
-                flag = self.cur_page.close()
-                time.sleep(0.5)
+            # 设置栈为2
+            num = len(self.list_widget)
+            if msg == 'history':
+                print(self.list_widget)
+                self._s.removeWidget(self._s.currentWidget())
+                self.list_widget.remove(self.list_widget[1])
+                self.p_ptr -= 1
+                return
+            # if num > 1:
+            #     self._s.removeWidget(self.list_widget[0])
+            #     self.list_widget.remove(self.list_widget[0])
+            #     self.p_ptr += 1
+            #     time.sleep(0.5)
             self.cur_page = globals()[msg]()
-            # self.cur_page = msg
-            # self.cur_page.show()
             self.cur_page.next_page.connect(self.changePage)
+            self.cur_page.update_json.connect(self.getJsonData)
             self.cur_page.setFocus()
-            self._v.addWidget(self.cur_page)
-            # self.ui.centerframe.setLayout(self._v)
+
+            # 防止页面重复
+            # num = len(self.list_widget)
+            # if self._s.indexOf(self.cur_page) > -1:
+            #     self._s.removeWidget(self.list_widget[1])
+            #     self.list_widget.remove(self.list_widget[1])
+            #     self.q_ptr -= 1
+            #     time.sleep(0.5)
+            #     return
+            if num > 1:
+                self._s.removeWidget(self.list_widget[0])
+                self.list_widget.remove(self.list_widget[0])
+                self.p_ptr += 1
+                time.sleep(0.5)
+
+            self._s.addWidget(self.cur_page)
+            self._s.setCurrentIndex(self._s.count() - 1)
+            self.list_widget.append(self._s.currentWidget())
+            self.q_ptr += 1
+            # self.ui.centerframe.setLayout(self._s)
             # self.cur_page.show()
         except Exception as e:
             print(e)
-
+    
     def statusShowTime(self):
         self.timer = QTimer()
         self.timer.timeout.connect(self.showCurrentTime)
@@ -125,6 +175,14 @@ class loadPage(Ui_Form, QMainWindow):
     def retryThread(self):
         self.ui.retry_icon_label.show()
         self.ui.btnRetry.show()
+
+    """
+    子窗口之间通信
+    子窗口传输数据给父窗口，父窗口在传到指定的子窗口
+    """
+    def getJsonData(self, msg):
+        self.update_json.connect(self.cur_page.getData)
+        self.update_json.emit(msg)
 
     @Slot()
     def on_btnRetry_clicked(self):

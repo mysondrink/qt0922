@@ -1,3 +1,4 @@
+import os
 from gui.test import *
 from inf.picThread import MyPicThread
 from keyboard.keyboard import KeyBoard
@@ -15,10 +16,12 @@ from inf.img_process import Image_Processing
 import time
 from func.testinfo import MyTestInfo
 
-allergen = [' ','花生', '牛奶', '大豆', '桃子']
+allergen = [' ','柳树', '普通豚草', '艾蒿', '桃子']
 
 class testPage(Ui_Form, QWidget):
     next_page = Signal(str)
+    update_json = Signal(dict)
+
     def __init__(self):
         super().__init__()
         self.genderCb = None
@@ -31,6 +34,7 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnExe.hide()
         self.ui.btnPrint.hide()
         self.ui.btnSwitch.hide()
+        self.ui.btnDownload.hide()
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -69,6 +73,10 @@ class testPage(Ui_Form, QWidget):
         switch_icon_path = frozen.app_path() + r"/res/icon/switch.png"
         self.ui.btnSwitch.setIconSize(QSize(32, 32))
         self.ui.btnSwitch.setIcon(QIcon(switch_icon_path))
+
+        exe_icon_path = frozen.app_path() + r"/res/icon/compute.png"
+        self.ui.btnDownload.setIconSize(QSize(32, 32))
+        self.ui.btnDownload.setIcon(QIcon(exe_icon_path))
 
         return_icon_path = frozen.app_path() + r"/res/icon/return.png"
         self.ui.btnReturn.setIconSize(QSize(32, 32))
@@ -126,6 +134,7 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnSwitch.hide()
         self.ui.btnExe.hide()
         self.ui.btnPrint.hide()
+        self.ui.btnDownload.hide()
         self.ui.btnConfirm.show()
         self.ui.btnReturn.setGeometry(410, 10, 380, 80)
 
@@ -207,6 +216,59 @@ class testPage(Ui_Form, QWidget):
         save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '.jpeg'
         dirs.makedir(save_path)
         flag_bool = cv.imwrite(save_path, img_final)
+
+        self.testinfo.closeWin()
+        page_msg = 'dataPage'
+        self.next_page.emit(page_msg)
+
+        patient_id = random.randint(1000, 1999)
+
+        # name_id = random.randint(1,199)
+        # patient_name = self.name_file[name_id].get("name")
+        # patient_age = self.name_file[name_id].get("age")
+        # patient_gender = self.name_file[name_id].get("gender")
+
+        patient_name = self.ui.nameLine.text()
+        patient_age = self.ui.ageLine.text()
+        id_num = self.genderCb.checkedId()
+        if id_num == 0:
+            patient_gender = "男"
+        else:
+            patient_gender = "女"
+
+        # patient_gender = self.ui.genderCb.currentText()
+
+        item_type = self.ui.modeBox_1.currentText()
+        pic_name = name_pic
+
+        # 时间进行切片
+        test_time = cur_time.split()
+
+        doctor = self.ui.docCb.text()
+        depart = self.ui.departCb.text()
+        age = self.ui.ageLine.text()
+        gender = patient_gender
+        name = self.ui.nameLine.text()
+
+        matrix = self.ui.typeLabel.text()
+        code_num = random.randint(1000, 19999)
+        reagent_matrix_info = self.readPixtableNum()
+        data_json = dict(patient_id=patient_id, patient_name=patient_name,
+                         patient_age=patient_age, patient_gender=patient_gender,
+                         item_type=item_type, pic_name=pic_name,
+                         time=test_time, doctor=doctor,
+                         depart=depart, age=age,
+                         gender=gender, name=name,
+                         matrix=matrix, code_num=code_num,
+                         gray_aver=gray_aver, gray_row=gray_row,
+                         gray_column=gray_column, pic_path=pic_path,
+                         name_pic=name_pic, row_exetable=self.row_exetable,
+                         column_exetable=self.column_exetable, reagent_matrix_info=reagent_matrix_info)
+        info_msg = 201
+        self.update_json.emit(dict(info=info_msg, data=data_json))
+        return
+
+        # 原代码
         self.ui.photoLabel.setScaledContents(False)  # 是否拉伸窗口
 
         # 测试
@@ -222,8 +284,10 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnExe.hide()
         self.ui.btnSwitch.show()
         self.ui.btnPrint.show()
+        self.ui.btnDownload.show()
         self.ui.stackedWidget.setCurrentIndex(2)
         self.ui.btnReturn.setGeometry(539, 10, 254, 80)
+        self.ui.btnReturn.setGeometry(601, 10, 187, 80)
 
         flag = 0
 
@@ -313,7 +377,7 @@ class testPage(Ui_Form, QWidget):
         pic_name = name_pic
 
         # 时间进行切片
-        time = cur_time.split()
+        test_time = cur_time.split()
 
         doctor = self.ui.docCb.text()
         depart = self.ui.departCb.text()
@@ -339,8 +403,8 @@ class testPage(Ui_Form, QWidget):
         try:
             # 执行SQL语句
             cursor.execute(sql, [patient_name, patient_id, patient_age, patient_gender])
-            cursor.execute(sql_2, [item_type, patient_id, pic_name, time[0],
-                                   code_num, doctor, depart, matrix, time[1], reagent_matrix_info, name, age, gender])
+            cursor.execute(sql_2, [item_type, patient_id, pic_name, test_time[0],
+                                   code_num, doctor, depart, matrix, test_time[1], reagent_matrix_info, name, age, gender])
             # 提交事务
             connection.commit()
         except Exception as e:
@@ -413,6 +477,40 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnData.setEnabled(False)
         # self.ui.btnHistory.setEnabled(False)
         return
+    
+    def downLoadToUSB(self):
+        # 指定目标目录
+        target_dir = '/media/orangepi/orangepi/'
+        # 获取U盘设备路径
+        try:
+            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
+        except Exception as e:
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
+            return
+        # 检查U盘是否已插入
+        timenow = QDateTime.currentDateTime().toString('yyyy-MM-dd')
+        save_path = filename + timenow + "/" + self.pic_num + ".txt"
+        save_dir = filename + timenow + "/"
+        # save_path = filename + self.searchtime + "/" + self.pic_num + ".txt"
+        # save_dir = filename + self.searchtime + "/"
+        dirs.makedir(save_path)
+        if os.path.exists(save_dir):
+            # 在U盘根目录下创建示例文件
+            # print(filename + file_name)
+            # print("exists")
+            # file_path = os.path.join(filename, file_name)
+            with open(save_path, "a") as f:
+                msg = self.userinfo
+                f.write(str(msg) + "\n")
+            m_title = ""
+            m_info = "下载完成！"
+            infoMessage(m_info, m_title, 300)
+        else:
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
 
     @Slot()
     def on_btnReturn_clicked(self):
@@ -442,24 +540,10 @@ class testPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnExe_clicked(self):
-        # m_title = ""
-        # m_info = "照片生成中..."
-        # infoMessage(m_info, m_title, 280)
-        # time.sleep(1)
         self.testinfo = MyTestInfo()
+        self.testinfo.setWindowModality(Qt.ApplicationModal)
         self.testinfo.show()
         self.mypicthread.start()
-
-    """
-    # 先跳转后出图
-    def btnExe_clicked(self):
-        self.ui.btnExe.hide()
-        self.ui.btnSwitch.show()
-        self.ui.btnPrint.show()
-        self.ui.stackedWidget.setCurrentIndex(2)
-        self.ui.btnReturn.setGeometry(539, 10, 254, 80)
-        self.mypicthread.start()
-    """
 
     @Slot()
     def on_btnSwitch_clicked(self):
@@ -484,3 +568,17 @@ class testPage(Ui_Form, QWidget):
         m_title = ""
         m_info = "输出表格成功!"
         infoMessage(m_title, m_info, 300)
+
+    @Slot()
+    def on_btnDownload_clicked(self):
+        m_title = "错误"
+        m_title = ""
+        m_info = "下载中..."
+        infoMessage(m_info, m_title, 380)
+        # 创建定时器
+        self.change_timer = QTimer()
+        self.change_timer.timeout.connect(self.downLoadToUSB())
+        # 设置定时器延迟时间，单位为毫秒
+        # 延迟2秒跳转
+        delay_time = 2000
+        self.change_timer.start(delay_time)

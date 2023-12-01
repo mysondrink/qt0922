@@ -11,6 +11,8 @@ screen_top = 30
 class loginPage(Ui_Form, QWidget):
     next_page = Signal(str)
     # next_page = Signal(QWidget)
+    update_json = Signal(dict)
+    
     def __init__(self):
         super().__init__()
         self.ui = Ui_Form()

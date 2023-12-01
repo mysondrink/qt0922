@@ -18,6 +18,8 @@ header_list = ["试剂卡编号", "采样时间",  "病人编号" , "病人姓�
 
 class historyPage(Ui_Form, QWidget):
     next_page = Signal(str)
+    update_json = Signal(dict)
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_Form()
@@ -171,7 +173,7 @@ class historyPage(Ui_Form, QWidget):
                                      charset='utf8')
         # MySQL语句
         sql = "SELECT * FROM reagent_copy1 WHERE reagent_type = %s AND reagent_time = %s;"
-
+        
         # 获取标记
         cursor = connection.cursor()
         try:
@@ -259,21 +261,48 @@ class historyPage(Ui_Form, QWidget):
         # MySQL语句
         sql = "SELECT reagent_photo, reagent_type FROM reagent_copy1 WHERE reagent_id = %s"
         sql_2 = "SELECT * FROM reagent_copy1 WHERE reagent_id = %s"
+        sql_3 = "SELECT * FROM reagent_copy1 WHERE patient_id = %s"
 
         # 获取标记
         cursor = connection.cursor()
         try:
             # 执行SQL语句
-            cursor.execute(sql, [pic_num])
+            # cursor.execute(sql, [pic_num])
+            cursor.execute(sql_2, [pic_num])
             for i in cursor.fetchall():
-                # img_list = ["A","B","C","D"]
-                # num = int(i[1])
-                # 设置拍照图片显示
-                # self.ui.photoLabel.setPixmap(QPixmap("./img/%s/b'%s'.bmp"%(img_list[num], i[0])))
-                # self.ui.picLabel.setStyleSheet("QLabel{"
-                #                                  "border-image: url(%s/img/%s/b'%s'.bmp); "
-                #                                  "font: 20pt; "
-                #                                  "color: rgb(255,0,0);}"%(frozen.app_path(), self.time_list[num][:10], i[0]))
+                patient_id = i[1]
+                patient_name = i[11]
+                patient_age = i[12]
+                patient_gender = i[13]
+                item_type = i[0]
+                pic_name = i[2]
+                time = i[9]
+                doctor = i[6]
+                depart = i[7]
+                age = i[12]
+                gender = i[13]
+                name = i[11]
+                matrix = i[8]
+                code_num = i[5]
+                reagent_matrix_info = i[10]
+                reagent_matrix = i[8]
+                row_exetable = reagent_matrix[0]
+                column_exetable = reagent_matrix[2]
+                name_pic = pic_name
+                pic_path = i[3].strftime("%Y-%m-%d")
+                data_json = dict(patient_id=patient_id, patient_name=patient_name,
+                                 patient_age=patient_age, patient_gender=patient_gender,
+                                 item_type=item_type, pic_name=pic_name,
+                                 time=time, doctor=doctor,
+                                 depart=depart, age=age,
+                                 gender=gender, name=name,
+                                 matrix=matrix, code_num=code_num,
+                                 pic_path=pic_path, name_pic=name_pic,
+                                 row_exetable=row_exetable, column_exetable=column_exetable,
+                                 reagent_matrix_info=reagent_matrix_info)
+                info_msg = 202
+                self.update_json.emit(dict(info=info_msg, data=data_json))
+                """
                 a = frozen.app_path()
                 b = self.time_list[num][:10]
                 c = i[0]
@@ -287,6 +316,7 @@ class historyPage(Ui_Form, QWidget):
             cursor.execute(sql_2, [pic_num])
             for x in cursor.fetchall():
                 self.userinfo = x
+            """
             # 提交事务
             connection.commit()
         except Exception as e:
@@ -420,6 +450,9 @@ class historyPage(Ui_Form, QWidget):
             infoMessage(m_info, m_title, 300)
             return
         else:
+            self.next_page.emit('dataPage')
+            self.changePhoto()
+            return
             self.resetBtn_3()
             # self.ui.btnReturn.setGeometry(539, 10, 254, 80)
             self.ui.btnReturn.setGeometry(601, 10, 187, 80)

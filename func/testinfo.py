@@ -13,12 +13,13 @@ class MyTestInfo(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setGeometry(320, 180, 200, 80)
+        self.move(320, 180)
         # self.info_timer = QTimer()
         # self.info_timer.timeout.connect(self.closeWin)
         # self.info_timer.start(2000)
+        # self.ui.label.setText("生成中。。。图片生成中。。。图片生成中。。。")
 
     def closeWin(self):
         print("close!")
         self.close()
-        self.info_timer.stop()
+        # self.info_timer.stop()

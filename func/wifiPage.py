@@ -10,6 +10,8 @@ from utils.wifi import wifisearch
 
 class wifiPage(Ui_Form, QWidget):
     next_page = Signal(str)
+    update_json = Signal(dict)
+    
     def __init__(self):
         super().__init__()
         self.ui = Ui_Form()
