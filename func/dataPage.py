@@ -235,7 +235,7 @@ class dataPage(Ui_Form, QWidget):
             # print("exists")
             # file_path = os.path.join(filename, file_name)
             with open(save_path, "a") as f:
-                msg = self.userinfo
+                msg = self.data
                 f.write(str(msg) + "\n")
             try:
                 name_pic = self.data['name_pic']
