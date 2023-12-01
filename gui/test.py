@@ -65,7 +65,7 @@ class Ui_Form(object):
 "")
         self.btnSwitch = QPushButton(self.frame)
         self.btnSwitch.setObjectName(u"btnSwitch")
-        self.btnSwitch.setGeometry(QRect(275, 10, 254, 80))
+        self.btnSwitch.setGeometry(QRect(404, 10, 187, 80))
         self.btnSwitch.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -78,8 +78,21 @@ class Ui_Form(object):
 "")
         self.btnPrint = QPushButton(self.frame)
         self.btnPrint.setObjectName(u"btnPrint")
-        self.btnPrint.setGeometry(QRect(10, 10, 254, 80))
+        self.btnPrint.setGeometry(QRect(207, 10, 187, 80))
         self.btnPrint.setStyleSheet(u"QPushButton {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:#05abc2;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(255, 0, 0);\n"
+"}\n"
+"")
+        self.btnDownload = QPushButton(self.frame)
+        self.btnDownload.setObjectName(u"btnDownload")
+        self.btnDownload.setGeometry(QRect(10, 10, 187, 80))
+        self.btnDownload.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color:#05abc2;\n"
@@ -313,6 +326,7 @@ class Ui_Form(object):
         self.btnExe.setText(QCoreApplication.translate("Form", u"\u5feb\u901f\u6d4b\u8bd5", None))
         self.btnSwitch.setText(QCoreApplication.translate("Form", u"\u5207\u6362", None))
         self.btnPrint.setText(QCoreApplication.translate("Form", u"\u6253\u5370", None))
+        self.btnDownload.setText(QCoreApplication.translate("Form", u"\u4e0b\u8f7d", None))
         self.label_4.setText(QCoreApplication.translate("Form", u"\u6279\u6b21\u7f16\u53f7", None))
         self.pushButton_2.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u4fe1\u606f", None))
         self.label_11.setText(QCoreApplication.translate("Form", u"\u9001\u68c0\u533b\u751f*", None))

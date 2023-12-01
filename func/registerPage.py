@@ -7,6 +7,7 @@ from keyboard.keyboard import KeyBoard
 
 class registerPage(Ui_Form, QWidget):
     next_page = Signal(str)
+    update_json = Signal(dict)
 
     def __init__(self):
         super().__init__()

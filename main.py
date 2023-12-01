@@ -1,7 +1,7 @@
 # created by xiao 
 import sys
 from func.loadPage import *
-from func.setPage import *
+from func.dataPage import *
 
 def main():
     app = QApplication()
