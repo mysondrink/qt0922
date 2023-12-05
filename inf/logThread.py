@@ -1,6 +1,8 @@
 from PySide2.QtCore import QThread
 import frozen as frozen
 import logging
+import sys
+import traceback
 
 log_file = frozen.app_path() + r"/reagent.log"
 
@@ -36,8 +38,9 @@ class LogThread(QThread):
             # ERROR：更严重的问题,软件没能执行一些功能
             # CRITICAL：一个严重的错误,这表明程序本身可能无法继续运行
         except Exception as e:
-            print(e)
-            self.logger.warning(e)
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+            self.logger.warning(err_msg)
 
     def getLogMsg(self, msg):
         print(msg)
