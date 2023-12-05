@@ -40,14 +40,6 @@ class loginPage(Ui_Form, QWidget):
         self.update_log.emit(err_msg)
 
     """
-    @detail 发送异常信息
-    """
-    def sendException(self):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-        self.update_log.emit(err_msg)
-
-    """
     @detail 设置界面相关信息
     """
     def InitUI(self):
