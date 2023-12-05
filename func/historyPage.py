@@ -269,33 +269,34 @@ class historyPage(Ui_Form, QWidget):
             # 执行SQL语句
             cursor.execute(sql_2, [pic_num])
             for i in cursor.fetchall():
-                patient_id = i[1]
-                patient_name = i[11]
-                patient_age = i[12]
-                patient_gender = i[13]
                 item_type = i[0]
+                patient_id = i[1]
                 pic_name = i[2]
-                time = i[9]
+                pic_path = i[3].strftime("%Y-%m-%d")
+                code_num = i[5]
                 doctor = i[6]
                 depart = i[7]
-                age = i[12]
-                gender = i[13]
-                name = i[11]
-                matrix = i[8]
-                code_num = i[5]
-                reagent_matrix_info = i[10]
                 reagent_matrix = i[8]
                 row_exetable = reagent_matrix[0]
                 column_exetable = reagent_matrix[2]
+                cur_time = []
+                cur_time.append(pic_path)
+                cur_time.append(i[9])
+                reagent_matrix_info = i[10]
+                patient_name = i[11]
+                patient_age = i[12]
+                patient_gender = i[13]
+                age = i[12]
+                gender = i[13]
+                name = i[11]
                 name_pic = pic_name
-                pic_path = i[3].strftime("%Y-%m-%d")
                 data_json = dict(patient_id=patient_id, patient_name=patient_name,
                                  patient_age=patient_age, patient_gender=patient_gender,
                                  item_type=item_type, pic_name=pic_name,
-                                 time=time, doctor=doctor,
+                                 time=cur_time, doctor=doctor,
                                  depart=depart, age=age,
                                  gender=gender, name=name,
-                                 matrix=matrix, code_num=code_num,
+                                 matrix=reagent_matrix, code_num=code_num,
                                  pic_path=pic_path, name_pic=name_pic,
                                  row_exetable=row_exetable, column_exetable=column_exetable,
                                  reagent_matrix_info=reagent_matrix_info)

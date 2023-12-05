@@ -8,9 +8,17 @@ succeed_code = 202
 class CheckSerialThread(QThread):
     update_json = Signal(dict)
 
+    """
+    @detail 构造函数
+    @param parent: 无父类
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
 
+    """
+    @detail 线程开启
+    @detail 串口的检测
+    """
     def run(self):
         # qmutex.tryLock(trylock_time)
         try:

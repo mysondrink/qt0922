@@ -1,5 +1,7 @@
 import os
 import time
+import sys
+import traceback
 
 from func.testinfo import MyTestInfo
 from gui.test import *
@@ -15,20 +17,26 @@ import utils.dirs as dirs
 import random
 import pymysql
 
-allergen = [' ', '花生', '牛奶', '大豆', '桃子']
-
+allergen = [' ', '柳树', '普通豚草', '艾蒿', '屋尘螨']
 
 class testPage(Ui_Form, QWidget):
     next_page = Signal(str)
     update_json = Signal(dict)
+    update_log = Signal(str)
 
     def __init__(self):
         super().__init__()
+        sys.excepthook = self.HandleException
         self.genderCb = None
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
         self.startProbeMem()
+
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
 
     def InitUI(self):
         self.ui.btnExe.hide()
@@ -47,6 +55,7 @@ class testPage(Ui_Form, QWidget):
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
         # self.mypicthread = MyPicThread()
+        # self.mypicthread.finished.connect(self.takePicture)
 
         self.setFocusWidget()
         self.installEvent()
@@ -190,12 +199,14 @@ class testPage(Ui_Form, QWidget):
     """
     def takePicture(self, msg):
         cur_time = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
-        time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
-        self.ui.photoLabel.setText(cur_time)
+        time_now = msg
+
+        # self.ui.photoLabel.setText(cur_time)
 
         # try:
-        #     gray_aver = self.mypicthread.takePicture(time_now)
+        #     gray_aver = self.mypicthread.getGrayAver()
         #     gray_row = len(gray_aver)
         #     gray_column = len(gray_aver[0])
         # except Exception as e:
@@ -204,10 +215,11 @@ class testPage(Ui_Form, QWidget):
         print(img_final)
         # 测试
         gray_aver = img_final[0]
-        gray_row = 5
-        gray_column = 8
+        gray_row = 8
+        gray_column = 5
 
         name_pic = time_now
+        name_pic = "1"
 
         save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '.jpeg'
         dirs.makedir(save_path)
@@ -526,9 +538,6 @@ class testPage(Ui_Form, QWidget):
             m_title = ""
             m_info = "请填写完信息！"
             infoMessage(m_info, m_title, 280)
-            print("now")
-            time.sleep(2)
-            print("then")
             return
 
         self.setTableView()
@@ -541,13 +550,16 @@ class testPage(Ui_Form, QWidget):
         self.testinfo = MyTestInfo()
         self.testinfo.setWindowModality(Qt.ApplicationModal)
         self.testinfo.show()
+        # 测试
         # self.info_timer = QTimer()
         # self.info_timer.timeout.connect(self.takePicture)
         # self.info_timer.start(2000)
         # self.testThread = TestThread()
         # self.testThread.update_json.connect(self.takePicture)
         # self.testThread.start()
+        # self.mypicthread = MyPicThread()
         self.takePicture()
+        # self.mypicthread.start()
 
     @Slot()
     def on_btnSwitch_clicked(self):

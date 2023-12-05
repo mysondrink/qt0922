@@ -1,6 +1,8 @@
 import os
 import random
 import re
+import time
+
 import pymysql
 
 from func.infoPage import infoMessage
@@ -77,13 +79,15 @@ class dataPage(Ui_Form, QWidget):
 
         self.ui.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.photoLabel.setText(self.test_time)
+
 
         # 测试
         # self.ui.photoLabel.setStyleSheet("QLabel{"
         #                                  "border-image: url(./inf/img_out/img_final.jpeg); "
         #                                  "font: 20pt; "
         #                                  "color: rgb(255,0,0);}")
-        print('%s\\img\\%s\\%s.jpeg' % (frozen.app_path(), pic_path, name_pic))
+        # print('%s\\img\\%s\\%s.jpeg' % (frozen.app_path(), pic_path, name_pic))
         self.ui.photoLabel.setStyleSheet("QLabel{"
                                          "border-image: url(./img/%s/%s.jpeg); "
                                          "font: 20pt; "
@@ -112,7 +116,7 @@ class dataPage(Ui_Form, QWidget):
                 else:
                     num = i % 3
                     for j in range(0, self.column_exetable):
-                        if i - flag < gray_row and j < gray_column:
+                        if j < gray_column:
                             item = QStandardItem(reagent_matrix_info[num][j])
                         else:
                             item = QStandardItem(str(0))
@@ -262,6 +266,10 @@ class dataPage(Ui_Form, QWidget):
     @Slot()
     def on_btnPrint_clicked(self):
         print("print")
+        m_title = ""
+        m_info = "输出表格成功!"
+        infoMessage(m_info, m_title, 300)
+        time.sleep(1)
         return
         time_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         test_time = self.test_time
@@ -269,23 +277,23 @@ class dataPage(Ui_Form, QWidget):
         myEm5822_Print.em5822_print()
         m_title = ""
         m_info = "输出表格成功!"
-        infoMessage(m_title, m_info, 300)
+        infoMessage(m_info, m_title, 300)
 
     @Slot()
     def on_btnDownload_clicked(self):
         print("Download")
-        return
         m_title = "错误"
         m_title = ""
         m_info = "下载中..."
         infoMessage(m_info, m_title, 380)
+        return
         # 创建定时器
-        self.change_timer = QTimer()
-        self.change_timer.timeout.connect(self.downLoadToUSB())
+        self.info_timer = QTimer()
+        self.info_timer.timeout.connect(self.downLoadToUSB)
         # 设置定时器延迟时间，单位为毫秒
         # 延迟2秒跳转
         delay_time = 2000
-        self.change_timer.start(delay_time)
+        self.info_timer.start(delay_time)
 
     @Slot()
     def on_btnData_clicked(self):

@@ -21,6 +21,7 @@ class infoMessage(QWidget):
         m_box.setText(m_info)
         timer = QTimer()
         timer.timeout.connect(m_box.close)
+        timer.timeout.connect(timer.stop)
         timer.start(2500)
         m_box.setStandardButtons(QMessageBox.StandardButton.Ok)
         btnOk = m_box.button(QMessageBox.StandardButton.Ok)

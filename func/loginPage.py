@@ -1,4 +1,6 @@
 import frozen
+import sys
+import traceback
 from gui.login import *
 # from func.homePage import homePage
 # from func.registerPage import registerPage
@@ -12,13 +14,20 @@ class loginPage(Ui_Form, QWidget):
     next_page = Signal(str)
     # next_page = Signal(QWidget)
     update_json = Signal(dict)
+    update_log = Signal(str)
 
     def __init__(self):
         super().__init__()
+        sys.excepthook = self.HandleException
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
         self.setUserDict()
+
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
 
     def InitUI(self):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)

@@ -1,4 +1,6 @@
 import frozen
+import sys
+import traceback
 from func.infoPage import infoMessage
 from gui.home import *
 from inf.probeThread import MyProbe
@@ -7,12 +9,19 @@ from inf.probeThread import MyProbe
 class homePage(Ui_Form, QWidget):
     next_page = Signal(str)
     update_json = Signal(dict)
+    update_log = Signal(str)
 
     def __init__(self):
         super().__init__()
+        sys.excepthook = self.HandleException
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
+
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
 
     def InitUI(self):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)

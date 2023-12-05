@@ -1,5 +1,5 @@
 import os
-from datetime import time
+import time
 
 import frozen
 from gui.power import *
