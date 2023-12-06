@@ -1,7 +1,7 @@
 # created by xiao 
 import sys
 from func.loadPage import *
-from func.dataPage import *
+from func.testPage import *
 
 
 def main():

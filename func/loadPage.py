@@ -244,7 +244,8 @@ class loadPage(Ui_Form, QMainWindow):
         self.ui.btnRetry.show()
 
     """
-    @detail 获取子界面发送的信息
+    @detail 获取子界面发送的信息,同时发送给其他子界面
+    @detail 槽函数
     @param msg: 发送的信号，获取子页面返回的信号，信号是子界面的消息
     """
     def getJsonData(self, msg):

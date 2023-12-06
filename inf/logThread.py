@@ -7,11 +7,19 @@ import traceback
 log_file = frozen.app_path() + r"/reagent.log"
 
 class LogThread(QThread):
+    """
+    @detail 初始化线程
+    @detail 构造函数
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
         self.logger = None
         self.log_file = log_file
 
+    """
+    @detail 线程运行函数
+    @detail 进行日志的创建
+    """
     def run(self):
         try:
             # 创建一个logger
@@ -42,6 +50,9 @@ class LogThread(QThread):
             err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
             self.logger.warning(err_msg)
 
+    """
+    @detail 获取线程的日志信息
+    @detail 槽函数
+    """
     def getLogMsg(self, msg):
-        print(msg)
         self.logger.info(msg)

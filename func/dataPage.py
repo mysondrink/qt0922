@@ -2,7 +2,8 @@ import os
 import random
 import re
 import time
-
+import sys
+import traceback
 import pymysql
 
 from func.infoPage import infoMessage
@@ -16,13 +17,44 @@ import cv2 as cv
 class dataPage(Ui_Form, QWidget):
     next_page = Signal(str)
     update_json = Signal(dict)
+    update_log = Signal(str)
+
+    """
+    @detail 初始化加载界面信息，同时创建记录异常的信息
+    @detail 构造函数
+    """
     def __init__(self):
         super().__init__()
+        sys.excepthook = self.HandleException
         self.pix_table_model = None
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
 
+    """
+    @detail 捕获及输出异常类
+    @param excType: 异常类型
+    @param excValue: 异常对象
+    @param tb: 异常的trace back
+    """
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 发送异常信息
+    @detail 在正常抛出异常时使用
+    @detail 未使用
+    """
+    def sendException(self):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 设置界面相关信息
+    """
     def InitUI(self):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -32,6 +64,9 @@ class dataPage(Ui_Form, QWidget):
         self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTableWidget()
 
+    """
+    @detail 设置按钮图标
+    """
     def setBtnIcon(self):
         confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
         self.ui.btnData.setIconSize(QSize(32, 32))
@@ -58,8 +93,13 @@ class dataPage(Ui_Form, QWidget):
         self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
     # this is a data get slot
+    """
+    @detail 获取信息
+    @detail 信息来自testPage和historyPage页面，信息包括图片信息和数据库信息
+    @param msg: 信号，发送来的信息
+    """
     def getData(self, msg):
-        print(msg['info'])
+        # print(msg['info'])
         # self.writeFile(msg['data'])
 
         flag = 0
@@ -79,19 +119,30 @@ class dataPage(Ui_Form, QWidget):
 
         self.ui.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.ui.photoLabel.setText(self.test_time)
-
+        self.ui.rightLabel.setText(self.test_time)
+        self.ui.leftLabel.setText(self.test_time)
 
         # 测试
+        img_right = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
+        img_left = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
+        # img_right = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic))  # linux
+        # img_left = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # linux
+        img_right = self.resizePhoto(img_right)
+        img_left = self.resizePhoto(img_left)
+
+        self.ui.photoLabel.setPixmap(img_right)
+        self.ui.photoLabel.setScaledContents(True)
+
+        self.ui.picLabel.setPixmap(img_left)
+        self.ui.picLabel.setScaledContents(True)
+        # self.ui.photoLabel.setPixmap(pixmap)
+        # self.ui.photoLabel.setScaledContents(True)
+        # self.ui.photoLabel.setAlignment(Qt.AlignCenter)
         # self.ui.photoLabel.setStyleSheet("QLabel{"
-        #                                  "border-image: url(./inf/img_out/img_final.jpeg); "
+        #                                  "border-image: url(./img/%s/%s.jpeg); "
         #                                  "font: 20pt; "
-        #                                  "color: rgb(255,0,0);}")
-        # print('%s\\img\\%s\\%s.jpeg' % (frozen.app_path(), pic_path, name_pic))
-        self.ui.photoLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(./img/%s/%s.jpeg); "
-                                         "font: 20pt; "
-                                         "color: rgb(255,0,0);}" % (pic_path, name_pic))  # windows环境
+        #                                  "color: rgb(255,0,0);"
+        #                                  "background-position: center;}" % (pic_path, name_pic))  # windows环境
         # self.ui.photoLabel.setStyleSheet("QLabel{"
         #                                  "border-image: url(%s/img/%s/%s.jpeg); "
         #                                  "font: 20pt; "
@@ -136,8 +187,46 @@ class dataPage(Ui_Form, QWidget):
                     self.pix_table_model.setItem(i, j, item)
 
     """
-    连接数据库，写入图片信息
-    需要修改
+    @detail 调整图片自适应label大小
+    @param img_right: opencv图片
+    """
+    def resizePhoto(self, img_right):
+        # 自适应label大小
+        width, height, channels = img_right.shape  ##获取图片宽度
+        long = width - height
+        image_copy = cv.copyMakeBorder(img_right, 0, 0, int(long / 2), int(long / 2), cv.BORDER_CONSTANT, value=[0, 0, 0])
+
+        new_long = self.ui.rightLabel.width()
+        new_img_right = cv.resize(image_copy, (int(new_long), int(new_long)), interpolation=cv.INTER_AREA)
+
+        new_img_right = self.opencv2img(new_img_right)
+        new_img = self.img2pix(new_img_right)
+
+        return new_img
+
+    """
+    @detail 将opencv图片转换成QImage图片
+    @param img: opencv图片
+    """
+    def opencv2img(self, img):
+        height, width, depth = img.shape
+        cv_img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+        cv_img = QImage(cv_img.data, width, height, width * depth, QImage.Format_RGB888)
+        return cv_img
+
+    """
+    @detail 将QImage图片转换成QPixmap图片
+    @param img: QImage图片
+    """
+    def img2pix(self, img):
+        img_pix = QPixmap.fromImage(img)
+        return img_pix
+
+    """
+    @detail 连接数据库，写入图片信息
+    @detail 需要修改
+    @param name_pic: 保存图片的图片名
+    @param cur_time: 测试时间
     """
     def insertMysql(self, name_pic, cur_time):
         reagent_matrix_info = str(self.readPixtable())
@@ -186,9 +275,9 @@ class dataPage(Ui_Form, QWidget):
         # 释放内存
         cursor.close()
         connection.close()
-        
+
     """
-    设置报告单页面
+    @detail 设置报告单页面
     """
     def setTableWidget(self):
         v = QVBoxLayout()
@@ -204,7 +293,7 @@ class dataPage(Ui_Form, QWidget):
         self.ui.tableWidget.setLayout(v)
 
     """
-    读取表格内容，同时以list形式保存到数据库
+    @detail 读取表格内容，同时以list形式保存到数据库
     """
     def readPixtable(self):
         reagent_matrix_info = ""
@@ -215,6 +304,10 @@ class dataPage(Ui_Form, QWidget):
                 reagent_matrix_info += "," + str(data)
         return reagent_matrix_info
 
+    """
+    @detail 下载信息到u盘
+    @detail 下载内容包括图片、数据库信息
+    """
     def downLoadToUSB(self):
         # 指定目标目录
         target_dir = '/media/orangepi/orangepi/'
@@ -232,7 +325,8 @@ class dataPage(Ui_Form, QWidget):
         filename = str(len(os.listdir(save_dir)) + 1)
         save_path = save_dir + filename + ".txt"
         dirs.makedir(save_path)
-        save_img_path = save_dir + filename + ".jpeg"
+        save_img_path_1 = save_dir + filename + "-1.jpeg"
+        save_img_path_2 = save_dir + filename + "-2.jpeg"
         if os.path.exists(save_dir):
             # 在U盘根目录下创建示例文件
             # print(filename + file_name)
@@ -244,8 +338,13 @@ class dataPage(Ui_Form, QWidget):
             try:
                 name_pic = self.data['name_pic']
                 pic_path = self.data['pic_path']
-                img_final = cv.imread('%s\\img\\%s\\%s.jpeg' % (frozen.app_path(), pic_path, name_pic))
-                flag_bool = cv.imwrite(save_img_path, img_final)
+                img_origin = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic)) # windows
+                # img_final = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic)) # linux
+                flag_bool = cv.imwrite(save_img_path_1, img_origin)
+
+                img_final = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic)) # windows
+                # img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic)) # linux
+                flag_bool = cv.imwrite(save_img_path_2, img_final)
             except Exception as e:
                 m_title = ""
                 m_info = "图片读取失败或未找到图片！"
@@ -258,11 +357,19 @@ class dataPage(Ui_Form, QWidget):
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
 
+    """
+    @detail 读取下传文件
+    @detail 测试代码
+    """
     def writeFile(self, msg):
         # file_path = os.path.join(r'/', "example.txt")
         with open("./example.txt", "w") as f:
             f.write(str(msg))
 
+    """
+    @detail 打印按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnPrint_clicked(self):
         print("print")
@@ -279,6 +386,10 @@ class dataPage(Ui_Form, QWidget):
         m_info = "输出表格成功!"
         infoMessage(m_info, m_title, 300)
 
+    """
+    @detail 下载按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnDownload_clicked(self):
         print("Download")
@@ -290,23 +401,40 @@ class dataPage(Ui_Form, QWidget):
         # 创建定时器
         self.info_timer = QTimer()
         self.info_timer.timeout.connect(self.downLoadToUSB)
+        self.info_timer.timeout.connect(self.info_timer.stop)
         # 设置定时器延迟时间，单位为毫秒
         # 延迟2秒跳转
         delay_time = 2000
         self.info_timer.start(delay_time)
 
+    """
+    @detail 数据按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnData_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
 
+    """
+    @detail 图片按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnPic_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
 
+    """
+    @detail 报告单按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnReport_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(2)
 
+    """
+    @detail 返回按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnReturn_clicked(self):
         if self.info == 201:

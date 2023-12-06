@@ -2,7 +2,13 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import QTimer
 from PySide2.QtGui import *
 
+
 class infoMessage(QWidget):
+
+    """
+    @detail 初始化加载界面信息，同时创建记录异常的信息
+    @detail 构造函数
+    """
     def __init__(self, info, title,_x=230,_y=200):
         super().__init__()
         self.x = _x
@@ -11,6 +17,9 @@ class infoMessage(QWidget):
         self.m_info = info
         self.InitUI()
 
+    """
+    @detail 设置界面相关信息
+    """
     def InitUI(self):
         m_title = self.m_title
         m_info = self.m_info

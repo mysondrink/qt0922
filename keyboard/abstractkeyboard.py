@@ -2,7 +2,17 @@ from PySide2.QtGui import *
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
+"""
+@detail 初始化线程，同时创建记录异常的信息
+@detail 构造函数
+"""
+
+
 class abstractkeyboard(QWidget):
+    """
+    @detail 初始化界面
+    @detail 构造函数
+    """
     def __init__(self):
         super().__init__()
         self.m_name = ''
