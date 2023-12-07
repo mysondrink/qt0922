@@ -690,7 +690,8 @@ class testPage(Ui_Form, QWidget):
         infoMessage(m_info, m_title, 380)
         # 创建定时器
         self.change_timer = QTimer()
-        self.change_timer.timeout.connect(self.downLoadToUSB())
+        self.change_timer.timeout.connect(self.downLoadToUSB)
+        self.change_timer.timeout.connect(self.change_timer.stop)
         # 设置定时器延迟时间，单位为毫秒
         # 延迟2秒跳转
         delay_time = 2000
