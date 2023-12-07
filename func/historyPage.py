@@ -1,9 +1,10 @@
 import os
 import shutil
 import datetime
-
+import sys
+import traceback
+from func.testinfo import MyTestInfo
 from gui.history import *
-page_dict = {'page': 0, 'page_2': 1, 'page_3': 2, 'page_4': 3}
 from func.infoPage import infoMessage
 import pymysql
 import math
@@ -13,19 +14,49 @@ from inf.print import Em5822_Print
 import utils.dirs as dirs
 
 
-
+page_dict = {'page': 0, 'page_2': 1, 'page_3': 2, 'page_4': 3}
 header_list = ["试剂卡编号", "采样时间",  "病人编号" , "病人姓名"]
 
 class historyPage(Ui_Form, QWidget):
     next_page = Signal(str)
     update_json = Signal(dict)
+    update_log = Signal(str)
 
+    """
+    @detail 初始化加载界面信息，同时创建记录异常的信息
+    @detail 构造函数
+    """
     def __init__(self):
         super().__init__()
+        sys.excepthook = self.HandleException
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
 
+    """
+    @detail 捕获及输出异常类
+    @param excType: 异常类型
+    @param excValue: 异常对象
+    @param tb: 异常的trace back
+    """
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 发送异常信息
+    @detail 在正常抛出异常时使用
+    @detail 未使用
+    """
+    def sendException(self):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 设置界面相关信息
+    """
     def InitUI(self):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -42,6 +73,9 @@ class historyPage(Ui_Form, QWidget):
         self.setReagentCb()
         self.setTableWidget()
 
+    """
+    @detail 设置按钮图标
+    """
     def setBtnIcon(self):
         confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
         self.ui.btnConfirm.setIconSize(QSize(32, 32))
@@ -75,6 +109,10 @@ class historyPage(Ui_Form, QWidget):
         self.ui.btnPrint.setIconSize(QSize(32, 32))
         self.ui.btnPrint.setIcon(QIcon(exe_icon_path))
 
+    """
+    @detail 重置按钮
+    @detail 弃用
+    """
     def resetBtn(self):
         self.ui.btnReport.setText('报告单')
         self.ui.btnReport.hide()
@@ -82,19 +120,26 @@ class historyPage(Ui_Form, QWidget):
         self.ui.btnPrint.hide()
         self.ui.stackedWidget.setCurrentIndex(1)
 
+    """
+    @detail 查询列表页面跳转
+    """
     def resetBtn_2(self):
         self.ui.btnNext.show()
         self.ui.btnPre.show()
         self.ui.btnDetail.show()
         self.ui.btnReturn.setGeometry(601, 10, 187, 80)
 
+    """
+    @detail 查询页面跳转
+    """
     def resetBtn_3(self):
         self.ui.btnNext.hide()
         self.ui.btnPre.hide()
         self.ui.btnDetail.hide()
 
     """
-    添加数据至表格显示
+    @detail 设置页面跳转信息
+    @param cur_page: 当前页面页数
     """
     def setHistoryTable(self, cur_page):
         if cur_page == 1:
@@ -164,8 +209,9 @@ class historyPage(Ui_Form, QWidget):
         # self.ui.btnDetail.clicked.connect(self.changePhoto)
 
     """
-    查询数据库数据
-    需要改进
+    @detail 根据时间和规格查询数据库数据
+    @param time: 查询测试时间
+    @param item_type: 查询试剂卡规格
     """
     def selectMysql(self, time, item_type):
         global header_list
@@ -242,17 +288,13 @@ class historyPage(Ui_Form, QWidget):
         connection.close()
 
     """
-    实现历史数据图片展示，选中时改变图片
+    @detail 历史数据图片展示，选中是改变图片
+    @param current_row: 选中的行
     """
-    def changePhoto(self):
-        # 点击空白不显示
-        current = self.ui.historyTable.currentIndex()
-        if current.row() >= self.min_size:
-            return
-
+    def changePhoto(self, current_row):
         # self.statusBar().showMessage('选中第{}行'.format(current.row() + 1))
 
-        num = current.row() + self.page_size * self.current_page
+        num = current_row + self.page_size * self.current_page
         pic_num = self.reagent_id_list[num]
         self.pic_num = pic_num
 
@@ -270,33 +312,34 @@ class historyPage(Ui_Form, QWidget):
             # cursor.execute(sql, [pic_num])
             cursor.execute(sql_2, [pic_num])
             for i in cursor.fetchall():
-                patient_id = i[1]
-                patient_name = i[11]
-                patient_age = i[12]
-                patient_gender = i[13]
                 item_type = i[0]
+                patient_id = i[1]
                 pic_name = i[2]
-                time = i[9]
+                pic_path = i[3].strftime("%Y-%m-%d")
+                code_num = i[5]
                 doctor = i[6]
                 depart = i[7]
-                age = i[12]
-                gender = i[13]
-                name = i[11]
-                matrix = i[8]
-                code_num = i[5]
-                reagent_matrix_info = i[10]
                 reagent_matrix = i[8]
                 row_exetable = reagent_matrix[0]
                 column_exetable = reagent_matrix[2]
+                cur_time = []
+                cur_time.append(pic_path)
+                cur_time.append(i[9])
+                reagent_matrix_info = i[10]
+                patient_name = i[11]
+                patient_age = i[12]
+                patient_gender = i[13]
+                age = i[12]
+                gender = i[13]
+                name = i[11]
                 name_pic = pic_name
-                pic_path = i[3].strftime("%Y-%m-%d")
                 data_json = dict(patient_id=patient_id, patient_name=patient_name,
                                  patient_age=patient_age, patient_gender=patient_gender,
                                  item_type=item_type, pic_name=pic_name,
-                                 time=time, doctor=doctor,
+                                 time=cur_time, doctor=doctor,
                                  depart=depart, age=age,
                                  gender=gender, name=name,
-                                 matrix=matrix, code_num=code_num,
+                                 matrix=reagent_matrix, code_num=code_num,
                                  pic_path=pic_path, name_pic=name_pic,
                                  row_exetable=row_exetable, column_exetable=column_exetable,
                                  reagent_matrix_info=reagent_matrix_info)
@@ -327,8 +370,11 @@ class historyPage(Ui_Form, QWidget):
         # 释放内存
         cursor.close()
         connection.close()
+        self.testinfo.closeWin()
 
-    # 获取试剂卡的信息
+    """
+    @detail 获取试剂卡的信息
+    """
     def setReagentCb(self):
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
@@ -371,7 +417,10 @@ class historyPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
-    # 设置UI页面
+    """
+    @detail 设置报告单页面
+    @detail 弃用
+    """
     def setTableWidget(self):
         v = QVBoxLayout()
         text = MyReport().gethtml()
@@ -385,6 +434,11 @@ class historyPage(Ui_Form, QWidget):
         v.addWidget(self.myreport)
         self.ui.tableWidget.setLayout(v)
 
+    """
+    @detail 下载信息到u盘
+    @detail 下载内容包括图片、数据库信息
+    @detail 弃用
+    """
     def downLoadToUSB(self):
         # 指定目标目录
         target_dir = '/media/orangepi/orangepi/'
@@ -416,6 +470,10 @@ class historyPage(Ui_Form, QWidget):
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
 
+    """
+    @detail 确认按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnConfirm_clicked(self):
         if self.ui.modeBox_3.currentIndex() == -1:
@@ -433,14 +491,26 @@ class historyPage(Ui_Form, QWidget):
             item_type = self.ui.modeBox_3.currentText()
             self.selectMysql(self.searchtime, item_type)
 
+    """
+    @detail 上一页按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnPre_clicked(self):
         self.setHistoryTable(2)
 
+    """
+    @detail 下一页按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnNext_clicked(self):
         self.setHistoryTable(3)
 
+    """
+    @detail 详情按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnDetail_clicked(self):
         if self.ui.historyTable.currentIndex().row() == -1:
@@ -450,9 +520,17 @@ class historyPage(Ui_Form, QWidget):
             infoMessage(m_info, m_title, 300)
             return
         else:
-            self.next_page.emit('dataPage')
-            self.changePhoto()
-            return
+            # 点击空白不显示
+            current_row = self.ui.historyTable.currentIndex().row()
+            if current_row >= self.min_size:
+                return
+            else:
+                self.testinfo = MyTestInfo()
+                self.testinfo.setWindowModality(Qt.ApplicationModal)
+                self.testinfo.show()
+                self.next_page.emit('dataPage')
+                self.changePhoto(current_row)
+                return
             self.resetBtn_3()
             # self.ui.btnReturn.setGeometry(539, 10, 254, 80)
             self.ui.btnReturn.setGeometry(601, 10, 187, 80)
@@ -462,6 +540,11 @@ class historyPage(Ui_Form, QWidget):
             self.ui.stackedWidget.setCurrentIndex(2)
             self.changePhoto()
 
+    """
+    @detail 打印按钮操作
+    @detail 槽函数
+    @detail 弃用
+    """
     @Slot()
     def on_btnPrint_clicked(self):
         reagent_id = self.ui.historyTable.currentIndex().row() + self.page_size * self.current_page
@@ -479,6 +562,11 @@ class historyPage(Ui_Form, QWidget):
         m_info = "输出表格成功!"
         infoMessage(m_title, m_info, 300)
 
+    """
+    @detail 报告单按钮操作
+    @detail 槽函数
+    @detail 弃用
+    """
     @Slot()
     def on_btnReport_clicked(self):
         if self.ui.stackedWidget.currentIndex() == 2:
@@ -488,6 +576,10 @@ class historyPage(Ui_Form, QWidget):
             self.ui.stackedWidget.setCurrentIndex(2)
             self.ui.btnReport.setText('报告单')
 
+    """
+    @detail 返回按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnReturn_clicked(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -505,6 +597,11 @@ class historyPage(Ui_Form, QWidget):
             self.resetBtn()
             self.resetBtn_2()
 
+    """
+    @detail 下载按钮操作
+    @detail 槽函数
+    @detail 弃用
+    """
     @Slot()
     def on_btnDownload_clicked(self):
         m_title = "错误"
@@ -513,7 +610,8 @@ class historyPage(Ui_Form, QWidget):
         infoMessage(m_info, m_title, 380)
         # 创建定时器
         self.change_timer = QTimer()
-        self.change_timer.timeout.connect(self.downLoadToUSB())
+        self.change_timer.timeout.connect(self.downLoadToUSB)
+        self.change_timer.timeout.connect(self.change_timer.stop)
         # 设置定时器延迟时间，单位为毫秒
         # 延迟2秒跳转
         delay_time = 2000

@@ -1,4 +1,7 @@
 import os
+import time
+import sys
+import traceback
 from gui.test import *
 from inf.picThread import MyPicThread
 from keyboard.keyboard import KeyBoard
@@ -13,23 +16,51 @@ import pymysql
 from inf.print import Em5822_Print
 from inf.img_acquire import Image_Acquire
 from inf.img_process import Image_Processing
-import time
 from func.testinfo import MyTestInfo
 
-allergen = [' ','柳树', '普通豚草', '艾蒿', '桃子']
+allergen = [' ', '柳树', '普通豚草', '艾蒿', '屋尘螨']
 
 class testPage(Ui_Form, QWidget):
     next_page = Signal(str)
     update_json = Signal(dict)
+    update_log = Signal(str)
 
+    """
+    @detail 初始化加载界面信息，同时创建记录异常的信息
+    @detail 构造函数
+    """
     def __init__(self):
         super().__init__()
+        sys.excepthook = self.HandleException
         self.genderCb = None
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
         self.startProbeMem()
 
+    """
+    @detail 捕获及输出异常类
+    @param excType: 异常类型
+    @param excValue: 异常对象
+    @param tb: 异常的trace back
+    """
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 发送异常信息
+    @detail 在正常抛出异常时使用
+    """
+    def sendException(self):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 设置界面相关信息
+    """
     def InitUI(self):
         self.ui.btnExe.hide()
         self.ui.btnPrint.hide()
@@ -46,6 +77,8 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.setId(self.ui.radioButton_2, 1)
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
+        self.testinfo = MyTestInfo()
+        self.testinfo.setWindowModality(Qt.ApplicationModal)
         self.mypicthread = MyPicThread()
         self.mypicthread.finished.connect(self.testinfo.closeWin)
         self.mypicthread.finished.connect(self.takePicture)
@@ -57,6 +90,9 @@ class testPage(Ui_Form, QWidget):
         self.mytest()
         self.setBtnIcon()
 
+    """
+    @detail 设置按钮图标
+    """
     def setBtnIcon(self):
         confirm_icon_path = frozen.app_path() + r"/res/icon/confirm.png"
         self.ui.btnConfirm.setIconSize(QSize(32, 32))
@@ -82,21 +118,36 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnReturn.setIconSize(QSize(32, 32))
         self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
+    """
+    @detail 测试信息
+    """
     def mytest(self):
         self.ui.nameLine.setText("123")
         self.ui.docCb.setText("123")
         self.ui.ageLine.setText("123")
         self.ui.departCb.setText("123")
 
+    """
+    @detail 安装事件监听
+    """
     def installEvent(self):
         for item in self.focuswidget:
             item.installEventFilter(self)
 
+    """
+    @detail 设置组件点击焦点
+    """
     def setFocusWidget(self):
         self.focuswidget = [self.ui.nameLine, self.ui.paraLine, self.ui.ageLine, self.ui.departCb, self.ui.docCb]
         for item in self.focuswidget:
             item.setFocusPolicy(Qt.ClickFocus)
 
+    """
+    @detail 事件过滤
+    @detail 槽函数
+    @param obj: 发生事件的组件
+    @param event: 发生的事件
+    """
     def eventFilter(self, obj, event):
         if obj in self.focuswidget:
             if event.type() == QEvent.Type.FocusIn:
@@ -108,6 +159,11 @@ class testPage(Ui_Form, QWidget):
         else:
             return False
 
+    """
+    @detail 设置可以键盘弹出的组件
+    @detail 槽函数
+    @param obj: 键盘弹出的组件
+    """
     def setKeyBoard(self, obj):
         self.keyboardtext = KeyBoard()
         self.keyboardtext.text_msg.connect(self.getKeyBoardText)
@@ -126,10 +182,18 @@ class testPage(Ui_Form, QWidget):
             self.keyboardtext.nameLabel.setText("送检医生")
         self.keyboardtext.showWindow()
 
+    """
+    @detail 获取键盘的文本信息
+    @detail 槽函数
+    @param msg: 信号，键盘文本信息
+    """
     def getKeyBoardText(self, msg):
         self.focusWidget().setText(msg)
         self.focusWidget().clearFocus()
 
+    """
+    @detail 重置按钮信息，当发生页面跳转时触发
+    """
     def resetBtn(self):
         self.ui.btnSwitch.hide()
         self.ui.btnExe.hide()
@@ -139,7 +203,7 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnReturn.setGeometry(410, 10, 380, 80)
 
     """
-    设置表格内容
+    @detail 设置表格内容，主要是过敏原信息
     """
     def setTableView(self):
         # 设置行列
@@ -188,36 +252,40 @@ class testPage(Ui_Form, QWidget):
                     self.ui.exeTable.setIndexWidget(self.pix_table_model.index(i, j), content_cb)
 
     """
-    实现图片提取功能
+    @detail 实现图片提取功能，获取得到的img_final图片和图片pixel信息
+    @param msg: 信号，测试完后发出的时间信息
     """
     def takePicture(self, msg):
         cur_time = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
-        time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         self.ui.photoLabel.setText(cur_time)
         time_now = msg
-        gray_aver = self.mypicthread.getGrayAver()
-        print(gray_aver)
-        # self.imgAcq.img_acquire(time_now)
-
+        try:
+            gray_aver = self.mypicthread.getGrayAver()
+            gray_row = len(gray_aver)
+            gray_column = len(gray_aver[0])
+        except Exception as e:
+            self.sendException()
+            m_title = ""
+            m_info = "系统错误！"
+            infoMessage(m_info, m_title, 300)
         # pic_name = 'img_final'
         # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
         #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
         #                                       radius=40)
-        # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
-        #                                     path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
-        #                                     radius=40)
-        gray_row = len(gray_aver)
-        gray_column = len(gray_aver[0])
 
         img_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_final.jpeg')
+        img_origin = cv.imread(frozen.app_path() + r'/inf/img_out/img_0ori.jpeg')
         name_pic = time_now
 
-        save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '.jpeg'
+        save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '-1.jpeg'
+        dirs.makedir(save_path)
+        flag_bool = cv.imwrite(save_path, img_origin)
+        save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '-2.jpeg'
         dirs.makedir(save_path)
         flag_bool = cv.imwrite(save_path, img_final)
 
-        self.testinfo.closeWin()
         page_msg = 'dataPage'
         self.next_page.emit(page_msg)
 
@@ -266,6 +334,7 @@ class testPage(Ui_Form, QWidget):
                          column_exetable=self.column_exetable, reagent_matrix_info=reagent_matrix_info)
         info_msg = 201
         self.update_json.emit(dict(info=info_msg, data=data_json))
+        self.testinfo.closeWin()
         return
 
         # 原代码
@@ -313,7 +382,8 @@ class testPage(Ui_Form, QWidget):
         # self.ftpServer(base64_data)   #上传图片到服务器
 
     """
-    读取表格内容，同时以list形式保存到数据库
+    @detail 读取表格内容，同时以list形式保存到数据库
+    @detail 弃用
     """
     def readPixtable(self):
         reagent_matrix_info = []
@@ -333,24 +403,28 @@ class testPage(Ui_Form, QWidget):
         return reagent_matrix_info
 
     """
-    读取表格内容，同时以list形式保存到数据库
+    @detail 读取表格内容，同时以list形式保存
+    @detail 弃用
     """
     def readPixtableNum(self):
-        str_num = ""
+        reagent_matrix_info = []
         for i in range(self.row_exetable + int(self.row_exetable / 2)):
-            # row_list = []
             if i % 3 == 0:
+                row_list = []
                 for j in range(self.column_exetable):
-                    index = self.ui.exeTable.model().index(i, j)  # 获取单元格的 QModelIndex 对象
-                    combo_box = self.ui.exeTable.indexWidget(index)  # 获取该单元格中的 QComboBox 对象
-                    data_index = combo_box.currentIndex() + 1
-                    # current_text = combo_box.currentText()  # 获取 QComboBox 当前选中的文本
-                    str_num = str_num + str(data_index)
-        return str_num
+                            index = self.ui.exeTable.model().index(i, j)  # 获取单元格的 QModelIndex 对象
+                            combo_box = self.ui.exeTable.indexWidget(index)  # 获取该单元格中的 QComboBox 对象
+                            current_text = combo_box.currentText()  # 获取 QComboBox 当前选中的文本
+                            row_list.append(str(current_text))
+                reagent_matrix_info.append(row_list)
+        return reagent_matrix_info
 
     """
-    连接数据库，写入图片信息
-    需要修改
+    @detail 连接数据库，写入图片信息
+    @detail 需要修改
+    @detail 弃用
+    @param name_pic: 保存图片的图片名
+    @param cur_time: 测试时间
     """
     def insertMysql(self, name_pic, cur_time):
         reagent_matrix_info = str(self.readPixtable())
@@ -415,7 +489,9 @@ class testPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
-    # 获取试剂卡的信息
+    """
+    @detail 读取数据库，获取试剂卡规格的信息
+    """
     def setReagentCb(self):
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
@@ -458,6 +534,10 @@ class testPage(Ui_Form, QWidget):
         cursor.close()
         connection.close()
 
+    """
+    @detail 显示试剂卡规格信息
+    @detail 槽函数
+    """
     def changeType(self):
         # super().changeType()
         if self.ui.modeBox_1.currentText() == '':
@@ -465,11 +545,17 @@ class testPage(Ui_Form, QWidget):
         text = self.reagent_matrix[self.reagent_type.index(self.ui.modeBox_1.currentText())]
         self.ui.typeLabel.setText(text)
 
+    """
+    @detail 系统存储检测
+    """
     def startProbeMem(self):
         self.myprobe = MyProbe()
         self.myprobe.update_progress.connect(self.memWarning)
         self.myprobe.start()
 
+    """
+    @detail 系统存储检测信息反馈
+    """
     def memWarning(self):
         m_title = "警告"
         m_info = "存储已经占满，请清理图片！"
@@ -478,6 +564,11 @@ class testPage(Ui_Form, QWidget):
         # self.ui.btnHistory.setEnabled(False)
         return
     
+    """
+    @detail 下载信息到u盘
+    @detail 下载内容包括图片、数据库信息
+    @detail 弃用
+    """
     def downLoadToUSB(self):
         # 指定目标目录
         target_dir = '/media/orangepi/orangepi/'
@@ -512,6 +603,10 @@ class testPage(Ui_Form, QWidget):
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
 
+    """
+    @detail 返回按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnReturn_clicked(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -523,6 +618,11 @@ class testPage(Ui_Form, QWidget):
         elif self.ui.stackedWidget.currentIndex() == 2:
             self.resetBtn()
             self.ui.stackedWidget.setCurrentIndex(0)
+
+    """
+    @detail 确认按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnConfirm_clicked(self):
         if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine == "" or self.ui.ageLine == "" \
@@ -538,13 +638,21 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnExe.show()
         self.ui.btnConfirm.hide()
 
+    """
+    @detail 检测按钮操作
+    @detail 槽函数
+    """
     @Slot()
     def on_btnExe_clicked(self):
-        self.testinfo = MyTestInfo()
-        self.testinfo.setWindowModality(Qt.ApplicationModal)
         self.testinfo.show()
         self.mypicthread.start()
+        print("test start!")
 
+    """
+    @detail 切换按钮操作
+    @detail 槽函数
+    @detail 弃用
+    """
     @Slot()
     def on_btnSwitch_clicked(self):
         if self.ui.stackedWidget.currentIndex() == 1:
@@ -552,6 +660,11 @@ class testPage(Ui_Form, QWidget):
         elif self.ui.stackedWidget.currentIndex() == 2:
             self.ui.stackedWidget.setCurrentIndex(1)
 
+    """
+    @detail 下载按钮操作
+    @detail 槽函数
+    @detail 弃用
+    """
     @Slot()
     def on_btnPrint_clicked(self):
         # reagent_id = self.ui.historyTable.currentIndex().row() + self.page_size * self.current_page

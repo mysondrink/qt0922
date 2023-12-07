@@ -146,7 +146,7 @@ class Ui_Form(object):
         self.page.setObjectName(u"page")
         self.photoLabel = QLabel(self.page)
         self.photoLabel.setObjectName(u"photoLabel")
-        self.photoLabel.setGeometry(QRect(230, 0, 350, 350))
+        self.photoLabel.setGeometry(QRect(440, 0, 350, 350))
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -154,9 +154,38 @@ class Ui_Form(object):
         self.photoLabel.setSizePolicy(sizePolicy1)
         self.photoLabel.setMinimumSize(QSize(350, 350))
         self.photoLabel.setMaximumSize(QSize(350, 350))
-        self.photoLabel.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";")
+        self.photoLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.photoLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.picLabel = QLabel(self.page)
+        self.picLabel.setObjectName(u"picLabel")
+        self.picLabel.setGeometry(QRect(10, 0, 350, 350))
+        sizePolicy1.setHeightForWidth(self.picLabel.sizePolicy().hasHeightForWidth())
+        self.picLabel.setSizePolicy(sizePolicy1)
+        self.picLabel.setMinimumSize(QSize(350, 350))
+        self.picLabel.setMaximumSize(QSize(350, 350))
+        self.picLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.picLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.leftLabel = QLabel(self.page)
+        self.leftLabel.setObjectName(u"leftLabel")
+        self.leftLabel.setGeometry(QRect(10, 0, 350, 30))
+        self.leftLabel.setStyleSheet(u"QLabel {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"color: rgb(255, 0, 0);\n"
+"background-color: transparent;\n"
+"}")
+        self.rightLabel = QLabel(self.page)
+        self.rightLabel.setObjectName(u"rightLabel")
+        self.rightLabel.setGeometry(QRect(440, 0, 350, 30))
+        self.rightLabel.setStyleSheet(u"QLabel {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"color: rgb(255, 0, 0);\n"
+"background-color: transparent;\n"
+"}")
         self.stackedWidget.addWidget(self.page)
+        self.photoLabel.raise_()
+        self.picLabel.raise_()
+        self.rightLabel.raise_()
+        self.leftLabel.raise_()
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
         self.tableView = QTableView(self.page_2)
@@ -212,6 +241,9 @@ class Ui_Form(object):
         self.btnPic.setText(QCoreApplication.translate("Form", u"\u56fe\u50cf", None))
         self.btnReport.setText(QCoreApplication.translate("Form", u"\u62a5\u544a\u5355", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
-        self.photoLabel.setText(QCoreApplication.translate("Form", u"TextLabel", None))
+        self.photoLabel.setText(QCoreApplication.translate("Form", u"test_photo", None))
+        self.picLabel.setText(QCoreApplication.translate("Form", u"origin_photo", None))
+        self.leftLabel.setText(QCoreApplication.translate("Form", u"TextLabel", None))
+        self.rightLabel.setText(QCoreApplication.translate("Form", u"TextLabel", None))
     # retranslateUi
 

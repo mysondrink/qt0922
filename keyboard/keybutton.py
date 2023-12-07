@@ -5,6 +5,11 @@ from PySide2.QtWidgets import *
 DEFAULT_STYLE_SHEET = "QPushButton { background: #4395ff; border-radius: 5px;" \
                       "margin: 5px;font-size: 26px; color:white;}" \
                       "QPushButton:pressed { background: #01ddfd}"
+"""
+@detail 键盘按钮类
+@detail 父类
+"""
+
 
 class keybutton(QPushButton):
     pressed = Signal(str)

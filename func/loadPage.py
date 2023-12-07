@@ -1,5 +1,8 @@
 import time
+import sys
+import traceback
 
+from func.infoPage import infoMessage
 from gui.loading import *
 from inf.dbThread import CheckDataBaseThread
 from inf.cameraThread import CheckCameraThread
@@ -17,6 +20,7 @@ from func.clearPage import clearPage
 from func.setPage import setPage
 from func.aboutPage import aboutPage
 from func.dataPage import dataPage
+from inf.logThread import LogThread
 
 flag_num = 0
 failed_code = 404
@@ -25,9 +29,18 @@ succeed_code = 202
 
 class loadPage(Ui_Form, QMainWindow):
     update_json = Signal(dict)
+    update_log = Signal(str)
 
+    """
+    @detail 初始化加载界面信息，同时创建记录异常的信息
+    @detail 构造函数
+    """
     def __init__(self):
         super().__init__()
+        self.log_thread = LogThread()
+        self.log_thread.start()
+        self.update_log.connect(self.log_thread.getLogMsg)
+        sys.excepthook = self.HandleException
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
@@ -35,6 +48,31 @@ class loadPage(Ui_Form, QMainWindow):
         self.cur_page = None
         self.flag_num = flag_num
 
+    """
+    @detail 捕获及输出异常类
+    @param excType: 异常类型
+    @param excValue: 异常对象
+    @param tb: 异常的trace back
+    """
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
+        m_title = ""
+        m_info = "系统错误！"
+        infoMessage(m_info, m_title, 300)
+
+    """
+    @detail 发送异常信息
+    """
+    def sendException(self):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 设置界面相关信息
+    """
     def InitUI(self):
         self.statusShowTime()
         self.ui.title_label.setText('荧光判读仪器')
@@ -52,6 +90,9 @@ class loadPage(Ui_Form, QMainWindow):
 
         self.startThread()
 
+    """
+    @detail 开启相机、数据库、串口的线程
+    """
     def startThread(self):
         self.thread_list = [CheckSerialThread(), CheckDataBaseThread(), CheckCameraThread()]
         self.thread_id = []
@@ -62,7 +103,10 @@ class loadPage(Ui_Form, QMainWindow):
             self.thread_list[num].finished.connect(self.thread_list[num].deleteLater)
             self.thread_list[num].start()
 
-    # @Slot()
+    """
+    @detail 开启相机、数据库、串口的线程检测
+    @param msg: 发送的信号
+    """
     def setInfoLabel(self, msg):
         try:
             info_msg, code_msg, status_msg = msg['info'], msg['code'], msg['status']
@@ -79,13 +123,20 @@ class loadPage(Ui_Form, QMainWindow):
                 self.change_timer = QTimer()
                 self.flag_num == -1
                 self.change_timer.timeout.connect(self.showPage)
+                self.change_timer.timeout.connect(self.change_timer.stop)
                 # 设置定时器延迟时间，单位为毫秒
                 # 延迟2秒跳转
                 delay_time = 2000
                 self.change_timer.start(delay_time)
         except Exception as e:
-            print(e)
+            self.sendException()
+            m_title = ""
+            m_info = "系统错误！"
+            infoMessage(m_info, m_title, 300)
 
+    """
+    @detail 设置主界面中子界面的显示位置，同时显示登录界面
+    """
     def showPage(self):
         # print(self.flag_num)
         self.list_widget = []
@@ -96,6 +147,7 @@ class loadPage(Ui_Form, QMainWindow):
             self.cur_page = loginPage()
             self.cur_page.next_page.connect(self.changePage)
             self.cur_page.update_json.connect(self.getJsonData)
+            self.cur_page.update_log.connect(self.log_thread.getLogMsg)
             self.cur_page.setFocus()
             self._s.addWidget(self.cur_page)
             self._h.addLayout(self._s)
@@ -115,8 +167,8 @@ class loadPage(Ui_Form, QMainWindow):
             self.p_ptr = self._s.currentIndex()
 
     """
-    进行页面的跳转
-    获取子页面返回的信号，信号是跳转页面
+    @detail 进行页面的跳转
+    @param msg: 发送的信号，获取子页面返回的信号，信号是跳转页面
     """
     def changePage(self, msg):
         try:
@@ -136,6 +188,7 @@ class loadPage(Ui_Form, QMainWindow):
             self.cur_page = globals()[msg]()
             self.cur_page.next_page.connect(self.changePage)
             self.cur_page.update_json.connect(self.getJsonData)
+            self.cur_page.update_log.connect(self.log_thread.getLogMsg)
             self.cur_page.setFocus()
 
             # 防止页面重复
@@ -159,31 +212,46 @@ class loadPage(Ui_Form, QMainWindow):
             # self.ui.centerframe.setLayout(self._s)
             # self.cur_page.show()
         except Exception as e:
-            print(e)
-    
+            self.sendException()
+            m_title = ""
+            m_info = "系统错误！"
+            infoMessage(m_info, m_title, 300)
+
+    """
+    @detail 设置时间显示，间隔为1秒
+    """
     def statusShowTime(self):
         self.timer = QTimer()
         self.timer.timeout.connect(self.showCurrentTime)
-
         self.timer.start(1000)
 
+    """
+    @detail 设置显示时间格式
+    """
     def showCurrentTime(self):
         cur_time = QDateTime.currentDateTime()
         time_display = cur_time.toString('yyyy-MM-dd hh:mm:ss dddd')
         self.ui.time_label.setText(time_display)
 
+    """
+    @detail 显示重试标签、按钮
+    """
     def retryThread(self):
         self.ui.retry_icon_label.show()
         self.ui.btnRetry.show()
 
     """
-    子窗口之间通信
-    子窗口传输数据给父窗口，父窗口在传到指定的子窗口
+    @detail 获取子界面发送的信息,同时发送给其他子界面
+    @detail 槽函数
+    @param msg: 发送的信号，获取子页面返回的信号，信号是子界面的消息
     """
     def getJsonData(self, msg):
         self.update_json.connect(self.cur_page.getData)
         self.update_json.emit(msg)
 
+    """
+    @detail 槽函数，重试按钮，重新进行相机、数据库、串口的线程检测
+    """
     @Slot()
     def on_btnRetry_clicked(self):
         self.ui.textEdit.clear()
@@ -198,6 +266,10 @@ class loadPage(Ui_Form, QMainWindow):
         self.thread_id.clear()
         self.startThread()
 
+    """
+    @detail 未使用
+    @detail 槽函数，进度条设置
+    """
     @Slot()
     def loadingError(self):
         error_stylesheet = "QProgressBar {\
