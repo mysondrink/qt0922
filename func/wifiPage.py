@@ -5,6 +5,7 @@ import traceback
 import frozen
 from func.infoPage import infoMessage
 from gui.wifi import *
+from inf.wifiThread import WifiThread
 from keyboard.keyboard import KeyBoard
 from utils.wifi import wifisearch
 
@@ -65,6 +66,26 @@ class wifiPage(Ui_Form, QWidget):
         self.setFocusWidget()
         self.installEvent()
         self.mytest()
+        self.mywifithread = WifiThread()
+        self.mywifithread.finished.connect(self.getWifiMsg)
+        self.mywifithread.start()
+
+    """
+    @detail 获取wifi连接反馈
+    @detail 槽函数
+    @param msg: 信号，返回wifi连接的结果
+    """
+    def getWifiMsg(self, msg):
+        if msg == 202:
+            m_title = "确认"
+            m_title = ""
+            m_info = "wifi连接成功！"
+            infoMessage(m_info, m_title, 280)
+        else:
+            m_title = "确认"
+            m_title = ""
+            m_info = "wifi连接失败！"
+            infoMessage(m_info, m_title, 280)
 
     """
     @detail 测试信息
@@ -145,6 +166,11 @@ class wifiPage(Ui_Form, QWidget):
             flag = -100
             self.wifiPwd = self.ui.pwdLine.text()
             self.wifiSSID = self.ui.wifiCb.currentText()
+            self.mywifithread.connectWifi(self.wifiSSID, self.wifiPwd)
+            m_title = ""
+            m_info = "wifi连接中。。。"
+            infoMessage(m_info, m_title, 280)
+            return
             if self.wifiPwd != '':
                 cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s password %s' % (
                 'orangepi', self.wifiSSID, self.wifiPwd)
@@ -182,6 +208,7 @@ class wifiPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnReturn_clicked(self):
+        self.mywifithread.deleteLater()
         page_msg = 'sysPage'
         self.next_page.emit(page_msg)
 
