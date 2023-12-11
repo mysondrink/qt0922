@@ -313,6 +313,27 @@ class dataPage(Ui_Form, QWidget):
         return reagent_matrix_info
 
     """
+    @detail u盘提示信息
+    @param msg: U盘信息    
+    """
+    def getUSBInfo(self, msg):
+        if msg == 202:
+            self.usbthread.deleteLater()
+            m_title = ""
+            m_info = "下载完成！"
+            infoMessage(m_info, m_title, 300)
+        elif msg == 404:
+            self.usbthread.deleteLater()
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
+        elif msg == 405:
+            self.usbthread.deleteLater()
+            m_title = ""
+            m_info = "图片读取失败或未找到图片！"
+            infoMessage(m_info, m_title)
+
+    """
     @detail 下载信息到u盘
     @detail 下载内容包括图片、数据库信息
     """
@@ -406,9 +427,13 @@ class dataPage(Ui_Form, QWidget):
         m_info = "下载中..."
         infoMessage(m_info, m_title, 380)
         return
+        name = self.data['name_pic']
+        path = self.data['pic_path']
+        self.usbthread = CheckUSBThread(name, path)
+        self.usbthread.update_json.connect(self.getUSBInfo)
         # 创建定时器
         self.info_timer = QTimer()
-        self.info_timer.timeout.connect(self.downLoadToUSB)
+        self.info_timer.timeout.connect(self.usbthread.start)
         self.info_timer.timeout.connect(self.info_timer.stop)
         # 设置定时器延迟时间，单位为毫秒
         # 延迟2秒跳转
