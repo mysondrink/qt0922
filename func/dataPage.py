@@ -6,6 +6,7 @@ import traceback
 import pymysql
 import time
 
+from inf.USBThread import CheckUSBThread
 from func.infoPage import infoMessage
 from gui.info import *
 import frozen
@@ -311,10 +312,32 @@ class dataPage(Ui_Form, QWidget):
                 data = self.pix_table_model.data(index)
                 reagent_matrix_info += "," + str(data)
         return reagent_matrix_info
+    
+    """
+    @detail u盘提示信息
+    @param msg: U盘信息    
+    """
+    def getUSBInfo(self, msg):
+        if msg == 202:
+            self.usbthread.deleteLater()
+            m_title = ""
+            m_info = "下载完成！"
+            infoMessage(m_info, m_title, 300)
+        elif msg == 404:
+            self.usbthread.deleteLater()
+            m_title = ""
+            m_info = "U盘未插入或无法访问！"
+            infoMessage(m_info, m_title)
+        elif msg == 405:
+            self.usbthread.deleteLater()
+            m_title = ""
+            m_info = "图片读取失败或未找到图片！"
+            infoMessage(m_info, m_title)
 
     """
     @detail 下载信息到u盘
     @detail 下载内容包括图片、数据库信息
+    @detail 弃用
     """
     def downLoadToUSB(self):
         self.download_timer.stop()
@@ -396,17 +419,21 @@ class dataPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnDownload_clicked(self):
-        m_title = ""
-        m_info = "下载中..."
-        infoMessage(m_info, m_title, 380)
+        name = self.data['name_pic']
+        path = self.data['pic_path']
+        self.usbthread = CheckUSBThread(name, path)
+        self.usbthread.update_json.connect(self.getUSBInfo)
         # 创建定时器
         self.download_timer = QTimer()
-        self.download_timer.timeout.connect(self.downLoadToUSB)
+        self.download_timer.timeout.connect(self.usbthread.start)
         self.download_timer.timeout.connect(self.download_timer.stop)
         # 设置定时器延迟时间，单位为毫秒
         # 延迟2秒跳转
         delay_time = 2000
         self.download_timer.start(delay_time)
+        m_title = ""
+        m_info = "下载中..."
+        infoMessage(m_info, m_title, 380)
 
     """
     @detail 数据按钮操作
