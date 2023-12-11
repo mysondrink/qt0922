@@ -65,6 +65,14 @@ class dataPage(Ui_Form, QWidget):
         self.setTableWidget()
 
     """
+    @detail 窗口关闭事件
+    @param evnet: 响应事件, 窗口关闭
+    """
+    def closeEvent(self, event):
+        self.setParent(None)
+        event.accept()		# 表示同意了，结束吧
+
+    """
     @detail 设置按钮图标
     """
     def setBtnIcon(self):

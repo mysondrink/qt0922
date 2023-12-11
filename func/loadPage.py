@@ -177,10 +177,11 @@ class loadPage(Ui_Form, QMainWindow):
             # 设置栈为2
             num = len(self.list_widget)
             if msg == 'history':
-                print(self.list_widget)
+                temp = self.list_widget[1]
                 self._s.removeWidget(self._s.currentWidget())
                 self.list_widget.remove(self.list_widget[1])
                 self.p_ptr -= 1
+                temp.close()
                 return
             # if num > 1:
             #     self._s.removeWidget(self.list_widget[0])
@@ -202,9 +203,11 @@ class loadPage(Ui_Form, QMainWindow):
             #     time.sleep(0.5)
             #     return
             if num > 1:
+                temp = self.list_widget[0]
                 self._s.removeWidget(self.list_widget[0])
                 self.list_widget.remove(self.list_widget[0])
                 self.p_ptr += 1
+                temp.close()
                 time.sleep(0.5)
 
             self._s.addWidget(self.cur_page)

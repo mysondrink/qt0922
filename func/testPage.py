@@ -76,6 +76,8 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.setId(self.ui.radioButton_2, 1)
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
+        self.ui.modeBox_1.setCurrentIndex(4)
+        self.ui.typeLabel.setText('8x5')
         # self.mypicthread = MyPicThread()
         # self.mypicthread.finished.connect(self.takePicture)
 
