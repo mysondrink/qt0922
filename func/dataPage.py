@@ -5,6 +5,7 @@ import sys
 import traceback
 import pymysql
 import time
+import datetime
 
 from inf.USBThread import CheckUSBThread
 from func.infoPage import infoMessage
@@ -407,8 +408,8 @@ class dataPage(Ui_Form, QWidget):
     def on_btnPrint_clicked(self):
         time_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         test_time = self.test_time
-        myEm5822_Print = Em5822_Print(test_time, time_now)
-        myEm5822_Print.em5822_print()
+        myEm5822_Print = Em5822_Print()
+        myEm5822_Print.em5822_print(test_time, time_now)
         m_title = ""
         m_info = "输出表格成功!"
         infoMessage(m_info, m_title, 300)
