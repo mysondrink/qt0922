@@ -14,6 +14,9 @@ import frozen
 from utils import dirs
 from utils.report import MyReport
 import cv2 as cv
+from inf.pictureThread import pictureThread
+from func.testinfo import MyTestInfo
+from inf.print import Em5822_Print
 
 
 class dataPage(Ui_Form, QWidget):
@@ -61,20 +64,17 @@ class dataPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WA_DeleteOnClose)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.setBtnIcon()
         self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTableWidget()
-
-    """
-    @detail 窗口关闭事件
-    @detail 重写窗口关闭事件
-    @param event: 响应事件，窗口关闭
-    """
+        self.ui.photoLabel.setText("")
+        self.ui.picLabel.setText("")
+    
     def closeEvent(self, event):
         self.setParent(None)
         event.accept()		# 表示同意了，结束吧
-        print("6", id(self))
 
     """
     @detail 设置按钮图标
@@ -111,9 +111,11 @@ class dataPage(Ui_Form, QWidget):
     @param msg: 信号，发送来的信息
     """
     def getData(self, msg):
+        print("data id", id(self))
         # print(msg['info'])
         # self.writeFile(msg['data'])
-
+        # 测试
+        start_time = time.time()
         flag = 0
         pic_para = 1
         self.info = msg['info']
@@ -133,29 +135,49 @@ class dataPage(Ui_Form, QWidget):
         self.ui.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.rightLabel.setText(self.test_time)
         self.ui.leftLabel.setText(self.test_time)
-        img_right = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
-        img_left = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
+
+        # self.testinfo = MyTestInfo()
+        # self.testinfo.setProgress(80)
+        # self.testinfo.setWindowModality(Qt.ApplicationModal)
+        # self.testinfo.show()
+        
+        # self.mypicturethread = pictureThread()
+        # self.mypicturethread.finished.connect(self.showPicture)
+        # self.mypicturethread.finished.connect(self.mypicturethread.deleteLater)
+        # self.mypicturethread.start()
+
+        # 测试
+        # img_right = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
+        # img_left = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
         # img_right = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic))  # linux
         # img_left = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # linux
-        img_right = self.resizePhoto(img_right)
-        img_left = self.resizePhoto(img_left)
+        # img_right = self.resizePhoto(img_right)
+        # img_left = self.resizePhoto(img_left)
+        # img_left, img_right = self.mypicturethread.getPixImg()
+        # self.testinfo.closeWin()
+        # self.ui.photoLabel.setPixmap(img_right)
+        # self.ui.photoLabel.setScaledContents(True)
 
-        self.ui.photoLabel.setPixmap(img_right)
-        self.ui.photoLabel.setScaledContents(True)
-
-        self.ui.picLabel.setPixmap(img_left)
-        self.ui.picLabel.setScaledContents(True)
+        # self.ui.picLabel.setPixmap(img_left)
+        # self.ui.picLabel.setScaledContents(True)
     
-        # 测试
         # self.ui.photoLabel.setStyleSheet("QLabel{"
         #                                  "border-image: url(./inf/img_out/img_final.jpeg); "
         #                                  "font: 20pt; "
         #                                  "color: rgb(255,0,0);}")
         # print('%s\\img\\%s\\%s.jpeg' % (frozen.app_path(), pic_path, name_pic))
-        # self.ui.photoLabel.setStyleSheet("QLabel{"
-        #                                  "border-image: url(%s/img/%s/%s.jpeg); "
-        #                                  "font: 20pt; "
-        #                                  "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # linux环境
+        self.ui.picLabel.setStyleSheet("QLabel{"
+                                         "border-image: url(%s/img/%s/%s-1.jpeg); "
+                                         "font: 20pt; "
+                                         "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # linux环境
+        self.ui.photoLabel.setStyleSheet("QLabel{"
+                                         "border-image: url(%s/img/%s/%s-2.jpeg); "
+                                         "font: 20pt; "
+                                         "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # linux环境
+        end_time = time.time()
+        print("setPicture", end_time - start_time)
+
+        start_time = time.time()
         self.pic_para = 1
         if self.info == 201:
             gray_row = self.data['gray_row']
@@ -185,11 +207,17 @@ class dataPage(Ui_Form, QWidget):
                         self.pix_table_model.setItem(i, j, item)
                     flag += 1
 
+            end_time = time.time()
+            print("setTable", end_time - start_time)
+            start_time = time.time()
             self.insertMysql(name_pic, cur_time)  # 图片数据信息存入数据库
+            end_time = time.time()
+            print("insertmysql", end_time - start_time)
 
             # self.ftpServer(base64_data)   #上传图片到服务器
         elif self.info == 202:
             reagent_matrix_info = re.split(r",", reagent_matrix_info)[1:]
+            self.allergy_info = reagent_matrix_info
             for i in range(self.row_exetable + int(self.row_exetable / 2)):
                 for j in range(self.column_exetable):
                     item = QStandardItem(reagent_matrix_info[i * self.column_exetable + j])
@@ -240,7 +268,7 @@ class dataPage(Ui_Form, QWidget):
     """
     def insertMysql(self, name_pic, cur_time):
         reagent_matrix_info = str(self.readPixtable())
-
+        self.allergy_info = reagent_matrix_info
         patient_id = self.data['patient_id']
         
         # name_id = random.randint(1,199)
@@ -313,7 +341,7 @@ class dataPage(Ui_Form, QWidget):
                 data = self.pix_table_model.data(index)
                 reagent_matrix_info += "," + str(data)
         return reagent_matrix_info
-    
+
     """
     @detail u盘提示信息
     @param msg: U盘信息    
@@ -342,19 +370,27 @@ class dataPage(Ui_Form, QWidget):
     """
     def downLoadToUSB(self):
         self.download_timer.stop()
+        # 两层
         # 指定目标目录
-        target_dir = '/media/orangepi/orangepi/'
+        target_dir = '/media/orangepi/'
+        target_dir = r"/media/orangepi/" + os.listdir(target_dir)[0] + "/"
+        # target_dir = '/media/orangepi/orangepi/'
         # 获取U盘设备路径
         try:
-            u_name = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
+            u_name = target_dir + os.listdir(target_dir)[0] + "/"
+            # u_name = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
         except Exception as e:
-            m_title = ""
-            m_info = "U盘未插入或无法访问！"
-            infoMessage(m_info, m_title)
-            return
+            # target_dir = '/media/orangepi/orangepi/'
+            # u_name = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
+            # m_title = ""
+            # m_info = "U盘未插入或无法访问！"
+            # infoMessage(m_info, m_title)
+            # return
+            self.sendException()
         # 检查U盘是否已插入
         timenow = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         save_dir = u_name + timenow + "/"
+        dirs.makedir(save_dir)
         filename = str(len(os.listdir(save_dir)) + 1)
         save_path = save_dir + filename + ".txt"
         dirs.makedir(save_path)
@@ -371,12 +407,12 @@ class dataPage(Ui_Form, QWidget):
             try:
                 name_pic = self.data['name_pic']
                 pic_path = self.data['pic_path']
-                img_origin = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic)) # windows
-                # img_final = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic)) # linux
+                # img_origin = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic)) # windows
+                img_origin = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic)) # linux
                 flag_bool = cv.imwrite(save_img_path_1, img_origin)
 
-                img_final = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic)) # windows
-                # img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic)) # linux
+                # img_final = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic)) # windows
+                img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic)) # linux
                 flag_bool = cv.imwrite(save_img_path_2, img_final)
             except Exception as e:
                 print(str(e))
@@ -390,6 +426,7 @@ class dataPage(Ui_Form, QWidget):
             m_title = ""
             m_info = "U盘未插入或无法访问！"
             infoMessage(m_info, m_title)
+               # 指定目标目录
 
     """
     @detail 读取下传文件
@@ -422,7 +459,8 @@ class dataPage(Ui_Form, QWidget):
     def on_btnDownload_clicked(self):
         name = self.data['name_pic']
         path = self.data['pic_path']
-        self.usbthread = CheckUSBThread(name, path)
+        data = self.data
+        self.usbthread = CheckUSBThread(name, path, data, self.allergy_info)
         self.usbthread.update_json.connect(self.getUSBInfo)
         # 创建定时器
         self.download_timer = QTimer()
