@@ -83,7 +83,7 @@ class CheckUSBThread(QThread):
         save_dir = u_name + timenow + "/"
         dirs.makedir(save_dir)
         filename = str(int((len(os.listdir(save_dir)) - 1)/2) + 1).zfill(4)
-        save_path = save_dir + timenow + ".xlsx"
+        save_path = save_dir + timenow + ".csv"
         dirs.makedir(save_path)
         save_img_path_1 = save_dir + filename + "-" + self.name_pic + "生成图.jpeg"
         save_img_path_2 = save_dir + filename + "-" + self.name_pic + "检疫图.jpeg"
@@ -131,16 +131,18 @@ class CheckUSBThread(QThread):
                                         columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
                                                  "阵列", "病人名", "病人性别", "病人年龄", "数据"])
                 if os.path.exists(save_path):
-                    df = pd.read_excel(save_path)
+                    df = pd.read_csv(save_path, converters={0:str})
                     new_data = pd.concat([df, dataframe, datanone], axis=0)
-                    with pd.ExcelWriter(save_path) as writer:
-                    # 覆盖
-                        new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
+                    new_data.to_csv(save_path, index=False)
+                    # with pd.ExcelWriter(save_path) as writer:
+                    # # 覆盖
+                    #     new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
                 else:
                     new_data = pd.concat([dataframe, datanone], axis=0)
-                    with pd.ExcelWriter(save_path) as writer:
-                    # 新建
-                        new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
+                    new_data.to_csv(save_path, index=False)
+                    # with pd.ExcelWriter(save_path) as writer:
+                    # # 新建
+                    #     new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
             except:
                 self.update_json.emit(failed_code)
                 return
