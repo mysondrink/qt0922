@@ -151,6 +151,16 @@ class dataPage(Ui_Form, QWidget):
         # img_left = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # windows
         # img_right = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), pic_path, name_pic))  # linux
         # img_left = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), pic_path, name_pic))  # linux
+
+        # img_right = cv.resize(img_right, (350, 350))
+        # img_left = cv.resize(img_left, (350, 350))
+
+        # img_right = self.opencv2img(img_right)
+        # img_left = self.opencv2img(img_left)
+
+        # img_right = self.img2pix(img_right)
+        # img_left = self.img2pix(img_left)
+
         # img_right = self.resizePhoto(img_right)
         # img_left = self.resizePhoto(img_left)
         # img_left, img_right = self.mypicturethread.getPixImg()

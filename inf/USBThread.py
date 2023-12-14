@@ -72,7 +72,23 @@ class CheckUSBThread(QThread):
         target_dir = '/media/orangepi/'
         # 获取U盘设备路径
         try:
-            u_name = r"/media/orangepi/" + os.listdir(target_dir)[0] + "/"
+            if len(os.listdir(target_dir)) == 0:
+                self.update_json.emit(failed_code)
+                return
+            else:
+                u_name = r"/media/orangepi/" + os.listdir(target_dir)[0] + "/"
+        except Exception as e:
+            self.sendException()
+            self.update_json.emit(failed_code)
+            return
+        try:
+            cmd = 'su orangepi -c "cd %s"'%u_name
+            flag = os.system(cmd)
+            if flag != 0:
+                self.update_json.emit(failed_code)
+                delete_cmd = 'echo %s | sudo rm -rf %s' % ('orangepi', u_name)
+                os.system(delete_cmd)
+                return
         except Exception as e:
             self.sendException()
             self.update_json.emit(failed_code)
@@ -111,7 +127,7 @@ class CheckUSBThread(QThread):
                 self.update_json.emit(failed_code + 1)
                 return
             try:
-                id_num = filename
+                id_num = "\t" + filename.zfill(4)
                 name_pic = self.name_pic
                 test_time = self.data['time']
                 cur_time = test_time[0] + ' ' + test_time[1]
@@ -122,30 +138,53 @@ class CheckUSBThread(QThread):
                 name = self.data['name']
                 gender = self.data['gender']
                 age = self.data['age']
-                allergy_info = self.allergy_info
-                dataframe = pd.DataFrame([[id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
-                                               reagent_matrix, name, gender, age, allergy_info]], 
-                                               columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
-                                                        "阵列", "病人名", "病人性别", "病人年龄", "数据"])
+                reagent_matrix_info = self.allergy_info
+                if type(reagent_matrix_info) == str:
+                    reagent_matrix_info = reagent_matrix_info.split(',')[1:]
+                row = reagent_matrix[0]
+                col = int(reagent_matrix[2])
+                reagent_matrix_info = self.split_string(reagent_matrix_info, col)
+                k = ["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
+                    "阵列", "病人名", "病人性别", "病人年龄", "数据"]
+                v = [id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
+                    reagent_matrix, name, gender, age, reagent_matrix_info]
+                data = dict(zip(k, v))
+                dataframe = pd.DataFrame(data)
+                info_data = dataframe['数据'].str.split(',', expand=True)
+                dataframe = dataframe[:1].drop(columns='数据')
+                newdata = pd.merge(dataframe, info_data, left_index=True, right_index=True, how='outer')
+                # dataframe = pd.DataFrame([[id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
+                #                                reagent_matrix, name, gender, age, allergy_info]], 
+                #                                columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
+                #                                         "阵列", "病人名", "病人性别", "病人年龄", "数据"])
                 datanone = pd.DataFrame([['', '', '', '', '', '', '', '', '', '', '']], 
                                         columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
                                                  "阵列", "病人名", "病人性别", "病人年龄", "数据"])
                 if os.path.exists(save_path):
-                    df = pd.read_csv(save_path, converters={0:str})
-                    new_data = pd.concat([df, dataframe, datanone], axis=0)
-                    new_data.to_csv(save_path, index=False)
-                    # with pd.ExcelWriter(save_path) as writer:
+                    new_data = pd.concat([newdata, datanone], axis=0)
+                    new_data.to_csv(save_path, mode='a', encoding='utf-8-sig', index=False, header=False)
+                    # with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
                     # # 覆盖
                     #     new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
                 else:
-                    new_data = pd.concat([dataframe, datanone], axis=0)
-                    new_data.to_csv(save_path, index=False)
-                    # with pd.ExcelWriter(save_path) as writer:
+                    new_data = pd.concat([newdata, datanone], axis=0)
+                    new_data.to_csv(save_path, mode='w', encoding='utf-8-sig', index=False)
+                    # with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
                     # # 新建
                     #     new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
-            except:
+            except Exception as e:
                 self.update_json.emit(failed_code)
                 return
             self.update_json.emit(succeed_code)
         else:
             self.update_json.emit(failed_code)
+
+    def split_string(self, obj, sec):
+        result = []
+        data = [obj[i:i+sec] for i in range(0,len(obj),sec)]
+        for i in range(len(data)):
+            _s = ''
+            for j in range(len(data[i])):
+                _s += data[i][j] + ','
+            result.append(_s[:-1])
+        return result 

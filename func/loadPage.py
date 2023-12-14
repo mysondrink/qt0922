@@ -75,7 +75,7 @@ class loadPage(Ui_Form, QMainWindow):
     """
     def InitUI(self):
         self.statusShowTime()
-        self.ui.title_label.setText('荧光判读仪器')
+        self.ui.title_label.setText('荧光分析仪')
         self.ui.retry_icon_label.hide()
         self.ui.btnRetry.hide()
         # self.ui.textEdit.setEnabled(False)
