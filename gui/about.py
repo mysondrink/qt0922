@@ -26,8 +26,8 @@ class Ui_Form(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.label_36 = QLabel(self.frame)
         self.label_36.setObjectName(u"label_36")
-        self.label_36.setGeometry(QRect(360, 110, 311, 60))
-        self.label_36.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.label_36.setGeometry(QRect(510, 110, 221, 60))
+        self.label_36.setStyleSheet(u"font: 20pt \"Times New Roman\";")
         self.label_35 = QLabel(self.frame)
         self.label_35.setObjectName(u"label_35")
         self.label_35.setGeometry(QRect(180, 110, 121, 60))
@@ -70,6 +70,10 @@ class Ui_Form(object):
         self.version_label.setObjectName(u"version_label")
         self.version_label.setGeometry(QRect(360, 220, 311, 60))
         self.version_label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.label_2 = QLabel(self.frame)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(360, 110, 151, 60))
+        self.label_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
 
         self.retranslateUi(Form)
 
@@ -78,12 +82,13 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.label_36.setText(QCoreApplication.translate("Form", u"\u8367\u5149\u5224\u8bfb\u4eea CIO-1001", None))
+        self.label_36.setText(QCoreApplication.translate("Form", u"CIO-1001", None))
         self.label_35.setText(QCoreApplication.translate("Form", u"\u4eea\u5668\u578b\u53f7", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u5173\u4e8e\u4eea\u5668", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
         self.btnUpload.setText(QCoreApplication.translate("Form", u"\u4e0a\u4f20", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u8f6f\u4ef6\u7248\u672c\u53f7", None))
         self.version_label.setText(QCoreApplication.translate("Form", u"V1.0.1", None))
+        self.label_2.setText(QCoreApplication.translate("Form", u"\u8367\u5149\u5206\u6790\u4eea", None))
     # retranslateUi
 

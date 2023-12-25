@@ -78,6 +78,11 @@ class sysPage(Ui_Form, QWidget):
         self.ui.btnReturn.setIconSize(QSize(32, 32))
         self.ui.btnReturn.setIcon(QIcon(return_icon_path))
 
+        per_icon_path = frozen.app_path() + r"/res/icon/register.png"
+        pixImg = self.mySetIconSize(per_icon_path)
+        self.ui.per_icon_label.setPixmap(pixImg)
+        self.ui.per_icon_label.setAlignment(Qt.AlignCenter)
+
     """
     @detail 设置按钮图标比例
     """

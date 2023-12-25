@@ -326,10 +326,33 @@ class Ui_Form(object):
         self.picLabel.raise_()
         self.rightLabel.raise_()
         self.leftLabel.raise_()
+        self.page_4 = QWidget()
+        self.page_4.setObjectName(u"page_4")
+        self.tableView = QTableView(self.page_4)
+        self.tableView.setObjectName(u"tableView")
+        self.tableView.setGeometry(QRect(10, 0, 771, 350))
+        self.tableView.setStyleSheet(u"QTableView{\n"
+"	font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:rgb(255,255,255);\n"
+"}\n"
+"\n"
+"QComboBox {\n"
+"    font: 20pt \"\u5b8b\u4f53\";\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(0,0,0);\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"	background-color: rgb(0, 0, 0);/*\u80cc\u666f\u989c\u8272*/\n"
+"    padding: 1px 2px 1px 2px;  /*\u9488\u5bf9\u4e8e\u7ec4\u5408\u6846\u4e2d\u7684\u6587\u672c\u5185\u5bb9*/\n"
+"	color: rgb(255,255,255)\n"
+"}")
+        self.stackedWidget.addWidget(self.page_4)
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(Form)

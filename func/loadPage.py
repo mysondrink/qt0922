@@ -21,6 +21,8 @@ from func.setPage import setPage
 from func.aboutPage import aboutPage
 from func.dataPage import dataPage
 from inf.logThread import LogThread
+from func.perPage import perPage
+from func.perinfoPage import perinfoPage
 
 flag_num = 0
 failed_code = 404
@@ -75,7 +77,7 @@ class loadPage(Ui_Form, QMainWindow):
     """
     def InitUI(self):
         self.statusShowTime()
-        self.ui.title_label.setText('荧光判读仪器')
+        self.ui.title_label.setText('荧光分析仪')
         self.ui.retry_icon_label.hide()
         self.ui.btnRetry.hide()
         # self.ui.textEdit.setEnabled(False)
@@ -145,6 +147,7 @@ class loadPage(Ui_Form, QMainWindow):
             self.change_timer.stop()
             self._s = QStackedLayout()
             self._h = QHBoxLayout()
+            # self.cur_page = perinfoPage()
             self.cur_page = loginPage()
             self.cur_page.next_page.connect(self.changePage)
             self.cur_page.update_json.connect(self.getJsonData)

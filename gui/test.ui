@@ -192,7 +192,7 @@ background-color: rgb(255, 0, 0);
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLineEdit" name="paraLine">
@@ -821,6 +821,7 @@ QComboBox QAbstractItemView {
     <zorder>rightLabel</zorder>
     <zorder>leftLabel</zorder>
    </widget>
+   <widget class="QWidget" name="page_4"/>
   </widget>
  </widget>
  <resources/>
