@@ -1,8 +1,8 @@
 from PySide2.QtCore import QThread, Signal
 import sys
 import traceback
-
-from func.infoPage import infoMessage
+import os
+import time
 
 time_to_sleep = 2
 trylock_time = -1
@@ -10,8 +10,8 @@ failed_code = 404
 succeed_code = 202
 
 
-class CheckCameraThread(QThread):
-    update_json = Signal(dict)
+class WifiThread(QThread):
+    update_json = Signal(int)
     update_log = Signal(str)
 
     """
@@ -49,19 +49,30 @@ class CheckCameraThread(QThread):
     """
     def run(self):
         try:
-            # qmutex.tryLock(trylock_time)
-            info_msg = "摄像头检测中。。。"
-            code_msg = succeed_code
-            status_msg = 1
-            self.update_json.emit(dict(info=info_msg, code=code_msg, status=status_msg))
-            self.sleep(time_to_sleep)
-            info_msg = "连接摄像头成功！"
-            code_msg = succeed_code
-            status_msg = self.currentThread()
-            self.update_json.emit(dict(info=info_msg, code=code_msg, status=status_msg))
-            # qmutex.unlock()
+            print("wifi connecting")
         except Exception as e:
             self.sendException()
-            m_title = ""
-            m_info = "系统错误！"
-            infoMessage(m_info, m_title, 300)
+
+    def connectWifi(self, wifiPwd, wifiSSID):
+        try:
+            if len(wifiPwd) != 0:
+                cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s password %s' % (
+                    'orangepi', wifiSSID, wifiPwd)
+            else:
+                cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s' % ('orangepi', wifiSSID)
+            result = os.popen(cmd_wifi)
+            info = 'Error'
+            for i in result:
+                flag = i.find(info)
+                if flag != -1:
+                    break
+            if flag == -1:
+                self.update_json.emit(succeed_code)
+                cmd_date = 'echo %s | sudo ntpdate cn.pool.ntp.org' % ('orangepi')
+                os.system(cmd_date)
+            else:
+                self.update_json.emit(failed_code)
+            time.sleep(1)
+        except Exception as e:
+            self.update_json.emit(404)
+            self.sendException()

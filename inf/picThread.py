@@ -3,6 +3,9 @@ import frozen as frozen
 import time
 from inf.img_acquire import Image_Acquire
 from inf.img_process import Image_Processing
+import datetime
+import sys
+import traceback
 
 #   试剂区域圈定区域，可修改
 roi_agentia = [
@@ -47,13 +50,49 @@ class MyPicThread(QThread):
     update_progress = Signal(int)
     update_fail = Signal()
     update_success = Signal()
+    finished = Signal(str)
+    update_log = Signal(str)
 
+    """
+    @detail 初始化线程，同时创建记录异常的信息
+    @detail 构造函数
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
+        sys.excepthook = self.HandleException
+        self.gray_aver = []
+        self.imgAcq = None
+        self.imgPro = None
 
+
+    """
+    @detail 捕获及输出异常类
+    @param excType: 异常类型
+    @param excValue: 异常对象
+    @param tb: 异常的trace back
+    """
+    def HandleException(self, excType, excValue, tb):
+        sys.__excepthook__(excType, excValue, tb)
+        err_msg = ''.join(traceback.format_exception(excType, excValue, tb))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 发送异常信息
+    @detail 在正常抛出异常时使用
+    @detail 未使用
+    """
+    def sendException(self):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+        self.update_log.emit(err_msg)
+
+    """
+    @detail 线程运行函数
+    @detail 进行图片的获取和图片pixel的获取
+    """
     def run(self):
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
-
+        time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         path_cache = frozen.app_path() + r'/inf/pic_cache/'
         path_save = frozen.app_path() + r'/inf/picture/'
         self.imgAcq = Image_Acquire(
@@ -69,20 +108,19 @@ class MyPicThread(QThread):
         #     time.sleep(0.1)
         # self.update_success.emit()
 
-    def takePicture(self, time_now):
-        try:
-            time.sleep(2)
-        except Exception as e:
-            print(str(e))
-
         self.imgAcq.img_acquire(time_now)
 
         # pic_name = 'img_final'
         # flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + pic_name + '.jpeg',
         #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
         #                                       radius=40)
-        flag, gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
-                                              path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
-                                              radius=40)
+        flag, self.gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
+                                                   path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+                                                   radius=40)
+        self.finished.emit(time_now)
 
-        return gray_aver
+    """
+    @detail 获取图片pixel信息
+    """
+    def getGrayAver(self):
+        return self.gray_aver
