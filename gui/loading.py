@@ -30,6 +30,9 @@ class Ui_Form(object):
         self.time_label = QLabel(self.topframe)
         self.time_label.setObjectName(u"time_label")
         self.time_label.setGeometry(QRect(600, 0, 200, 30))
+        self.wifi_label = QLabel(self.topframe)
+        self.wifi_label.setObjectName(u"wifi_label")
+        self.wifi_label.setGeometry(QRect(550, 0, 30, 30))
         self.centerframe = QFrame(Form)
         self.centerframe.setObjectName(u"centerframe")
         self.centerframe.setGeometry(QRect(0, 30, 800, 450))
@@ -72,6 +75,7 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.title_label.setText(QCoreApplication.translate("Form", u"TextLabel", None))
         self.time_label.setText(QCoreApplication.translate("Form", u"TextLabel", None))
+        self.wifi_label.setText("")
         self.btnRetry.setText(QCoreApplication.translate("Form", u"\u91cd\u8bd5", None))
         self.retry_icon_label.setText("")
     # retranslateUi

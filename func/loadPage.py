@@ -2,8 +2,10 @@ import time
 import sys
 import traceback
 
+import frozen
 from func.infoPage import infoMessage
 from gui.loading import *
+from inf.blinkThread import CheckBlinkThread
 from inf.dbThread import CheckDataBaseThread
 from inf.cameraThread import CheckCameraThread
 from inf.serialThread import CheckSerialThread
@@ -90,7 +92,64 @@ class loadPage(Ui_Form, QMainWindow):
         self.move(screen.left(), screen.top())
         self.showMaximized()
 
+        # 创建定时器
+        self.blink_timer = QTimer()
+        self.blink_flag = True
+        self.blink_timer.timeout.connect(self.blinkIcon)
+        self.myBlinkThread = CheckBlinkThread()
+        self.myBlinkThread.update_json.connect(self.blinkAssess)
+        self.thread_timer = QTimer()
+        self.thread_timer.timeout.connect(self.myBlinkThread.start)
+        thread_delay_time = 2000
+        self.thread_timer.start(thread_delay_time)
+
         self.startThread()
+
+    """
+    @detail 检测设备wifi连接情况，同时设置图标进行显示
+    """
+    def blinkAssess(self, msg):
+        self.blink_timer.stop()
+        code = msg['code']
+        print(code)
+        if code == 202:
+            self.ui.wifi_label.show()
+            wifi_icon_path = frozen.app_path() + r"/res/icon/icon-wi-fi.png"
+            pixImg = self.mySetIconSize(wifi_icon_path)
+            self.ui.wifi_label.setPixmap(pixImg)
+            self.ui.wifi_label.setAlignment(Qt.AlignCenter)
+        elif code == 404:
+            wifi_icon_path = frozen.app_path() + r"/res/icon/icon-wi-fi-disconnected.png"
+            pixImg = self.mySetIconSize(wifi_icon_path)
+            self.ui.wifi_label.setPixmap(pixImg)
+            self.ui.wifi_label.setAlignment(Qt.AlignCenter)
+            # 设置定时器延迟时间，单位为毫秒
+            # 延迟0.5秒跳转
+            delay_time = 500
+            self.blink_timer.start(delay_time)
+
+    """
+    @detail 图标闪烁提示
+    """
+    def blinkIcon(self):
+        if self.blink_flag :
+            self.blink_flag = False
+            self.ui.wifi_label.hide()
+        else:
+            self.blink_flag = True
+            self.ui.wifi_label.show()
+
+    """
+    @detail 设置按钮图标比例
+    """
+    def mySetIconSize(self, path):
+        img = QImage(path)  # 创建图片实例
+        mgnWidth = 30
+        mgnHeight = 30  # 缩放宽高尺寸
+        size = QSize(mgnWidth, mgnHeight)
+        pixImg = QPixmap.fromImage(
+            img.scaled(size, Qt.IgnoreAspectRatio))  # 修改图片实例大小并从QImage实例中生成QPixmap实例以备放入QLabel控件中
+        return pixImg
 
     """
     @detail 开启相机、数据库、串口的线程检测
