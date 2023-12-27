@@ -553,6 +553,7 @@ class testPage(Ui_Form, QWidget):
     def startProbeMem(self):
         self.myprobe = MyProbe()
         self.myprobe.update_progress.connect(self.memWarning)
+        self.myprobe.finished.connect(self.myprobe.deleteLater())
         self.myprobe.start()
 
     """
@@ -563,8 +564,6 @@ class testPage(Ui_Form, QWidget):
         m_title = "警告"
         m_info = "存储已经占满，请清理图片！"
         infoMessage(m_info, m_title)
-        self.ui.btnData.setEnabled(False)
-        # self.ui.btnHistory.setEnabled(False)
         return
     
     """
