@@ -549,6 +549,7 @@ class testPage(Ui_Form, QWidget):
     def startProbeMem(self):
         self.myprobe = MyProbe()
         self.myprobe.update_progress.connect(self.memWarning)
+        self.myprobe.finished.connect(self.myprobe.deleteLater())
         self.myprobe.start()
 
     """
