@@ -14,6 +14,7 @@ class MyTestInfo(Ui_Form, QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.move(320, 180)
+        self.ui.progressBar.setRange(0, 0)
         # self.info_timer = QTimer()
         # self.info_timer.timeout.connect(self.closeWin)
         # self.info_timer.start(2000)

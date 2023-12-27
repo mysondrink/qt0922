@@ -35,7 +35,6 @@ class testPage(Ui_Form, QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
-        self.startProbeMem()
 
     """
     @detail 捕获及输出异常类
@@ -80,6 +79,8 @@ class testPage(Ui_Form, QWidget):
         self.ui.typeLabel.setText('8x5')
         # self.mypicthread = MyPicThread()
         # self.mypicthread.finished.connect(self.takePicture)
+        self.ui.exeTable.horizontalHeader().close()
+        self.ui.exeTable.verticalHeader().close()
 
         self.setFocusWidget()
         self.installEvent()
@@ -543,6 +544,7 @@ class testPage(Ui_Form, QWidget):
 
     """
     @detail 系统存储检测
+    @detail 弃用
     """
     def startProbeMem(self):
         self.myprobe = MyProbe()
@@ -551,13 +553,12 @@ class testPage(Ui_Form, QWidget):
 
     """
     @detail 系统存储检测信息反馈
+    @detail 弃用
     """
     def memWarning(self):
         m_title = "警告"
         m_info = "存储已经占满，请清理图片！"
         infoMessage(m_info, m_title)
-        self.ui.btnData.setEnabled(False)
-        # self.ui.btnHistory.setEnabled(False)
         return
 
     """
