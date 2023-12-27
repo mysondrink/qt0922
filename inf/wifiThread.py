@@ -1,8 +1,9 @@
 from PySide2.QtCore import QThread, Signal
 import sys
 import traceback
-import os
 import time
+import subprocess
+import os
 
 time_to_sleep = 2
 trylock_time = -1
@@ -18,9 +19,11 @@ class WifiThread(QThread):
     @detail 初始化线程，同时创建记录异常的信息
     @detail 构造函数
     """
-    def __init__(self, parent=None):
+    def __init__(self, wifiSSID, wifiPwd, parent=None):
         super().__init__(parent)
         sys.excepthook = self.HandleException
+        self.wifiSSID = wifiSSID
+        self.wifiPwd = wifiPwd
 
     """
     @detail 捕获及输出异常类
@@ -50,10 +53,11 @@ class WifiThread(QThread):
     def run(self):
         try:
             print("wifi connecting")
+            self.connectWifi(self.wifiSSID, self.wifiPwd)
         except Exception as e:
             self.sendException()
 
-    def connectWifi(self, wifiPwd, wifiSSID):
+    def connectWifi(self, wifiSSID, wifiPwd):
         try:
             if len(wifiPwd) != 0:
                 cmd_wifi = 'echo %s | sudo nmcli dev wifi connect %s password %s' % (
@@ -69,10 +73,15 @@ class WifiThread(QThread):
             if flag == -1:
                 self.update_json.emit(succeed_code)
                 cmd_date = 'echo %s | sudo ntpdate cn.pool.ntp.org' % ('orangepi')
-                os.system(cmd_date)
+                result = subprocess.Popen(cmd_date, shell=True)
+                p = result.wait()
+                if p == 0:
+                    self.update_json.emit(203)
+                else: 
+                    self.update_json.emit(403)
             else:
                 self.update_json.emit(failed_code)
-            time.sleep(1)
+            time.sleep(0.5)
         except Exception as e:
             self.update_json.emit(404)
             self.sendException()
