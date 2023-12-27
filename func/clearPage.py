@@ -2,10 +2,12 @@ import os
 import datetime
 import sys
 import traceback
+
 import frozen
 from func.infoPage import infoMessage
 from gui.clear import *
 from inf.probeThread import MyProbe
+from inf.clearThread import ClearThread
 
 class clearPage(Ui_Form, QWidget):
     next_page = Signal(str)
@@ -62,20 +64,23 @@ class clearPage(Ui_Form, QWidget):
 
         self.ui.clearCb.addItems(['7', '14', '21', '0'])
         self.ui.clearCb.setCurrentIndex(-1)
-        self.startProbeMem()
+        self.ui.clearBar.setMinimum(0)
+        self.ui.clearBar.setMaximum(100)
+
         self.setClearBar()
 
     """
     @detail 遍历本地图片文件
+    @detail 弃用
     """
     def deleteDirs(self, now_time, root_list):
         for i in range(1, len(root_list)):
             if now_time > root_list[i][-10:]:
                 self.deletePicFile(root_list[i])
 
-    #批量删除文件
     """
     @detail 批量删除文件
+    @detail 弃用
     """
     def deletePicFile(self, path):
         ls = os.listdir(path)
@@ -86,20 +91,18 @@ class clearPage(Ui_Form, QWidget):
             else:
                 os.remove(c_path)
 
-    # 设置存储条
     """
     @detail 设置存储条
     """
     def setClearBar(self):
-        self.memorystr = QStorageInfo().root()
-        self.ui.clearBar.setMinimum(0)
-        self.ui.clearBar.setMaximum(100)
-        mem_total = self.memorystr.bytesTotal() / (1024 * 1024 * 1024)
-        mem_avail = self.memorystr.bytesAvailable() / (1024 * 1024 * 1024)
+        QStorageInfo.refresh()
+        memorystr = QStorageInfo().root()
+        mem_total = memorystr.bytesTotal() / (1024 * 1024 * 1024)
+        mem_avail = memorystr.bytesAvailable() / (1024 * 1024 * 1024)
         mem_progress = (1 - (mem_avail / mem_total)) * 100
+        print('mem_progress:', mem_progress)
         self.ui.clearBar.setValue(int(mem_progress))
 
-    # 存储满后显示
     """
     @detail 存储满后显示
     @detail 弃用
@@ -111,18 +114,18 @@ class clearPage(Ui_Form, QWidget):
             # self.ui.btnSet.setEnabled(False)
             # self.ui.btnPara.setEnabled(False)
 
-    # 开始存储探测
     """
     @detail 开始存储探测
+    @detail 弃用
     """
     def startProbeMem(self):
         self.myprobe = MyProbe()
         self.myprobe.update_progress.connect(self.memWarning)
         self.myprobe.start()
 
-    # 存储满警告
     """
     @detail 存储满后警告
+    @detail 弃用
     """
     def memWarning(self):
         m_title = "警告"
@@ -131,20 +134,23 @@ class clearPage(Ui_Form, QWidget):
         return
 
     """
+    @detail 清理结果处理，同时设置进度条显示
+    @detail 槽函数
+    """
+    def getInfo(self, msg):
+        self.setClearBar()
+        m_title = "确认"
+        m_title = ""
+        m_info = "已经完成清理!"
+        infoMessage(m_info, m_title, 260)
+        return
+
+    """
     @detail 确认按钮操作
     @detail 槽函数
     """
     @Slot()
     def on_btnConfirm_clicked(self):
-        pic_path = frozen.app_path() + "/img/"
-        root_list = []
-        dirs_list = []
-        files_list = []
-        for root, dirs, files in os.walk(pic_path):
-            root_list.append(root)
-            dirs_list.append(dirs)
-            files_list.append(files)
-
         if self.ui.clearCb.currentIndex() == -1:
             m_title = "错误"
             m_title = ""
@@ -161,32 +167,24 @@ class clearPage(Ui_Form, QWidget):
             day = -7
             now_time = datetime.datetime.now()
             now_time = now_time + datetime.timedelta(days=day)
-            self.deleteDirs(str(now_time)[:10], root_list)
+            # self.deleteDirs(str(now_time)[:10], root_list)
         elif dict_mode.get(self.ui.clearCb.currentText()) == 2:
             day = -14
             now_time = datetime.datetime.now()
             now_time = now_time + datetime.timedelta(days=day)
-            self.deleteDirs(str(now_time)[:10], root_list)
+            # self.deleteDirs(str(now_time)[:10], root_list)
 
         elif dict_mode.get(self.ui.clearCb.currentText()) == 3:
             day = -21
             now_time = datetime.datetime.now()
             now_time = now_time + datetime.timedelta(days=day)
-            self.deleteDirs(str(now_time)[:10], root_list)
-
-        else:
-            self.deletePicFile(pic_path)
-
-        # self.deletePicFile(pic_path)
-        m_title = "确认"
-        m_title = ""
-        m_info = "已经完成清理!"
-        infoMessage(m_info, m_title, 260)
-        # self.ui.btnData.setEnabled(True)
-        # self.ui.btnHistory.setEnabled(True)
-        # self.ui.btnSet.setEnabled(True)
-        # self.ui.btnPara.setEnabled(True)
-        self.setClearBar()
+            # self.deleteDirs(str(now_time)[:10], root_list)
+        elif dict_mode.get(self.ui.clearCb.currentText()) == 4:
+            now_time = None
+        self.myClearThread = ClearThread(now_time)
+        self.myClearThread.finished.connect(self.myClearThread.deleteLater())
+        self.myClearThread.finished.connect(self.getInfo)
+        self.myClearThread.start()
 
     """
     @detail 返回按钮操作

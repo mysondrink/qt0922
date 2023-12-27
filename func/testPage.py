@@ -36,7 +36,6 @@ class testPage(Ui_Form, QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
-        self.startProbeMem()
 
     """
     @detail 捕获及输出异常类
@@ -549,6 +548,7 @@ class testPage(Ui_Form, QWidget):
 
     """
     @detail 系统存储检测
+    @detail 弃用
     """
     def startProbeMem(self):
         self.myprobe = MyProbe()
@@ -557,6 +557,7 @@ class testPage(Ui_Form, QWidget):
 
     """
     @detail 系统存储检测信息反馈
+    @detail 弃用
     """
     def memWarning(self):
         m_title = "警告"
