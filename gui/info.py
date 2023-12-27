@@ -21,7 +21,7 @@ class Ui_Form(object):
         Form.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.frame = QFrame(Form)
         self.frame.setObjectName(u"frame")
-        self.frame.setGeometry(QRect(0, 350, 800, 100))
+        self.frame.setGeometry(QRect(0, 370, 800, 80))
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame)
@@ -141,7 +141,7 @@ class Ui_Form(object):
         self.horizontalLayout.setStretch(5, 1)
         self.stackedWidget = QStackedWidget(Form)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setGeometry(QRect(0, 0, 800, 350))
+        self.stackedWidget.setGeometry(QRect(0, 0, 800, 370))
         self.page = QWidget()
         self.page.setObjectName(u"page")
         self.photoLabel = QLabel(self.page)
@@ -214,7 +214,7 @@ class Ui_Form(object):
         self.page_3.setObjectName(u"page_3")
         self.tableWidget = QTableWidget(self.page_3)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(10, 10, 771, 341))
+        self.tableWidget.setGeometry(QRect(10, 0, 771, 370))
         self.tableWidget.setStyleSheet(u"QTableWidget{\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color:rgb(255,255,255);\n"
@@ -227,6 +227,28 @@ class Ui_Form(object):
 "}\n"
 "")
         self.stackedWidget.addWidget(self.page_3)
+        self.page_4 = QWidget()
+        self.page_4.setObjectName(u"page_4")
+        self.tableView_2 = QTableView(self.page_4)
+        self.tableView_2.setObjectName(u"tableView_2")
+        self.tableView_2.setGeometry(QRect(10, 0, 778, 370))
+        self.tableView_2.setStyleSheet(u"#tableView_2{\n"
+"	font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:rgb(255,255,255);\n"
+"}\n"
+"\n"
+"QComboBox {\n"
+"    font: 20pt \"\u5b8b\u4f53\";\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(0,0,0);\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"	background-color: rgb(0, 0, 0);/*\u80cc\u666f\u989c\u8272*/\n"
+"	color: rgb(255,255,255)\n"
+"}")
+        self.stackedWidget.addWidget(self.page_4)
 
         self.retranslateUi(Form)
 

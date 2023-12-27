@@ -63,6 +63,8 @@ class historyPage(Ui_Form, QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.dateBox.setCalendarPopup(True)
         self.ui.dateBox.setDateTime(QDateTime.currentDateTime())
+        self.ui.historyTable.horizontalHeader().close()
+        self.ui.historyTable.verticalHeader().close()
 
         self.setBtnIcon()
 

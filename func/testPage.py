@@ -75,6 +75,8 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.addButton(self.ui.radioButton_2)
         self.genderCb.setId(self.ui.radioButton, 0)
         self.genderCb.setId(self.ui.radioButton_2, 1)
+        self.ui.exeTable.horizontalHeader().close()
+        self.ui.exeTable.verticalHeader().close()
 
         self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
         self.testinfo = MyTestInfo()

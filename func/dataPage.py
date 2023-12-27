@@ -68,6 +68,7 @@ class dataPage(Ui_Form, QWidget):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.setBtnIcon()
         self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableView_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTableWidget()
         self.ui.photoLabel.setText("")
         self.ui.picLabel.setText("")
@@ -129,10 +130,19 @@ class dataPage(Ui_Form, QWidget):
         self.test_time = cur_time[0] + ' ' + cur_time[1]
         reagent_matrix_info = self.data['reagent_matrix_info']
         self.pix_table_model = QStandardItemModel(self.row_exetable + int(self.row_exetable / 2), self.column_exetable)
+        self.pix_table_model_copy = QStandardItemModel(self.row_exetable + int(self.row_exetable / 2) + 2, self.column_exetable)
         self.ui.tableView.setModel(self.pix_table_model)
-
         self.ui.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableView.horizontalHeader().close()
+        self.ui.tableView.verticalHeader().close()
+
+        self.ui.tableView_2.setModel(self.pix_table_model_copy)
+        self.ui.tableView_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableView_2.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableView_2.horizontalHeader().close()
+        self.ui.tableView_2.verticalHeader().close()
+        self.ui.tableView_2.setGridStyle(Qt.NoPen)
         self.ui.rightLabel.setText(self.test_time)
         self.ui.leftLabel.setText(self.test_time)
 
@@ -278,6 +288,7 @@ class dataPage(Ui_Form, QWidget):
     """
     def insertMysql(self, name_pic, cur_time):
         reagent_matrix_info = str(self.readPixtable())
+        self.showDataView(reagent_matrix_info)
         self.allergy_info = reagent_matrix_info
         patient_id = self.data['patient_id']
         
@@ -448,6 +459,23 @@ class dataPage(Ui_Form, QWidget):
             f.write(str(msg))
 
     """
+    @detail 数据展示
+    """
+    def showDataView(self, data):
+        title_list = ["定位点", "", "定位点", "", "定位点", 1, 2, 3, 4, 5]
+        data_copy = re.split(r",", data)[1:]
+        data_copy = title_list + data_copy
+        row = self.pix_table_model_copy.rowCount()
+        column = self.pix_table_model_copy.columnCount()
+        for i in range(row):
+            for j in range(column):
+                pix_num = data_copy[i * column + j]
+                item = QStandardItem(str(pix_num))
+                item.setTextAlignment(Qt.AlignCenter)
+                self.pix_table_model_copy.setItem(i, j, item)
+        return
+
+    """
     @detail 打印按钮操作
     @detail 槽函数
     """
@@ -490,7 +518,8 @@ class dataPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnData_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
+        # self.ui.stackedWidget.setCurrentIndex(1)
+        self.ui.stackedWidget.setCurrentIndex(3)
 
     """
     @detail 图片按钮操作

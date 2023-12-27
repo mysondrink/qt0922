@@ -57,6 +57,19 @@
      <string>TextLabel</string>
     </property>
    </widget>
+   <widget class="QLabel" name="wifi_label">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>0</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QFrame" name="centerframe">
    <property name="geometry">
