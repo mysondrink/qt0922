@@ -505,7 +505,7 @@ class dataPage(Ui_Form, QWidget):
         name = self.data['name_pic']
         path = self.data['pic_path']
         data = self.data
-        self.usbthread = CheckUSBThread(name, path, data, self.data['point_str'] + self.allergy_info)
+        self.usbthread = CheckUSBThread(name, path, data, ',' + self.data['point_str'] + self.allergy_info)
         self.usbthread.update_json.connect(self.getUSBInfo)
         # 创建定时器
         self.download_timer = QTimer()
