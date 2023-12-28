@@ -43,8 +43,8 @@ class MyProbe(QThread):
     @detail 进行系统存储的检测
     """
     def run(self):
-        QStorageInfo.refresh()
         memorystr = QStorageInfo().root()
+        memorystr.refresh()
         mem_total = memorystr.bytesTotal() / (1024 * 1024 * 1024)
         mem_avail = memorystr.bytesAvailable() / (1024 * 1024 * 1024)
         mem_progress = mem_avail / mem_total

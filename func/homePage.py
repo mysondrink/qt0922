@@ -90,7 +90,6 @@ class homePage(Ui_Form, QWidget):
     def startProbeMem(self):
         self.myprobe = MyProbe()
         self.myprobe.update_progress.connect(self.memWarning)
-        self.myprobe.finished.connect(self.myprobe.deleteLater())
         self.myprobe.start()
 
     """
@@ -102,10 +101,12 @@ class homePage(Ui_Form, QWidget):
             m_title = "警告"
             m_info = "存储已经占满，请清理图片！"
             infoMessage(m_info, m_title)
+            self.myprobe.deleteLater()
             return
         elif msg == 202:
             page_msg = 'testPage'
             self.next_page.emit(page_msg)
+            self.myprobe.deleteLater()
 
     """
     @detail 电源按钮操作，跳转到电源界面
@@ -122,9 +123,9 @@ class homePage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnData_clicked(self):
-        # self.startProbeMem()
-        page_msg = 'testPage'
-        self.next_page.emit(page_msg)
+        self.startProbeMem()
+        # page_msg = 'testPage'
+        # self.next_page.emit(page_msg)
 
     """
     @detail 历史记录按钮操作，跳转到历史记录界面
