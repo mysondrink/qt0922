@@ -2,6 +2,9 @@ from PySide2.QtCore import QThread, Signal, QStorageInfo
 import sys
 import traceback
 
+failed_code = 404
+succeed_code = 202
+
 class MyProbe(QThread):
     update_progress = Signal()
     update_log = Signal(str)
@@ -40,10 +43,12 @@ class MyProbe(QThread):
     @detail 进行系统存储的检测
     """
     def run(self):
-        QStorageInfo.refresh()
-        self.memorystr = QStorageInfo().root()
-        mem_total = self.memorystr.bytesTotal() / (1024 * 1024 * 1024)
-        mem_avail = self.memorystr.bytesAvailable() / (1024 * 1024 * 1024)
+        memorystr = QStorageInfo().root()
+        memorystr.refresh()
+        mem_total = memorystr.bytesTotal() / (1024 * 1024 * 1024)
+        mem_avail = memorystr.bytesAvailable() / (1024 * 1024 * 1024)
         mem_progress = mem_avail / mem_total
         if mem_progress < 0.02:
-            self.update_progress.emit()
+            self.update_progress.emit(failed_code)
+        else:
+            self.update_progress.emit(succeed_code)

@@ -263,9 +263,18 @@ class testPage(Ui_Form, QWidget):
         self.ui.photoLabel.setText(cur_time)
         time_now = msg
         try:
-            gray_aver = self.mypicthread.getGrayAver()
-            gray_row = len(gray_aver)
-            gray_column = len(gray_aver[0])
+            _matrix = self.mypicthread.getGrayAver()
+            gray_row = len(_matrix) - 1
+            gray_column = len(_matrix[0])
+            point_list = _matrix[0]
+            point_str = ''
+            for i in point_list:
+                if i == 0:
+                    point_str = point_str + ','
+                else:
+                    point_str = point_str + ',' + str(i)
+            point_str = point_str[1:]
+            gray_aver = _matrix[1:]
         except Exception as e:
             self.sendException()
             m_title = ""
@@ -278,6 +287,8 @@ class testPage(Ui_Form, QWidget):
 
         img_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_final.jpeg')
         img_origin = cv.imread(frozen.app_path() + r'/inf/img_out/img_0ori.jpeg')
+        img_show_final = cv.imread(frozen.app_path() + r'/inf/img_out/img_show_final.jpeg')
+        img_show_origin = cv.imread(frozen.app_path() + r'/inf/img_out/img_show_ori.jpeg')
         name_pic = time_now
 
         save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '-1.jpeg'
@@ -286,6 +297,12 @@ class testPage(Ui_Form, QWidget):
         save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '-2.jpeg'
         dirs.makedir(save_path)
         flag_bool = cv.imwrite(save_path, img_final)
+        save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '-3.jpeg'
+        dirs.makedir(save_path)
+        flag_bool = cv.imwrite(save_path, img_show_origin)
+        save_path = frozen.app_path() + r'/img/' + r'/' + pic_path + r'/' + name_pic + '-4.jpeg'
+        dirs.makedir(save_path)
+        flag_bool = cv.imwrite(save_path, img_show_final)
 
         page_msg = 'dataPage'
         self.next_page.emit(page_msg)
@@ -332,7 +349,7 @@ class testPage(Ui_Form, QWidget):
                          gray_aver=gray_aver, gray_row=gray_row,
                          gray_column=gray_column, pic_path=pic_path,
                          name_pic=name_pic, row_exetable=self.row_exetable,
-                         column_exetable=self.column_exetable, reagent_matrix_info=reagent_matrix_info)
+                         column_exetable=self.column_exetable, reagent_matrix_info=reagent_matrix_info, point_str=point_str)
         info_msg = 201
         self.update_json.emit(dict(info=info_msg, data=data_json))
         self.testinfo.closeWin()

@@ -95,8 +95,8 @@ class clearPage(Ui_Form, QWidget):
     @detail 设置存储条
     """
     def setClearBar(self):
-        QStorageInfo.refresh()
         memorystr = QStorageInfo().root()
+        memorystr.refresh()
         mem_total = memorystr.bytesTotal() / (1024 * 1024 * 1024)
         mem_avail = memorystr.bytesAvailable() / (1024 * 1024 * 1024)
         mem_progress = (1 - (mem_avail / mem_total)) * 100

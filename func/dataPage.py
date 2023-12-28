@@ -187,11 +187,11 @@ class dataPage(Ui_Form, QWidget):
         #                                  "color: rgb(255,0,0);}")
         # print('%s\\img\\%s\\%s.jpeg' % (frozen.app_path(), pic_path, name_pic))
         self.ui.picLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(%s/img/%s/%s-1.jpeg); "
+                                         "border-image: url(%s/img/%s/%s-3.jpeg); "
                                          "font: 20pt; "
                                          "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # linux环境
         self.ui.photoLabel.setStyleSheet("QLabel{"
-                                         "border-image: url(%s/img/%s/%s-2.jpeg); "
+                                         "border-image: url(%s/img/%s/%s-4.jpeg); "
                                          "font: 20pt; "
                                          "color: rgb(255,0,0);}" % (frozen.app_path(), pic_path, name_pic))  # linux环境
         end_time = time.time()
@@ -200,6 +200,7 @@ class dataPage(Ui_Form, QWidget):
         start_time = time.time()
         self.pic_para = 1
         if self.info == 201:
+            self.point_list = self.data['point_str']
             gray_row = self.data['gray_row']
             gray_column = self.data['gray_column']
             gray_aver = self.data['gray_aver']
@@ -236,13 +237,15 @@ class dataPage(Ui_Form, QWidget):
 
             # self.ftpServer(base64_data)   #上传图片到服务器
         elif self.info == 202:
-            reagent_matrix_info = re.split(r",", reagent_matrix_info)[1:]
             self.allergy_info = reagent_matrix_info
-            for i in range(self.row_exetable + int(self.row_exetable / 2)):
-                for j in range(self.column_exetable):
-                    item = QStandardItem(reagent_matrix_info[i * self.column_exetable + j])
-                    item.setTextAlignment(Qt.AlignCenter)
-                    self.pix_table_model.setItem(i, j, item)
+            self.showDataView(reagent_matrix_info)
+            # reagent_matrix_info = re.split(r",", reagent_matrix_info)[1:]
+            # self.allergy_info = reagent_matrix_info
+            # for i in range(self.row_exetable + int(self.row_exetable / 2)):
+            #     for j in range(self.column_exetable):
+            #         item = QStandardItem(reagent_matrix_info[i * self.column_exetable + j])
+            #         item.setTextAlignment(Qt.AlignCenter)
+            #         self.pix_table_model.setItem(i, j, item)
 
     """
     @detail 调整图片自适应label大小
@@ -308,6 +311,7 @@ class dataPage(Ui_Form, QWidget):
         name = self.data['name']
         matrix = self.data['matrix']
         code_num = self.data['code_num']
+        points = self.data['point_str']
         
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
@@ -315,8 +319,8 @@ class dataPage(Ui_Form, QWidget):
         sql = 'INSERT IGNORE INTO patient_copy1(name, patient_id, age, gender) VALUES (%s,%s,%s,%s)'
         sql_2 = "INSERT IGNORE INTO reagent_copy1(reagent_type, patient_id, reagent_photo, " \
                 "reagent_time, reagent_code, doctor, depart, reagent_matrix, reagent_time_detail, " \
-                "reagent_matrix_info, patient_name, patient_age, patient_gender) " \
-                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                "reagent_matrix_info, patient_name, patient_age, patient_gender, points) " \
+                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
         # 获取标记
         cursor = connection.cursor()
@@ -324,7 +328,7 @@ class dataPage(Ui_Form, QWidget):
             # 执行SQL语句
             cursor.execute(sql, [patient_name, patient_id, patient_age, patient_gender])
             cursor.execute(sql_2, [item_type, patient_id, pic_name, cur_time[0],
-                                   code_num, doctor, depart, matrix, cur_time[1], reagent_matrix_info, name, age, patient_gender])
+                                   code_num, doctor, depart, matrix, cur_time[1], reagent_matrix_info, name, age, patient_gender, points])
             # 提交事务
             connection.commit()
         except Exception as e:
@@ -462,7 +466,10 @@ class dataPage(Ui_Form, QWidget):
     @detail 数据展示
     """
     def showDataView(self, data):
-        title_list = ["定位点", "", "定位点", "", "定位点", 1, 2, 3, 4, 5]
+        point_str = self.data['point_str']
+        point_list = re.split(r",", point_str)
+        title_list = ["定位点", "", "定位点", "", "定位点"]
+        title_list = title_list + point_list
         data_copy = re.split(r",", data)[1:]
         data_copy = title_list + data_copy
         row = self.pix_table_model_copy.rowCount()
@@ -498,7 +505,7 @@ class dataPage(Ui_Form, QWidget):
         name = self.data['name_pic']
         path = self.data['pic_path']
         data = self.data
-        self.usbthread = CheckUSBThread(name, path, data, self.allergy_info)
+        self.usbthread = CheckUSBThread(name, path, data, self.data['point_str'] + self.allergy_info)
         self.usbthread.update_json.connect(self.getUSBInfo)
         # 创建定时器
         self.download_timer = QTimer()

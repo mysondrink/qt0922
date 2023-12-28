@@ -48,7 +48,7 @@
     <widget class="QDateEdit" name="dateBox">
      <property name="geometry">
       <rect>
-       <x>340</x>
+       <x>190</x>
        <y>80</y>
        <width>230</width>
        <height>70</height>
@@ -118,19 +118,19 @@ QCalendarWidget QSpinBox::down-arrow
      </property>
      <property name="dateTime">
       <datetime>
-       <hour>0</hour>
+       <hour>16</hour>
        <minute>0</minute>
        <second>0</second>
        <year>2019</year>
        <month>12</month>
-       <day>26</day>
+       <day>25</day>
       </datetime>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>170</x>
+       <x>20</x>
        <y>80</y>
        <width>136</width>
        <height>67</height>
@@ -152,7 +152,7 @@ QCalendarWidget QSpinBox::down-arrow
     <widget class="QComboBox" name="modeBox_3">
      <property name="geometry">
       <rect>
-       <x>340</x>
+       <x>190</x>
        <y>210</y>
        <width>230</width>
        <height>70</height>
@@ -185,7 +185,7 @@ QComboBox QAbstractItemView {
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>170</x>
+       <x>20</x>
        <y>210</y>
        <width>161</width>
        <height>67</height>
@@ -202,6 +202,72 @@ QComboBox QAbstractItemView {
      </property>
      <property name="text">
       <string>试剂卡型号*</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>80</y>
+       <width>111</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+     </property>
+     <property name="text">
+      <string>送检医生</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>210</y>
+       <width>111</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+     </property>
+     <property name="text">
+      <string>科室</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>80</y>
+       <width>230</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLineEdit{
+font: 20pt &quot;宋体&quot;;
+background-color:rgba(0,0,0,255);
+color: rgb(255,255,255);
+}</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>210</y>
+       <width>230</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLineEdit{
+font: 20pt &quot;宋体&quot;;
+background-color:rgba(0,0,0,255);
+color: rgb(255,255,255);
+}</string>
      </property>
     </widget>
    </widget>

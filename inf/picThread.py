@@ -114,7 +114,7 @@ class MyPicThread(QThread):
         #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
         #                                       radius=40)
         flag, self.gray_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
-                                              path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
+                                              path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8 + 1, 5),
                                               radius=40)
         # print(self.gray_aver)
         print("finished!")

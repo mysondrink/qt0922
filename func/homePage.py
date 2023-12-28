@@ -34,15 +34,6 @@ class homePage(Ui_Form, QWidget):
         self.update_log.emit(err_msg)
 
     """
-    @detail 发送异常信息
-    @detail 未使用
-    """
-    def sendException(self):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        err_msg = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-        self.update_log.emit(err_msg)
-
-    """
     @detail 设置界面相关信息
     """
     def InitUI(self):
@@ -97,23 +88,25 @@ class homePage(Ui_Form, QWidget):
     @detail 开始存储探测
     """
     def startProbeMem(self):
-        myprobe = MyProbe()
-        myprobe.update_progress.connect(self.memWarning)
-        myprobe.finished.connect(myprobe.deleteLater())
-        myprobe.start()
+        self.myprobe = MyProbe()
+        self.myprobe.update_progress.connect(self.memWarning)
+        self.myprobe.start()
 
     """
     @detail 存储满后警告
     """
     def memWarning(self, msg):
+        print(msg)
         if msg == 404:
             m_title = "警告"
             m_info = "存储已经占满，请清理图片！"
             infoMessage(m_info, m_title)
+            self.myprobe.deleteLater()
             return
         elif msg == 202:
             page_msg = 'testPage'
             self.next_page.emit(page_msg)
+            self.myprobe.deleteLater()
 
     """
     @detail 电源按钮操作，跳转到电源界面
@@ -131,6 +124,8 @@ class homePage(Ui_Form, QWidget):
     @Slot()
     def on_btnData_clicked(self):
         self.startProbeMem()
+        # page_msg = 'testPage'
+        # self.next_page.emit(page_msg)
 
     """
     @detail 历史记录按钮操作，跳转到历史记录界面
