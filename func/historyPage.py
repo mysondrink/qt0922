@@ -4,6 +4,7 @@ import datetime
 import sys
 import traceback
 
+from keyboard.keyboard import KeyBoard
 from func.testinfo import MyTestInfo
 from gui.history import *
 from utils import dirs
@@ -64,8 +65,11 @@ class historyPage(Ui_Form, QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.dateBox.setCalendarPopup(True)
         self.ui.dateBox.setDateTime(QDateTime.currentDateTime())
-        self.ui.historyTable.horizontalHeader().close()
+        # self.ui.historyTable.horizontalHeader().close()
         self.ui.historyTable.verticalHeader().close()
+
+        self.setFocusWidget()
+        self.installEvent()
 
         self.setBtnIcon()
 
@@ -75,6 +79,64 @@ class historyPage(Ui_Form, QWidget):
         self.ui.btnReport.hide()
         self.setReagentCb()
         self.setTableWidget()
+
+    """
+    @detail 安装事件监听
+    """
+    def installEvent(self):
+        for item in self.focuswidget:
+            item.installEventFilter(self)
+
+    """
+    @detail 设置组件点击焦点
+    """
+    def setFocusWidget(self):
+        self.focuswidget = [self.ui.lineEdit, self.ui.lineEdit_2]
+        for item in self.focuswidget:
+            item.setFocusPolicy(Qt.ClickFocus)
+
+    """
+    @detail 事件过滤
+    @detail 槽函数
+    @param obj: 发生事件的组件
+    @param event: 发生的事件
+    """
+    def eventFilter(self, obj, event):
+        if obj in self.focuswidget:
+            if event.type() == QEvent.Type.FocusIn:
+                # print(obj.setText("hello"))
+                self.setKeyBoard(obj)
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    """
+    @detail 设置可以键盘弹出的组件
+    @detail 槽函数
+    @param obj: 键盘弹出的组件
+    """
+    def setKeyBoard(self, obj):
+        self.keyboardtext = KeyBoard()
+        self.keyboardtext.text_msg.connect(self.getKeyBoardText)
+        obj_name = obj.objectName()
+        obj_text = obj.text()
+        self.keyboardtext.textInput.setText(obj_text)
+        if obj_name == "lineEdit":
+            self.keyboardtext.nameLabel.setText("送检医生")
+        elif obj_name == "lineEdit_2":
+            self.keyboardtext.nameLabel.setText("科室")
+        self.keyboardtext.showWindow()
+
+    """
+    @detail 获取键盘的文本信息
+    @detail 槽函数
+    @param msg: 信号，键盘文本信息
+    """
+    def getKeyBoardText(self, msg):
+        self.focusWidget().setText(msg)
+        self.focusWidget().clearFocus()
 
     """
     @detail 设置按钮图标
@@ -216,18 +278,33 @@ class historyPage(Ui_Form, QWidget):
     @param time: 查询测试时间
     @param item_type: 查询试剂卡规格
     """
-    def selectMysql(self, time, item_type):
+    def selectMysql(self, time, item_type, doctor, depart):
+        search_mode = 1
         global header_list
         connection = pymysql.connect(host="127.0.0.1", user="root", password="password", port=3306, database="test",
                                      charset='utf8')
-        # MySQL语句
-        sql = "SELECT * FROM reagent_copy1 WHERE reagent_type = %s AND reagent_time = %s;"
-
+        if doctor != '':
+            search_mode = 2
+            sql = "SELECT * FROM reagent_copy1 WHERE reagent_type = %s AND reagent_time = %s AND doctor = %s;"
+        elif depart != '':
+            search_mode = 3
+            sql = "SELECT * FROM reagent_copy1 WHERE reagent_type = %s AND reagent_time = %s AND doctor = %s AND depart = %s;"
+        else:
+            # MySQL语句
+            sql = "SELECT * FROM reagent_copy1 WHERE reagent_type = %s AND reagent_time = %s;"
+            search_mode = 1
         # 获取标记
         cursor = connection.cursor()
         try:
-            # 执行SQL语句
-            cursor.execute(sql, [item_type, time])
+            if search_mode == 1:
+                # 执行SQL语句
+                cursor.execute(sql, [item_type, time])
+            elif search_mode == 2:
+                # 执行SQL语句
+                cursor.execute(sql, [item_type, time, doctor])
+            elif search_mode == 3:
+                # 执行SQL语句
+                cursor.execute(sql, [item_type, time, doctor, depart])
             # 提交事务
             connection.commit()
         except Exception as e:
@@ -488,7 +565,9 @@ class historyPage(Ui_Form, QWidget):
                 self.ui.dateBox.date().year(), self.ui.dateBox.date().month(), self.ui.dateBox.date().day())
             # time = self.ui.dateBox.currentText()
             item_type = self.ui.modeBox_3.currentText()
-            self.selectMysql(time, item_type)
+            doctor = self.ui.lineEdit.text()
+            depart = self.ui.lineEdit_2.text()
+            self.selectMysql(time, item_type, doctor, depart)
 
     """
     @detail 上一页按钮操作
