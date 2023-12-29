@@ -1,6 +1,10 @@
 from PySide2.QtGui import *
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
+"""
+@detail 定义键盘抽象类
+@detail 父类
+"""
 
 class abstractkeyboard(QWidget):
     def __init__(self):

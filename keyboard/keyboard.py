@@ -21,6 +21,11 @@ label_qss = "QLabel {                    \
         }                              \
         "
 
+"""
+@detail 键盘界面
+@detail qt界面
+"""
+
 
 class KeyBoard(QWidget):
     text_msg = Signal(str)

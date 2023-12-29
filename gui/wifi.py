@@ -26,7 +26,7 @@ class Ui_Form(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.wifiCb = QComboBox(self.frame)
         self.wifiCb.setObjectName(u"wifiCb")
-        self.wifiCb.setGeometry(QRect(390, 110, 230, 70))
+        self.wifiCb.setGeometry(QRect(390, 70, 230, 70))
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -49,15 +49,15 @@ class Ui_Form(object):
 "}")
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(160, 110, 161, 73))
+        self.label.setGeometry(QRect(160, 70, 161, 73))
         self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.label_2 = QLabel(self.frame)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(160, 210, 151, 73))
+        self.label_2.setGeometry(QRect(160, 170, 151, 73))
         self.label_2.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.pwdLine = QLineEdit(self.frame)
         self.pwdLine.setObjectName(u"pwdLine")
-        self.pwdLine.setGeometry(QRect(390, 210, 230, 70))
+        self.pwdLine.setGeometry(QRect(390, 170, 230, 70))
         sizePolicy.setHeightForWidth(self.pwdLine.sizePolicy().hasHeightForWidth())
         self.pwdLine.setSizePolicy(sizePolicy)
         font = QFont()
@@ -114,6 +114,14 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
+        self.label_4 = QLabel(self.frame)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setGeometry(QRect(160, 270, 150, 70))
+        self.label_4.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.addr_Label = QLabel(self.frame)
+        self.addr_Label.setObjectName(u"addr_Label")
+        self.addr_Label.setGeometry(QRect(390, 270, 230, 70))
+        self.addr_Label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
 
         self.retranslateUi(Form)
 
@@ -127,5 +135,7 @@ class Ui_Form(object):
         self.label_3.setText(QCoreApplication.translate("Form", u"wifi\u8bbe\u7f6e", None))
         self.btnConfirm.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
+        self.label_4.setText(QCoreApplication.translate("Form", u"\u672c\u673aIP", None))
+        self.addr_Label.setText(QCoreApplication.translate("Form", u"127.0.0.1", None))
     # retranslateUi
 
