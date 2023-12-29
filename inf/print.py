@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import random
 import datetime
 
@@ -40,14 +39,12 @@ result_explain = [
     '  阴性', '  弱阳', '  中阳', '  强阳'
 ]
 
-out = ['0'] * 17
+out = ['0'] * 16
 
 
 class Em5822_Print:
 
-    def __init__(self, test_time, time_now):
-        self.test_time = test_time
-        self.time_now = time_now
+    def __init__(self):
         ports_list = list(serial.tools.list_ports.comports())
         if len(ports_list) <= 0:
             print("无串口设备。")
@@ -55,8 +52,8 @@ class Em5822_Print:
             print("可用的串口设备如下：")
             for comport in ports_list:
                 print(list(comport)[0], list(comport)[1])
-        # self.ser = serial.Serial("/dev/ttyUSB0", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
-        self.ser = serial.Serial("/dev/ttyUSB1", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
+        self.ser = serial.Serial("/dev/ttyUSB0", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
+        # self.ser = serial.Serial("/dev/ttyUSB1", 9600)  # 打开COM17，将波特率配置为115200，其余参数使用默认值
 
     def em5822_show(self, data):
         print(2)
@@ -64,9 +61,7 @@ class Em5822_Print:
     def em5822_instruction(self, data):
         print(3)
 
-    def em5822_print(self):
-        # now = datetime.datetime.now()
-        # time_now = now.strftime("%Y-%m-%d %H:%M:%S")
+    def em5822_print(self, time_test, time_now):
         mixture20_A_random = random.randint(0, 19)
         mixture20_A_result = random.randint(0, 3)
         mixture20_B_random = random.randint(0, 19)
@@ -80,8 +75,7 @@ class Em5822_Print:
         out[2] = "样本号：1234567890\r\n"
         out[3] = "条码号：1234567890\r\n"
         out[4] = "样本类型：试剂\r\n"
-        # out[5] = "测试时间：%s\r\n" % time_now
-        out[5] = "测试时间：%s\r\n" % self.test_time
+        out[5] = "测试时间：%s\r\n" % time_test
         out[6] = "--------------------------------"
         out[7] = "过敏原  结果  参考值  结果解释\r\n"
         out[8] = "1" + mixture19[mixture20_A_random] + "  " + result[mixture20_A_result] + \
@@ -93,17 +87,18 @@ class Em5822_Print:
         out[11] = "4" + mixture19[synthesis14_random] + "  " + result[synthesis14_result] + \
                   "  -----  " + result_explain[synthesis14_result]+"\r\n"
         out[12] = "--------------------------------"
-        # out[13] = "打印时间：%s\r\n" % time_now
-        out[13] = "打印时间：%s\r\n" % self.time_now
+        out[13] = "打印时间：%s\r\n" % time_now
         out[14] = "此检疫报告只对此标本负责，请结合临床。\r\n"
-        out[15] = "  \r\n"
-        out[16] = "  \r\n"
+        out[15] = "\r\n"
 
-        for i in range(17):
+        for i in range(16):
            self.ser.write(out[i].encode("GBK"))
 
 
 if __name__ == '__main__':
+    now = datetime.datetime.now()
+    time_now = now.strftime("%Y-%m-%d %H:%M:%S")
+
     eprint = Em5822_Print()
 
-    eprint.em5822_print()
+    eprint.em5822_print(time_now, time_now)
