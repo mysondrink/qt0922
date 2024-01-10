@@ -172,7 +172,8 @@ class Ui_Form(object):
         self.label_7 = QLabel(self.page)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setGeometry(QRect(20, 110, 140, 27))
-        self.label_7.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.label_7.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";\n"
+"")
         self.pushButton_3 = QPushButton(self.page)
         self.pushButton_3.setObjectName(u"pushButton_3")
         self.pushButton_3.setEnabled(False)
@@ -326,10 +327,13 @@ class Ui_Form(object):
         self.picLabel.raise_()
         self.rightLabel.raise_()
         self.leftLabel.raise_()
+        self.page_4 = QWidget()
+        self.page_4.setObjectName(u"page_4")
+        self.stackedWidget.addWidget(self.page_4)
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -349,12 +353,12 @@ class Ui_Form(object):
         self.label.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u9879\u76ee", None))
         self.label_10.setText(QCoreApplication.translate("Form", u"\u79d1\u5ba4*", None))
         self.label_6.setText(QCoreApplication.translate("Form", u"\u59d3\u540d*", None))
-        self.label_7.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u89c4\u683c", None))
+        self.label_7.setText(QCoreApplication.translate("Form", u"\u89c4\u683c", None))
         self.pushButton_3.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u4fe1\u606f", None))
         self.pushButton.setText(QCoreApplication.translate("Form", u"\u75c5\u4eba\u4fe1\u606f", None))
         self.label_5.setText("")
         self.label_9.setText(QCoreApplication.translate("Form", u"\u6027\u522b*", None))
-        self.label_3.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u578b\u53f7", None))
+        self.label_3.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u7ec4\u5408", None))
         self.label_2.setText("")
         self.label_8.setText(QCoreApplication.translate("Form", u"\u5e74\u9f84*", None))
         self.label_12.setText(QCoreApplication.translate("Form", u"\u53c2\u6570(\u9009\u586b)", None))
