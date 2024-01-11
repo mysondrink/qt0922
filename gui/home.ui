@@ -75,7 +75,7 @@ background-color: rgb(255, 0, 0);
 </string>
     </property>
     <property name="text">
-     <string>  荧光检疫</string>
+     <string>  荧光检测</string>
     </property>
    </widget>
    <widget class="QLabel" name="sys_icon_label">

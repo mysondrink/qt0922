@@ -74,7 +74,7 @@ class testPage(Ui_Form, QWidget):
         self.genderCb.setId(self.ui.radioButton, 0)
         self.genderCb.setId(self.ui.radioButton_2, 1)
 
-        self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
+        # self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
         self.ui.modeBox_1.setCurrentIndex(4)
         self.ui.typeLabel.setText('8x5')
         # self.mypicthread = MyPicThread()
@@ -84,6 +84,7 @@ class testPage(Ui_Form, QWidget):
 
         self.setFocusWidget()
         self.installEvent()
+        self.setAllergenCb()
         self.setReagentCb()
         self.mytest()
         self.setBtnIcon()
@@ -200,10 +201,60 @@ class testPage(Ui_Form, QWidget):
         self.ui.btnConfirm.show()
         self.ui.btnReturn.setGeometry(410, 10, 380, 80)
 
+    def setAllergenTableView(self):
+        f_name = self.ui.modeBox_1.currentText()
+        path = frozen.app_path() + r"\\res\\allergen\\"
+        f = open(path + f_name, "r", encoding="utf-8")
+        lines = f.readlines()
+        f.close()
+        allergen = []
+        for i in lines:
+            allergen.append(i.rstrip())
+        row = 9
+        column = 5
+        self.allergen_table_model = QStandardItemModel(row, column)
+        self.ui.tableView.setModel(self.allergen_table_model)
+        self.ui.tableView.horizontalHeader().close()
+        self.ui.tableView.verticalHeader().close()
+        self.ui.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        for k in range(column):
+            if k % 2 == 0:
+                color = QColor(255, 255, 127)
+                item = QStandardItem()
+                item.setData(color, Qt.BackgroundColorRole)
+                self.allergen_table_model.setItem(0, k, item)
+        num = 0
+        for i in range(1, row):
+            for j in range(column):
+                if (i * row + j) % 2 != 0:
+                    color = QColor(0, 255, 0)
+                    print(allergen[num])
+                    item = QStandardItem(allergen[num])
+                    item.setData(color, Qt.BackgroundColorRole)
+                    self.allergen_table_model.setItem(i, j, item)
+                    num = num + 1
+    def setAllergenCb(self):
+        # 指定要读取的路径
+        path = frozen.app_path() + r"\\res\\allergen\\"
+        # path = r"/res/allergen/"
+        # 获取指定路径下的所有文件名
+        filenames = os.listdir(path)
+        self.ui.modeBox_1.clear()
+        # 输出所有文件名
+        for filename in filenames:
+            # self.ui.modeBox_3.clear()
+            self.ui.modeBox_1.addItem(filename)
+            self.ui.modeBox_1.setCurrentIndex(-1)
+
     """
     @detail 设置表格内容，主要是过敏原信息
     """
     def setTableView(self):
+        # 测试
+        self.ui.typeLabel.setText("8x5")
         # 设置行列
         # 需要改进
         if self.ui.modeBox_1.currentIndex() == -1:
@@ -234,7 +285,9 @@ class testPage(Ui_Form, QWidget):
         self.ui.exeTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.exeTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        str_num = self.reagent_matrix_info[self.reagent_type.index(self.ui.modeBox_1.currentText())]
+        # str_num = self.reagent_matrix_info[self.reagent_type.index(self.ui.modeBox_1.currentText())]
+        # 测试
+        str_num = self.reagent_matrix_info[self.reagent_type.index("58")]
 
         for i in range(0, self.row_exetable + int(self.row_exetable / 2)):
             if i % 3 == 0:
@@ -514,11 +567,11 @@ class testPage(Ui_Form, QWidget):
             self.reagent_matrix.append(x[2])
             self.reagent_matrix_info.append(x[3])
 
-        self.ui.modeBox_1.clear()
+        # self.ui.modeBox_1.clear()
         # self.ui.modeBox_3.clear()
-        self.ui.modeBox_1.addItems(self.reagent_type)
-        self.ui.modeBox_1.setCurrentIndex(-1)
-        self.ui.typeLabel.setText("")
+        # self.ui.modeBox_1.addItems(self.reagent_type)
+        # self.ui.modeBox_1.setCurrentIndex(-1)
+        # self.ui.typeLabel.setText("")
         # self.ui.modeBox_3.addItems(self.reagent_type)
         # self.ui.modeBox_3.setCurrentIndex(-1)
 
@@ -616,6 +669,27 @@ class testPage(Ui_Form, QWidget):
         elif self.ui.stackedWidget.currentIndex() == 2:
             self.resetBtn()
             self.ui.stackedWidget.setCurrentIndex(0)
+        elif self.ui.stackedWidget.currentIndex() == 3:
+            self.resetBtn()
+            self.ui.stackedWidget.setCurrentIndex(0)
+
+    """
+    @detail 确认按钮操作
+    @detail 槽函数
+    @Slot()
+    def on_btnConfirm_clicked(self):
+        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine == "" or self.ui.ageLine == "" \
+                or self.ui.departCb == "" or self.ui.docCb == "":
+            m_title = ""
+            m_info = "请填写完信息！"
+            infoMessage(m_info, m_title, 280)
+            return
+
+        self.setTableView()
+        self.ui.stackedWidget.setCurrentIndex(1)
+        self.ui.btnExe.show()
+        self.ui.btnConfirm.hide()
+    """
 
     """
     @detail 确认按钮操作
@@ -631,9 +705,10 @@ class testPage(Ui_Form, QWidget):
             return
 
         self.setTableView()
-        self.ui.stackedWidget.setCurrentIndex(1)
+        self.ui.stackedWidget.setCurrentIndex(3)
         self.ui.btnExe.show()
         self.ui.btnConfirm.hide()
+        self.setAllergenTableView()
 
     """
     @detail 检测按钮操作
