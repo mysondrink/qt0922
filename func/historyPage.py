@@ -412,6 +412,9 @@ class historyPage(Ui_Form, QWidget):
                 gender = i[13]
                 name = i[11]
                 name_pic = pic_name
+                point_str = i[14]
+                gray_aver_str = i[15]
+                nature_aver_str = i[16]
                 data_json = dict(patient_id=patient_id, patient_name=patient_name,
                                  patient_age=patient_age, patient_gender=patient_gender,
                                  item_type=item_type, pic_name=pic_name,
@@ -422,6 +425,18 @@ class historyPage(Ui_Form, QWidget):
                                  pic_path=pic_path, name_pic=name_pic,
                                  row_exetable=row_exetable, column_exetable=column_exetable,
                                  reagent_matrix_info=reagent_matrix_info)
+                # new data
+                data_json = dict(patient_id=patient_id, patient_name=patient_name,
+                                 patient_age=patient_age, patient_gender=patient_gender,
+                                 item_type=item_type, pic_name=pic_name,
+                                 time=cur_time, doctor=doctor,
+                                 depart=depart, age=age,
+                                 gender=gender, name=name,
+                                 matrix=reagent_matrix, code_num=code_num,
+                                 pic_path=pic_path, name_pic=name_pic,
+                                 row_exetable=row_exetable, column_exetable=column_exetable,
+                                 reagent_matrix_info=reagent_matrix_info, point_str=point_str,
+                                 gray_aver_str=gray_aver_str,nature_aver_str=nature_aver_str)
                 info_msg = 202
                 self.update_json.emit(dict(info=info_msg, data=data_json))
                 """
@@ -607,6 +622,7 @@ class historyPage(Ui_Form, QWidget):
                 self.testinfo.setWindowModality(Qt.ApplicationModal)
                 self.testinfo.show()
                 self.next_page.emit('dataPage')
+                # self.next_page.emit('newDataPage')
                 self.changePhoto(current_row)
                 return
             self.resetBtn_3()

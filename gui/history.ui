@@ -118,7 +118,7 @@ QCalendarWidget QSpinBox::down-arrow
      </property>
      <property name="dateTime">
       <datetime>
-       <hour>16</hour>
+       <hour>8</hour>
        <minute>0</minute>
        <second>0</second>
        <year>2019</year>
@@ -201,7 +201,7 @@ QComboBox QAbstractItemView {
       <string notr="true">font: 20pt &quot;宋体&quot;;</string>
      </property>
      <property name="text">
-      <string>试剂卡型号*</string>
+      <string>检测组合*</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_4">
