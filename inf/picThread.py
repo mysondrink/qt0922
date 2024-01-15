@@ -56,7 +56,7 @@ class MyPicThread(QThread):
     @detail 线程运行函数
     @detail 进行图片的获取和图片pixel的获取
     """
-    def run(self, item_type):
+    def run(self):
         pic_path = QDateTime.currentDateTime().toString('yyyy-MM-dd')
         time_now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         path_cache = frozen.app_path() + r'/inf/pic_cache/'

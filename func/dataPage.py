@@ -458,7 +458,7 @@ class dataPage(Ui_Form, QWidget):
     """
     def showDataView(self, data):
         title_list = ["定位点", "", "定位点", "", "定位点"]
-        data_copy = re.split(r",", data)[1:]
+        data_copy = re.split(r",", data)
         data_copy = title_list + data_copy
         row = self.pix_table_model_copy.rowCount()
         column = self.pix_table_model_copy.columnCount()

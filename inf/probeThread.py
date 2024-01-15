@@ -6,7 +6,7 @@ failed_code = 404
 succeed_code = 202
 
 class MyProbe(QThread):
-    update_progress = Signal()
+    update_progress = Signal(int)
     update_log = Signal(str)
 
     """

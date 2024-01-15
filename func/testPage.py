@@ -91,6 +91,11 @@ class testPage(Ui_Form, QWidget):
         self.setAllergenCb()
         self.mytest()
         self.setBtnIcon()
+        self.ui.tableView.horizontalHeader().close()
+        self.ui.tableView.verticalHeader().close()
+        self.ui.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     """
     @detail 设置按钮图标
@@ -336,7 +341,7 @@ class testPage(Ui_Form, QWidget):
             point_list = gray_aver[0]
             point_str = ''
             for i in point_list:
-                if i == 0:
+                if i < 0:
                     point_str = point_str + ','
                 else:
                     point_str = point_str + ',' + str(i)
