@@ -206,7 +206,7 @@ class testPage(Ui_Form, QWidget):
 
     def setAllergenTableView(self):
         f_name = self.ui.modeBox_1.currentText()
-        path = frozen.app_path() + r"/res/allergen/"
+        path = frozen.app_path() + r"\\res\\allergen\\"
         f = open(path + f_name, "r", encoding="utf-8")
         lines = f.readlines()
         f.close()
@@ -726,7 +726,8 @@ class testPage(Ui_Form, QWidget):
     @Slot()
     def on_btnExe_clicked(self):
         self.testinfo.show()
-        self.mypicthread.start(self.ui.modeBox_1.currentText())
+        self.mypicthread.setType(self.ui.modeBox_1.currentText())
+        self.mypicthread.start()
         print("test start!")
 
     """
