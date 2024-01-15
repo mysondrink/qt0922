@@ -1,7 +1,7 @@
 import math
 import operator
 import time
-import random
+
 import numpy
 import numpy as np
 import cv2 as cv
@@ -171,22 +171,38 @@ class Image_Processing:
         return min_value
 
     #   1.9 过敏原性质判定
-    def nature_positive_negative(self, g_arr, n_arr):
+    def nature_positive_negative(self, g_arr, n_arr, comb):
         #   删除矩阵第一行数据
         g_arr = np.delete(g_arr, 0, axis=0)
-        for i in range(8):
-            for j in range(5):
-                if (i % 2 == 0 and j % 2 == 0) or (i % 2 == 1 and j % 2 == 1):
-                    if g_arr[i][j] < 60000:
-                        n_arr[i][j] = "阴性"
-                    elif g_arr[i][j] < 660000:
-                        n_arr[i][j] = "弱阳性"
-                    elif g_arr[i][j] < 1100000:
-                        n_arr[i][j] = "中阳性"
-                    elif g_arr[i][j] > 1100000:
-                        n_arr[i][j] = "强阳性"
-                    else:
-                        n_arr[i][j] = "error"
+        if comb == "检测组合A" or comb == "检测组合B" or comb == "检测组合C":
+            for i in range(8):
+                for j in range(5):
+                    if (i % 2 == 0 and j % 2 == 0) or (i % 2 == 1 and j % 2 == 1):
+                        if g_arr[i][j] < 60000:
+                            n_arr[i][j] = "阴性"
+                        elif g_arr[i][j] < 660000:
+                            n_arr[i][j] = "弱阳性"
+                        elif g_arr[i][j] < 1100000:
+                            n_arr[i][j] = "中阳性"
+                        elif g_arr[i][j] > 1100000:
+                            n_arr[i][j] = "强阳性"
+                        else:
+                            n_arr[i][j] = "error"
+        elif comb == "检测组合D":
+            for i in range(8):
+                for j in range(5):
+                    if (i % 2 == 0 and j % 2 == 1) or (i % 2 == 1 and j % 2 == 0):
+                        if g_arr[i][j] < 60000:
+                            n_arr[i][j] = "阴性"
+                        elif g_arr[i][j] < 660000:
+                            n_arr[i][j] = "弱阳性"
+                        elif g_arr[i][j] < 1100000:
+                            n_arr[i][j] = "中阳性"
+                        elif g_arr[i][j] > 1100000:
+                            n_arr[i][j] = "强阳性"
+                        else:
+                            n_arr[i][j] = "error"
+                    print(g_arr[0][1])
         return n_arr
 
     #   2.1 获取图像，并进行灰度化
@@ -585,11 +601,13 @@ class Image_Processing:
             return point_x, point_y, dis_error, cir_out_x, cir_out_y
 
     #   4.1 获取试剂点灰度值
-    def img_get_gray(self, img_rota, gray_aver, nature_aver, circle_x, circle_y, point_x, point_y, dis_error, radius):
+    def img_get_gray(self, img_rota, gray_aver, nature_aver, circle_x, circle_y, point_x, point_y, dis_error, radius,
+                     combina):
         #   获取试剂点的灰度值
         img_array = np.transpose(np.array(img_rota))
         print("定位点X轴：", circle_x)
         print("定位点X轴：", circle_y)
+        #   获取定位点的灰度值
         for i in range(3):
             print("定位点:", i + 1, circle_x[i], circle_y[i])
             cv.circle(img_rota, (int(circle_x[i]), int(circle_y[i])), radius, (0, 0, 0), 10)
@@ -597,20 +615,23 @@ class Image_Processing:
         gray_aver[0][4] = gray_aver[0][2]
         gray_aver[0][2] = gray_aver[0][1]
         gray_aver[0][1] = 0
+        #   获取试剂点的灰度值
         for i in range(5):
             for j in range(8):
                 cv.circle(img_rota, (int(point_x[i] + j * (dis_error / 8)), point_y[j]), radius, (0, 0, 0), 10)
                 gray_aver[j + 1][i] = self.__sum_gray(img_array, int(point_x[i] + j * (dis_error / 8)), point_y[j],
                                                       radius)
+        #   获取灰度最小灰度值
         min_blackgrand_value = self.find_min_value(gray_aver)
+        #   减去最小灰度值，变成规定的灰度值
         gray_aver = gray_aver - min_blackgrand_value
-
-        nature_aver = self.nature_positive_negative(gray_aver, nature_aver)
+        #   输出各个试剂点的灰度值
+        nature_aver = self.nature_positive_negative(gray_aver, nature_aver, combina)
 
         return gray_aver, nature_aver, img_rota, 1
 
     #   5 图像处理全流程
-    def process(self, path_read, path_write, radius):
+    def process(self, path_read, path_write, combina, radius):
         #   0 前期准备
         print("_______________________________________________")
         print("0    前期参数设置")
@@ -618,7 +639,7 @@ class Image_Processing:
         start = time.perf_counter()
         #   参数设置
         gray_aver = np.zeros((9, 5), dtype=int)  # 输出参数
-        nature_aver = np.zeros((8, 5))
+        nature_aver = np.zeros((8, 5), dtype=int)
         nature_aver = nature_aver.astype(str)
         #   获取图像
         img_ori = self.img_read(path_read)
@@ -691,7 +712,8 @@ class Image_Processing:
         #   开始时间
         start = time.perf_counter()
         gray_aver, nature_aver, img_rota, judge_1 = self.img_get_gray(img_rota, gray_aver, nature_aver, locat_x,
-                                                                      locat_y, point_x, point_y, dis_error, radius)
+                                                                      locat_y, point_x, point_y, dis_error, radius,
+                                                                      combina)
 
         font = cv.FONT_HERSHEY_SIMPLEX
         img_rota = cv.putText(img_rota, "Gray_Threshold: %s" % (self.gray_value), (50, 120), font, 3, (255, 255, 255),
@@ -704,13 +726,9 @@ class Image_Processing:
 
         cv.imwrite(path_write + 'img_final.jpeg', img_rota)
         self.img_resize(path_write + 'img_final.jpeg', path_write + "img_show_final.jpeg")
-
-        delay = random.randint(1, 199999999)
-        print("设定延时时间 %.4f" % (delay / 100000000))
         #   结束时间
         end = time.perf_counter()
         print("4    时间消耗：%.2f s" % (end - start))
-
 
         print(gray_aver)
         print(nature_aver)
@@ -723,4 +741,10 @@ if __name__ == '__main__':
         roi_position=roi_position
     )
 
-    imgPro.process(path_read='picture/2-1.jpeg', path_write='./img_out/', radius=40)
+    #   开始时间
+    # start = time.perf_counter()
+
+    imgPro.process(path_read='picture/2-1.jpeg', path_write='./img_out/', combina="检测组合A", radius=40)
+    #   结束时间
+    # end = time.perf_counter()
+    # print("0    图像获取——完成——初始化参数  时间消耗：%.2f s" % (end - start))

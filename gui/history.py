@@ -89,7 +89,7 @@ class Ui_Form(object):
 "QCalendarWidget QSpinBox::down-arrow\n"
 " { width:56px;  height:56px; }")
         self.dateBox.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
-        self.dateBox.setDateTime(QDateTime(QDate(2019, 12, 25), QTime(16, 0, 0)))
+        self.dateBox.setDateTime(QDateTime(QDate(2019, 12, 25), QTime(8, 0, 0)))
         self.label_2 = QLabel(self.page)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(20, 80, 136, 67))
@@ -307,7 +307,7 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u5386\u53f2\u8bb0\u5f55\u67e5\u8be2", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"\u65f6\u95f4*", None))
-        self.label.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u578b\u53f7*", None))
+        self.label.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u7ec4\u5408*", None))
         self.label_4.setText(QCoreApplication.translate("Form", u"\u9001\u68c0\u533b\u751f", None))
         self.label_5.setText(QCoreApplication.translate("Form", u"\u79d1\u5ba4", None))
         self.picLabel.setText("")

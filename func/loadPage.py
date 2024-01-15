@@ -85,7 +85,8 @@ class loadPage(Ui_Form, QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFocusPolicy(Qt.NoFocus)
-
+        self.ui.centerframe.setFrameStyle(QFrame.NoFrame)
+        self.ui.topframe.setFrameStyle(QFrame.NoFrame)
         screen = QDesktopWidget().screenGeometry()
         self.move(screen.left(), screen.top())
         self.showMaximized()

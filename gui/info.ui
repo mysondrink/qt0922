@@ -364,7 +364,7 @@ QComboBox QAbstractItemView {
     <widget class="QTableWidget" name="tableWidget">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>15</x>
        <y>0</y>
        <width>771</width>
        <height>370</height>

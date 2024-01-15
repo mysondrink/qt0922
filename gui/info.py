@@ -214,7 +214,7 @@ class Ui_Form(object):
         self.page_3.setObjectName(u"page_3")
         self.tableWidget = QTableWidget(self.page_3)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(10, 0, 771, 370))
+        self.tableWidget.setGeometry(QRect(15, 0, 771, 370))
         self.tableWidget.setStyleSheet(u"QTableWidget{\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color:rgb(255,255,255);\n"
