@@ -223,13 +223,15 @@ class testPage(Ui_Form, QWidget):
         self.global_allergen = allergen
         allergen_table_model = QStandardItemModel(row + 1, column)
         self.ui.tableView.setModel(allergen_table_model)
-        for k in range(column):
-            if k % 2 == 0:
-                color = QColor(255, 255, 127)
-                item = QStandardItem()
-                item.setData(color, Qt.BackgroundColorRole)
-                item.setTextAlignment(Qt.AlignCenter)
-                allergen_table_model.setItem(0, k, item)
+
+        coordinates = [(0, 0), (0, 2), (0, 4), (8, 0), (8, 4)]
+        for coord in coordinates:
+            color = QColor(255, 255, 127)
+            item = QStandardItem()
+            item.setData(color, Qt.BackgroundColorRole)
+            item.setTextAlignment(Qt.AlignCenter)
+            allergen_table_model.setItem(coord[0], coord[1], item)
+
         if f_name == "D":
             num = 0
             for i in range(1, row + 1):
@@ -332,7 +334,13 @@ class testPage(Ui_Form, QWidget):
         self.ui.photoLabel.setText(cur_time)
         time_now = msg
         try:
-            gray_aver, nature_aver, gray_aver_str, nature_aver_str = self.mypicthread.getGrayAver()
+            judge_flag, gray_aver, nature_aver, gray_aver_str, nature_aver_str = self.mypicthread.getGrayAver()
+            if judge_flag != 1:
+                self.testinfo.closeWin()
+                m_title = ""
+                m_info = "本次检测结果无效，建议重新进行检测"
+                infoMessage(m_info, m_title)
+                return
             # gray_row = len(_matrix) - 1
             # gray_column = len(_matrix[0])
             # point_list = _matrix[0]

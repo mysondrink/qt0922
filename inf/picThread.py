@@ -81,7 +81,7 @@ class MyPicThread(QThread):
         #                                       path_write=frozen.app_path() + r'/inf/img_out/', reagent=(8, 5),
         #                                       radius=40)
         item_type = "检测组合" + self.item_type
-        flag, self.gray_aver, self.nature_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
+        judge_flag, self.gray_aver, self.nature_aver = self.imgPro.process(path_read=frozen.app_path() + r'/inf/picture/' + time_now + '.jpeg',
                                                                      path_write=frozen.app_path() + r'/inf/img_out/', combina=item_type, radius=40)
         w, h = self.nature_aver.shape
         print(w, h)
@@ -105,12 +105,13 @@ class MyPicThread(QThread):
         # print(self.gray_aver_str)
         print("finished!")
         self.finished.emit(time_now)
+        self.judge_flag = judge_flag
 
     """
     @detail 获取图片pixel信息
     """     
     def getGrayAver(self):
-        return self.gray_aver, self.nature_aver, self.gray_aver_str, self.nature_aver_str
+        return self.judge_flag, self.gray_aver, self.nature_aver, self.gray_aver_str, self.nature_aver_str
     
     def setType(self, item_type):
         self.item_type = item_type
