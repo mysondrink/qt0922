@@ -100,7 +100,7 @@ class clearPage(Ui_Form, QWidget):
         mem_total = memorystr.bytesTotal() / (1024 * 1024 * 1024)
         mem_avail = memorystr.bytesAvailable() / (1024 * 1024 * 1024)
         mem_progress = (1 - (mem_avail / mem_total)) * 100
-        print('mem_progress:', mem_progress)
+        print('mem_progress page:', mem_progress)
         self.ui.clearBar.setValue(int(mem_progress))
 
     """
@@ -182,7 +182,7 @@ class clearPage(Ui_Form, QWidget):
         elif dict_mode.get(self.ui.clearCb.currentText()) == 4:
             now_time = None
         self.myClearThread = ClearThread(str(now_time)[:10])
-        self.myClearThread.finished.connect(self.myClearThread.deleteLater())
+        self.myClearThread.finished.connect(self.myClearThread.deleteLater)
         self.myClearThread.finished.connect(self.getInfo)
         self.myClearThread.start()
 

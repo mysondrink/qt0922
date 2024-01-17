@@ -240,6 +240,7 @@ class loadPage(Ui_Form, QMainWindow):
                 self.list_widget.remove(self.list_widget[1])
                 self.p_ptr -= 1
                 temp.close()
+                return
             # if num > 1:
             #     self._s.removeWidget(self.list_widget[0])
             #     self.list_widget.remove(self.list_widget[0])

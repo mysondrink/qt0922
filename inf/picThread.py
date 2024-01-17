@@ -99,8 +99,8 @@ class MyPicThread(QThread):
                 #     self.antibody_test_results.append(self.nature_aver[i][j])
         # print(self.gray_aver)
         # print(self.nature_aver)
-        for k in range(h):
-            self.gray_aver_str += "," + str(self.gray_aver[w][k])
+        # for k in range(h):
+        #     self.gray_aver_str += "," + str(self.gray_aver[w][k])
         # print(self.nature_aver_str)
         # print(self.gray_aver_str)
         print("finished!")

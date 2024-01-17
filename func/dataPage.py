@@ -187,7 +187,7 @@ class dataPage(Ui_Form, QWidget):
             self.point_list = self.data['point_str']
             gray_row = self.data['gray_row']
             gray_column = self.data['gray_column']
-            gray_aver = self.data['gray_aver']
+            gray_aver = self.data['gray_aver'][1:]
             for i in range(self.row_exetable + int(self.row_exetable / 2)):
                 if i % 3 != 0:
                     for j in range(self.column_exetable):
@@ -457,7 +457,7 @@ class dataPage(Ui_Form, QWidget):
     @detail 数据展示
     """
     def showDataView(self, data):
-        title_list = ["定位点", "", "定位点", "", "定位点"]
+        title_list = ["定位点", "", "", "", "定位点"]
         data_copy = re.split(r",", data)
         data_copy = title_list + data_copy
         row = self.pix_table_model_copy.rowCount()
@@ -489,6 +489,7 @@ class dataPage(Ui_Form, QWidget):
         Data_Nature = matrix_gray_aver
         Data_Light = matrix_nature_aver
         myEm5822_Print = Em5822_Print()
+        
         myEm5822_Print.em5822_print(Data_Base, Data_Nature, Data_Light)
         m_title = ""
         m_info = "输出表格成功!"

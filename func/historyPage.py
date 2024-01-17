@@ -64,7 +64,7 @@ class historyPage(Ui_Form, QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.dateBox.setCalendarPopup(True)
         self.ui.dateBox.setDateTime(QDateTime.currentDateTime())
-        self.ui.historyTable.horizontalHeader().close()
+        # self.ui.historyTable.horizontalHeader().close()
         self.ui.historyTable.verticalHeader().close()
 
         self.setFocusWidget()
@@ -76,7 +76,8 @@ class historyPage(Ui_Form, QWidget):
         self.ui.btnDownload.hide()
         self.ui.btnPrint.hide()
         self.ui.btnReport.hide()
-        self.setReagentCb()
+        self.setAllergenCb()
+        # self.setReagentCb()
         self.setTableWidget()
 
     """
@@ -466,6 +467,19 @@ class historyPage(Ui_Form, QWidget):
         connection.close()
         self.testinfo.closeWin()
 
+    def setAllergenCb(self):
+        # 指定要读取的路径
+        path = frozen.app_path() + r"/res/allergen/"
+        # path = r"/res/allergen/"
+        # 获取指定路径下的所有文件名
+        filenames = os.listdir(path)
+        self.ui.modeBox_3.clear()
+        # 输出所有文件名
+        for filename in filenames:
+            # self.ui.modeBox_3.clear()
+            self.ui.modeBox_3.addItem(filename)
+            self.ui.modeBox_3.setCurrentIndex(-1)
+
     """
     @detail 获取试剂卡的信息
     """
@@ -643,20 +657,23 @@ class historyPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnPrint_clicked(self):
-        reagent_id = self.ui.historyTable.currentIndex().row() + self.page_size * self.current_page
-
         time_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # detailwin = childWindow(self.reagent_info[reagent_id], self.time_list[reagent_id], time_now)
-        # reagent_info = self.reagent_info[reagent_id]
-        test_time = self.time_list[reagent_id]
-
-        myEm5822_Print = Em5822_Print(test_time, time_now)
-        myEm5822_Print.em5822_print()
-        # myEm5822_Print = Em5822_Print()
-        # myEm5822_Print.em5822_print(test_time, time_now)
+        test_time = self.test_time
+        Data_Base = [self.data['patient_name'], self.data['patient_gender'], self.data['patient_id'],
+                    self.data['code_num'], '检测组合' + self.data['item_type'], test_time, time_now]
+        gray_aver_str = self.data['gray_aver_str'].split(",")[1:]
+        nature_aver_str = self.data['nature_aver_str'].split(",")[1:]
+        array_gray_aver = np.array(gray_aver_str)
+        array_nature_aver = np.array(nature_aver_str)
+        matrix_gray_aver = array_gray_aver.reshape(9, 5)
+        matrix_nature_aver = array_nature_aver.reshape(9, 5)
+        Data_Nature = matrix_gray_aver
+        Data_Light = matrix_nature_aver
+        myEm5822_Print = Em5822_Print()
+        myEm5822_Print.em5822_print(Data_Base, Data_Nature, Data_Light)
         m_title = ""
         m_info = "输出表格成功!"
-        infoMessage(m_title, m_info, 300)
+        infoMessage(m_info, m_title, 300)
 
     """
     @detail 报告单按钮操作

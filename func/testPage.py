@@ -69,11 +69,13 @@ class testPage(Ui_Form, QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.stackedWidget.setCurrentIndex(0)
+        self.ui.radioButton_2.setChecked(True)
+        self.ui.typeLabel.setText("8x5")
         self.genderCb = QButtonGroup()
         self.genderCb.addButton(self.ui.radioButton)
         self.genderCb.addButton(self.ui.radioButton_2)
-        self.genderCb.setId(self.ui.radioButton, 0)
-        self.genderCb.setId(self.ui.radioButton_2, 1)
+        self.genderCb.setId(self.ui.radioButton, 1)
+        self.genderCb.setId(self.ui.radioButton_2, 2)
         self.ui.exeTable.horizontalHeader().close()
         self.ui.exeTable.verticalHeader().close()
 
@@ -129,10 +131,11 @@ class testPage(Ui_Form, QWidget):
     @detail 测试信息
     """
     def mytest(self):
-        self.ui.nameLine.setText("123")
-        self.ui.docCb.setText("123")
-        self.ui.ageLine.setText("123")
-        self.ui.departCb.setText("123")
+        name_list = ["佚名", "00", "检验", "佚名"]
+        self.ui.nameLine.setText(name_list[0])
+        self.ui.docCb.setText(name_list[4])
+        self.ui.ageLine.setText(name_list[1])
+        self.ui.departCb.setText(name_list[2])
 
     """
     @detail 安装事件监听
@@ -224,7 +227,7 @@ class testPage(Ui_Form, QWidget):
         allergen_table_model = QStandardItemModel(row + 1, column)
         self.ui.tableView.setModel(allergen_table_model)
 
-        coordinates = [(0, 0), (0, 2), (0, 4), (8, 0), (8, 4)]
+        coordinates = [(0, 0), (0, 4), (8, 0), (8, 4)]
         for coord in coordinates:
             color = QColor(255, 255, 127)
             item = QStandardItem()
@@ -237,13 +240,20 @@ class testPage(Ui_Form, QWidget):
             for i in range(1, row + 1):
                 for j in range(column - 1):
                     if (i * column + j) % 2 == 0 and num < len(allergen):
-                        color = QColor(0, 255, 0)
-                        # print(allergen[num])
-                        item = QStandardItem(allergen[num])
-                        item.setData(color, Qt.BackgroundColorRole)
-                        item.setTextAlignment(Qt.AlignCenter)
-                        allergen_table_model.setItem(i, j, item)
+                        if allergen[num] != "":
+                            color = QColor(0, 255, 0)
+                            # print(allergen[num])
+                            item = QStandardItem(allergen[num])
+                            item.setData(color, Qt.BackgroundColorRole)
+                            item.setTextAlignment(Qt.AlignCenter)
+                            allergen_table_model.setItem(i, j, item)
                         num = num + 1
+            # special:
+            color = QColor(0, 255, 0)
+            item = QStandardItem("总lgE")
+            item.setData(color, Qt.BackgroundColorRole)
+            item.setTextAlignment(Qt.AlignCenter)
+            allergen_table_model.setItem(2, 4, item)
         else:
             num = 0
             for i in range(1, row + 1):
@@ -274,8 +284,6 @@ class testPage(Ui_Form, QWidget):
     @detail 设置表格内容，主要是过敏原信息
     """
     def setTableView(self):
-        # 测试
-        self.ui.typeLabel.setText("8x5")
         # 设置行列
         # 需要改进
         if self.ui.modeBox_1.currentIndex() == -1:
@@ -397,10 +405,11 @@ class testPage(Ui_Form, QWidget):
         patient_name = self.ui.nameLine.text()
         patient_age = self.ui.ageLine.text()
         id_num = self.genderCb.checkedId()
-        if id_num == 0:
-            patient_gender = "男"
-        else:
-            patient_gender = "女"
+        patient_gender = "男" if id_num == 1 else "女"
+        # if id_num == 1:
+        #     patient_gender = "男"
+        # else:
+        #     patient_gender = "女"
 
         # patient_gender = self.ui.genderCb.currentText()
 
@@ -719,8 +728,8 @@ class testPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnConfirm_clicked(self):
-        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine == "" or self.ui.ageLine == "" \
-                or self.ui.departCb == "" or self.ui.docCb == "":
+        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine.text() == "" or self.ui.ageLine.text() == "" \
+                or self.ui.departCb.text() == "" or self.ui.docCb.text() == "":
             m_title = ""
             m_info = "请填写完信息！"
             infoMessage(m_info, m_title, 280)
