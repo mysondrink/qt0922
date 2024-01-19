@@ -25,7 +25,7 @@ from func.dataPage import dataPage
 from inf.logThread import LogThread
 from func.perPage import perPage
 from func.perinfoPage import perinfoPage
-from func.newDataPage import newDataPage
+# from func.newDataPage import newDataPage
 
 flag_num = 0
 failed_code = 404

@@ -1,12 +1,13 @@
 # created by xiao 
 import sys
-from func.loadPage import *
-from func.testPage import *
+from PySide2.QtWidgets import QApplication
+from func.newDataPage import NewDataPage
+# from func.loadPage import loadPage
 
 
 def main():
     app = QApplication()
-    w = loadPage()
+    w = NewDataPage()
     w.show()
     sys.exit(app.exec_())
 

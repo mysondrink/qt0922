@@ -137,7 +137,7 @@ class clearPage(Ui_Form, QWidget):
     @detail 清理结果处理，同时设置进度条显示
     @detail 槽函数
     """
-    def getInfo(self, msg):
+    def getInfo(self):
         self.setClearBar()
         m_title = "确认"
         m_title = ""
@@ -151,15 +151,6 @@ class clearPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnConfirm_clicked(self):
-        # pic_path = frozen.app_path() + "/img/"
-        # root_list = []
-        # dirs_list = []
-        # files_list = []
-        # for root, dirs, files in os.walk(pic_path):
-        #     root_list.append(root)
-        #     dirs_list.append(dirs)
-        #     files_list.append(files)
-
         if self.ui.clearCb.currentIndex() == -1:
             m_title = "错误"
             m_title = ""
@@ -190,8 +181,8 @@ class clearPage(Ui_Form, QWidget):
             # self.deleteDirs(str(now_time)[:10], root_list)
         elif dict_mode.get(self.ui.clearCb.currentText()) == 4:
             now_time = None
-        self.myClearThread = ClearThread(now_time)
-        self.myClearThread.finished.connect(self.myClearThread.deleteLater())
+        self.myClearThread = ClearThread(str(now_time)[:10])
+        self.myClearThread.finished.connect(self.myClearThread.deleteLater)
         self.myClearThread.finished.connect(self.getInfo)
         self.myClearThread.start()
 

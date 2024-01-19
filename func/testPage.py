@@ -233,25 +233,34 @@ class testPage(Ui_Form, QWidget):
         self.global_allergen = allergen
         allergen_table_model = QStandardItemModel(row + 1, column)
         self.ui.tableView.setModel(allergen_table_model)
-        for k in range(column):
-            if k % 2 == 0:
-                color = QColor(255, 255, 127)
-                item = QStandardItem()
-                item.setData(color, Qt.BackgroundColorRole)
-                item.setTextAlignment(Qt.AlignCenter)
-                allergen_table_model.setItem(0, k, item)
+
+        coordinates = [(0, 0), (0, 2), (0, 4), (8, 0), (8, 4)]
+        for coord in coordinates:
+            color = QColor(255, 255, 127)
+            item = QStandardItem()
+            item.setData(color, Qt.BackgroundColorRole)
+            item.setTextAlignment(Qt.AlignCenter)
+            allergen_table_model.setItem(coord[0], coord[1], item)
+
         if f_name == "D":
             num = 0
             for i in range(1, row + 1):
                 for j in range(column - 1):
                     if (i * column + j) % 2 == 0 and num < len(allergen):
-                        color = QColor(0, 255, 0)
-                        # print(allergen[num])
-                        item = QStandardItem(allergen[num])
-                        item.setData(color, Qt.BackgroundColorRole)
-                        item.setTextAlignment(Qt.AlignCenter)
-                        allergen_table_model.setItem(i, j, item)
+                        if allergen[num] != "":
+                            color = QColor(0, 255, 0)
+                            # print(allergen[num])
+                            item = QStandardItem(allergen[num])
+                            item.setData(color, Qt.BackgroundColorRole)
+                            item.setTextAlignment(Qt.AlignCenter)
+                            allergen_table_model.setItem(i, j, item)
                         num = num + 1
+            # special:
+            color = QColor(0, 255, 0)
+            item = QStandardItem("总lgE")
+            item.setData(color, Qt.BackgroundColorRole)
+            item.setTextAlignment(Qt.AlignCenter)
+            allergen_table_model.setItem(2, 4, item)
         else:
             num = 0
             for i in range(1, row + 1):
@@ -267,7 +276,7 @@ class testPage(Ui_Form, QWidget):
 
     def setAllergenCb(self):
         # 指定要读取的路径
-        path = frozen.app_path() + r"\\res\\allergen\\"
+        path = frozen.app_path() + r"/res/allergen/"
         # path = r"/res/allergen/"
         # 获取指定路径下的所有文件名
         filenames = os.listdir(path)
@@ -747,8 +756,8 @@ class testPage(Ui_Form, QWidget):
 
     @Slot()
     def on_btnConfirm_clicked(self):
-        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine == "" or self.ui.ageLine == "" \
-                or self.ui.departCb == "" or self.ui.docCb == "":
+        if self.ui.modeBox_1.currentIndex() == -1 or self.ui.nameLine.text() == "" or self.ui.ageLine.text() == "" \
+                or self.ui.departCb.text() == "" or self.ui.docCb.text() == "":
             m_title = ""
             m_info = "请填写完信息！"
             infoMessage(m_info, m_title, 280)
