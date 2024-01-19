@@ -100,6 +100,7 @@ class CheckUSBThread(QThread):
         dirs.makedir(save_dir)
         filename = str(int((len(os.listdir(save_dir)) - 1)/2) + 1).zfill(4)
         save_path = save_dir + timenow + ".csv"
+        save_path = save_dir + timenow + ".xlsx"
         dirs.makedir(save_path)
         save_img_path_1 = save_dir + filename + "-" + self.name_pic + "生成图.jpeg"
         save_img_path_2 = save_dir + filename + "-" + self.name_pic + "检疫图.jpeg"
@@ -133,12 +134,13 @@ class CheckUSBThread(QThread):
                 cur_time = test_time[0] + ' ' + test_time[1]
                 code_num = self.data['code_num']
                 doctor = self.data['doctor']
-                reagent_type = self.data['item_type']
+                reagent_type = "检测组合" + self.data['item_type']
                 reagent_matrix = self.data['matrix']
                 name = self.data['name']
                 gender = self.data['gender']
                 age = self.data['age']
                 reagent_matrix_info = self.allergy_info
+                reagent_matrix_info_copy = reagent_matrix_info
                 if type(reagent_matrix_info) == str:
                     reagent_matrix_info = reagent_matrix_info.split(',')[1:]
                 row = reagent_matrix[0]
@@ -148,30 +150,32 @@ class CheckUSBThread(QThread):
                     "阵列", "病人名", "病人性别", "病人年龄", "数据"]
                 v = [id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
                     reagent_matrix, name, gender, age, reagent_matrix_info]
+                v_2 = [id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
+                    reagent_matrix, name, gender, age, reagent_matrix_info_copy]
                 data = dict(zip(k, v))
+                data_2 = dict(zip(k, v_2))
                 dataframe = pd.DataFrame(data)
-                info_data = dataframe['数据'].str.split(',', expand=True)
+                datatwo = pd.DataFrame(data_2)
+                info_data = dataframe['数据'].str.split(',', expand=True) # 将list数据分割
                 dataframe = dataframe[:1].drop(columns='数据')
                 newdata = pd.merge(dataframe, info_data, left_index=True, right_index=True, how='outer')
-                # dataframe = pd.DataFrame([[id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
-                #                                reagent_matrix, name, gender, age, allergy_info]], 
-                #                                columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
-                #                                         "阵列", "病人名", "病人性别", "病人年龄", "数据"])
                 datanone = pd.DataFrame([['', '', '', '', '', '', '', '', '', '', '']], 
                                         columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
                                                  "阵列", "病人名", "病人性别", "病人年龄", "数据"])
                 if os.path.exists(save_path):
                     new_data = pd.concat([newdata, datanone], axis=0)
-                    new_data.to_csv(save_path, mode='a', encoding='utf-8-sig', index=False, header=False)
-                    # with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
-                    # # 覆盖
-                    #     new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
+                    # new_data.to_csv(save_path, mode='a', encoding='utf-8-sig', index=False, header=False)
+                    with pd.ExcelWriter(save_path, mode='a', engine='openpyxl', if_sheet_exists='overlay') as writer:
+                    # 追加
+                        new_data.to_excel(writer, sheet_name='Sheet1', index=False, header=False)
+                        datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=False)
                 else:
                     new_data = pd.concat([newdata, datanone], axis=0)
-                    new_data.to_csv(save_path, mode='w', encoding='utf-8-sig', index=False)
-                    # with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
-                    # # 新建
-                    #     new_data.to_excel(writer, sheet_name='sheet-1', index=False, engine='openpyxl')
+                    # new_data.to_csv(save_path, mode='w', encoding='utf-8-sig', index=False)
+                    with pd.ExcelWriter(save_path, mode='w', engine='openpyxl') as writer:
+                    # 新建
+                        new_data.to_excel(writer, sheet_name='Sheet1', index=False)
+                        datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=k)
             except Exception as e:
                 self.update_json.emit(failed_code)
                 return
