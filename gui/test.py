@@ -65,7 +65,7 @@ class Ui_Form(object):
 "")
         self.btnSwitch = QPushButton(self.frame)
         self.btnSwitch.setObjectName(u"btnSwitch")
-        self.btnSwitch.setGeometry(QRect(275, 10, 254, 80))
+        self.btnSwitch.setGeometry(QRect(404, 10, 187, 80))
         self.btnSwitch.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -78,8 +78,21 @@ class Ui_Form(object):
 "")
         self.btnPrint = QPushButton(self.frame)
         self.btnPrint.setObjectName(u"btnPrint")
-        self.btnPrint.setGeometry(QRect(10, 10, 254, 80))
+        self.btnPrint.setGeometry(QRect(207, 10, 187, 80))
         self.btnPrint.setStyleSheet(u"QPushButton {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:#05abc2;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(255, 0, 0);\n"
+"}\n"
+"")
+        self.btnDownload = QPushButton(self.frame)
+        self.btnDownload.setObjectName(u"btnDownload")
+        self.btnDownload.setGeometry(QRect(10, 10, 187, 80))
+        self.btnDownload.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color:#05abc2;\n"
@@ -159,7 +172,8 @@ class Ui_Form(object):
         self.label_7 = QLabel(self.page)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setGeometry(QRect(20, 110, 140, 27))
-        self.label_7.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.label_7.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";\n"
+"")
         self.pushButton_3 = QPushButton(self.page)
         self.pushButton_3.setObjectName(u"pushButton_3")
         self.pushButton_3.setEnabled(False)
@@ -258,7 +272,7 @@ class Ui_Form(object):
         self.page_2.setObjectName(u"page_2")
         self.exeTable = QTableView(self.page_2)
         self.exeTable.setObjectName(u"exeTable")
-        self.exeTable.setGeometry(QRect(10, 0, 771, 350))
+        self.exeTable.setGeometry(QRect(15, 0, 771, 350))
         self.exeTable.setStyleSheet(u"#exeTable{\n"
 "	font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -269,7 +283,6 @@ class Ui_Form(object):
 "    font: 20pt \"\u5b8b\u4f53\";\n"
 "	color: rgb(255, 255, 255);\n"
 "	background-color: rgb(0,0,0);\n"
-"	align: center;\n"
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
@@ -280,27 +293,67 @@ class Ui_Form(object):
         self.stackedWidget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
-        self.pic_info_label = QLabel(self.page_3)
-        self.pic_info_label.setObjectName(u"pic_info_label")
-        self.pic_info_label.setGeometry(QRect(30, 10, 91, 31))
-        self.pic_info_label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.photoLabel = QLabel(self.page_3)
         self.photoLabel.setObjectName(u"photoLabel")
-        self.photoLabel.setGeometry(QRect(230, 10, 351, 331))
+        self.photoLabel.setGeometry(QRect(440, 0, 350, 350))
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.photoLabel.sizePolicy().hasHeightForWidth())
         self.photoLabel.setSizePolicy(sizePolicy1)
-        self.photoLabel.setMinimumSize(QSize(351, 331))
-        self.photoLabel.setMaximumSize(QSize(351, 331))
-        self.photoLabel.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";")
+        self.photoLabel.setMinimumSize(QSize(350, 350))
+        self.photoLabel.setMaximumSize(QSize(350, 350))
+        self.photoLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.photoLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.picLabel = QLabel(self.page_3)
+        self.picLabel.setObjectName(u"picLabel")
+        self.picLabel.setGeometry(QRect(10, 0, 350, 350))
+        sizePolicy1.setHeightForWidth(self.picLabel.sizePolicy().hasHeightForWidth())
+        self.picLabel.setSizePolicy(sizePolicy1)
+        self.picLabel.setMinimumSize(QSize(350, 350))
+        self.picLabel.setMaximumSize(QSize(350, 350))
+        self.picLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.picLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.leftLabel = QLabel(self.page_3)
+        self.leftLabel.setObjectName(u"leftLabel")
+        self.leftLabel.setGeometry(QRect(10, 0, 350, 30))
+        self.leftLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
+        self.rightLabel = QLabel(self.page_3)
+        self.rightLabel.setObjectName(u"rightLabel")
+        self.rightLabel.setGeometry(QRect(440, 0, 350, 30))
+        self.rightLabel.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.stackedWidget.addWidget(self.page_3)
+        self.photoLabel.raise_()
+        self.picLabel.raise_()
+        self.rightLabel.raise_()
+        self.leftLabel.raise_()
+        self.page_4 = QWidget()
+        self.page_4.setObjectName(u"page_4")
+        self.tableView = QTableView(self.page_4)
+        self.tableView.setObjectName(u"tableView")
+        self.tableView.setGeometry(QRect(15, 0, 771, 350))
+        self.tableView.setStyleSheet(u"QTableView {\n"
+"	font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:rgb(255,255,255);\n"
+"}\n"
+"\n"
+"QComboBox {\n"
+"    font: 20pt \"\u5b8b\u4f53\";\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(0,0,0);\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"	background-color: rgb(0, 0, 0);/*\u80cc\u666f\u989c\u8272*/\n"
+"    padding: 1px 2px 1px 2px;  /*\u9488\u5bf9\u4e8e\u7ec4\u5408\u6846\u4e2d\u7684\u6587\u672c\u5185\u5bb9*/\n"
+"	color: rgb(255,255,255)\n"
+"}")
+        self.stackedWidget.addWidget(self.page_4)
 
         self.retranslateUi(Form)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -313,25 +366,28 @@ class Ui_Form(object):
         self.btnExe.setText(QCoreApplication.translate("Form", u"\u5feb\u901f\u6d4b\u8bd5", None))
         self.btnSwitch.setText(QCoreApplication.translate("Form", u"\u5207\u6362", None))
         self.btnPrint.setText(QCoreApplication.translate("Form", u"\u6253\u5370", None))
+        self.btnDownload.setText(QCoreApplication.translate("Form", u"\u4e0b\u8f7d", None))
         self.label_4.setText(QCoreApplication.translate("Form", u"\u6279\u6b21\u7f16\u53f7", None))
         self.pushButton_2.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u4fe1\u606f", None))
         self.label_11.setText(QCoreApplication.translate("Form", u"\u9001\u68c0\u533b\u751f*", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u9879\u76ee", None))
         self.label_10.setText(QCoreApplication.translate("Form", u"\u79d1\u5ba4*", None))
         self.label_6.setText(QCoreApplication.translate("Form", u"\u59d3\u540d*", None))
-        self.label_7.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u89c4\u683c", None))
+        self.label_7.setText(QCoreApplication.translate("Form", u"\u89c4\u683c", None))
         self.pushButton_3.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u4fe1\u606f", None))
         self.pushButton.setText(QCoreApplication.translate("Form", u"\u75c5\u4eba\u4fe1\u606f", None))
         self.label_5.setText("")
         self.label_9.setText(QCoreApplication.translate("Form", u"\u6027\u522b*", None))
-        self.label_3.setText(QCoreApplication.translate("Form", u"\u8bd5\u5242\u5361\u578b\u53f7", None))
+        self.label_3.setText(QCoreApplication.translate("Form", u"\u68c0\u6d4b\u7ec4\u5408", None))
         self.label_2.setText("")
         self.label_8.setText(QCoreApplication.translate("Form", u"\u5e74\u9f84*", None))
         self.label_12.setText(QCoreApplication.translate("Form", u"\u53c2\u6570(\u9009\u586b)", None))
         self.typeLabel.setText("")
         self.radioButton.setText(QCoreApplication.translate("Form", u"\u7537", None))
         self.radioButton_2.setText(QCoreApplication.translate("Form", u"\u5973", None))
-        self.pic_info_label.setText("")
         self.photoLabel.setText("")
+        self.picLabel.setText(QCoreApplication.translate("Form", u"origin_photo", None))
+        self.leftLabel.setText(QCoreApplication.translate("Form", u"TextLabel", None))
+        self.rightLabel.setText(QCoreApplication.translate("Form", u"TextLabel", None))
     # retranslateUi
 

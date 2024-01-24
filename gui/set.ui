@@ -120,7 +120,7 @@ background-color: rgb(255, 0, 0);
 </string>
     </property>
     <property name="text">
-     <string>     定位精度校正</string>
+     <string>      定位精度校正</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
@@ -146,7 +146,7 @@ background-color: rgb(255, 0, 0);
 </string>
     </property>
     <property name="text">
-     <string>     试剂精度校正</string>
+     <string>      试剂精度校正</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">

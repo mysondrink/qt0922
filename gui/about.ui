@@ -34,17 +34,17 @@
    <widget class="QLabel" name="label_36">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>510</x>
       <y>110</y>
-      <width>311</width>
+      <width>221</width>
       <height>60</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+     <string notr="true">font: 20pt &quot;Times New Roman&quot;;</string>
     </property>
     <property name="text">
-     <string>荧光判读仪 C10-1001</string>
+     <string>CIO-1001</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_35">
@@ -159,6 +159,22 @@ background-color: rgb(255, 0, 0);
     </property>
     <property name="text">
      <string>V1.0.1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>110</y>
+      <width>151</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+    </property>
+    <property name="text">
+     <string>荧光分析仪</string>
     </property>
    </widget>
   </widget>

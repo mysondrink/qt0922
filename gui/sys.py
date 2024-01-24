@@ -26,7 +26,7 @@ class Ui_Form(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.wifi_icon_label = QLabel(self.frame)
         self.wifi_icon_label.setObjectName(u"wifi_icon_label")
-        self.wifi_icon_label.setGeometry(QRect(100, 100, 80, 80))
+        self.wifi_icon_label.setGeometry(QRect(100, 50, 80, 80))
         self.wifi_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -39,7 +39,7 @@ class Ui_Form(object):
         self.label.setStyleSheet(u"font: 20pt \"\u5b8b\u4f53\";")
         self.clear_icon_label = QLabel(self.frame)
         self.clear_icon_label.setObjectName(u"clear_icon_label")
-        self.clear_icon_label.setGeometry(QRect(410, 100, 80, 80))
+        self.clear_icon_label.setGeometry(QRect(410, 50, 80, 80))
         self.clear_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -48,7 +48,7 @@ class Ui_Form(object):
 "")
         self.btnSet = QPushButton(self.frame)
         self.btnSet.setObjectName(u"btnSet")
-        self.btnSet.setGeometry(QRect(100, 220, 280, 80))
+        self.btnSet.setGeometry(QRect(100, 160, 280, 80))
         self.btnSet.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -62,7 +62,7 @@ class Ui_Form(object):
 "")
         self.btnClear = QPushButton(self.frame)
         self.btnClear.setObjectName(u"btnClear")
-        self.btnClear.setGeometry(QRect(410, 100, 280, 80))
+        self.btnClear.setGeometry(QRect(410, 50, 280, 80))
         self.btnClear.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -76,7 +76,7 @@ class Ui_Form(object):
 "")
         self.about_icon_label = QLabel(self.frame)
         self.about_icon_label.setObjectName(u"about_icon_label")
-        self.about_icon_label.setGeometry(QRect(410, 220, 80, 80))
+        self.about_icon_label.setGeometry(QRect(100, 270, 80, 80))
         self.about_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -85,7 +85,7 @@ class Ui_Form(object):
 "")
         self.btnWifi = QPushButton(self.frame)
         self.btnWifi.setObjectName(u"btnWifi")
-        self.btnWifi.setGeometry(QRect(100, 100, 280, 80))
+        self.btnWifi.setGeometry(QRect(100, 50, 280, 80))
         self.btnWifi.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -99,7 +99,7 @@ class Ui_Form(object):
 "")
         self.btnAbout = QPushButton(self.frame)
         self.btnAbout.setObjectName(u"btnAbout")
-        self.btnAbout.setGeometry(QRect(410, 220, 280, 80))
+        self.btnAbout.setGeometry(QRect(100, 270, 280, 80))
         self.btnAbout.setStyleSheet(u"QPushButton {\n"
 "font: 20pt \"\u5b8b\u4f53\";\n"
 "border:4px solid rgb(0,0,0);\n"
@@ -113,7 +113,7 @@ class Ui_Form(object):
 "")
         self.camera_icon_label = QLabel(self.frame)
         self.camera_icon_label.setObjectName(u"camera_icon_label")
-        self.camera_icon_label.setGeometry(QRect(100, 220, 80, 80))
+        self.camera_icon_label.setGeometry(QRect(100, 160, 80, 80))
         self.camera_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
 "border:4px solid rgb(0,0,0);\n"
 "background-color: rgb(255, 255, 255);\n"
@@ -133,6 +133,29 @@ class Ui_Form(object):
 "background-color: rgb(255, 0, 0);\n"
 "}\n"
 "")
+        self.btnPer = QPushButton(self.frame)
+        self.btnPer.setObjectName(u"btnPer")
+        self.btnPer.setGeometry(QRect(410, 160, 280, 80))
+        self.btnPer.setStyleSheet(u"QPushButton {\n"
+"font: 20pt \"\u5b8b\u4f53\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color:#05abc2;\n"
+"border-radius: 35px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(255, 0, 0);\n"
+"}\n"
+"")
+        self.per_icon_label = QLabel(self.frame)
+        self.per_icon_label.setObjectName(u"per_icon_label")
+        self.per_icon_label.setGeometry(QRect(410, 160, 80, 80))
+        self.per_icon_label.setStyleSheet(u"font: 20pt \"\u5e7c\u5706\";\n"
+"border:4px solid rgb(0,0,0);\n"
+"background-color: rgb(255, 255, 255);\n"
+"border-radius: 35px;\n"
+"\n"
+"")
         self.label.raise_()
         self.btnSet.raise_()
         self.btnClear.raise_()
@@ -143,6 +166,8 @@ class Ui_Form(object):
         self.clear_icon_label.raise_()
         self.wifi_icon_label.raise_()
         self.btnReturn.raise_()
+        self.btnPer.raise_()
+        self.per_icon_label.raise_()
 
         self.retranslateUi(Form)
 
@@ -161,5 +186,7 @@ class Ui_Form(object):
         self.btnAbout.setText(QCoreApplication.translate("Form", u"  \u5173\u4e8e\u4eea\u5668", None))
         self.camera_icon_label.setText("")
         self.btnReturn.setText(QCoreApplication.translate("Form", u"\u8fd4\u56de", None))
+        self.btnPer.setText(QCoreApplication.translate("Form", u"  \u6743\u9650\u8bbe\u7f6e", None))
+        self.per_icon_label.setText("")
     # retranslateUi
 

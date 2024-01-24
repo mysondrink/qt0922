@@ -35,7 +35,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>100</y>
+      <y>50</y>
       <width>80</width>
       <height>80</height>
      </rect>
@@ -72,7 +72,7 @@ border-radius: 35px;
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>100</y>
+      <y>50</y>
       <width>80</width>
       <height>80</height>
      </rect>
@@ -93,7 +93,7 @@ border-radius: 35px;
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>220</y>
+      <y>160</y>
       <width>280</width>
       <height>80</height>
      </rect>
@@ -119,7 +119,7 @@ background-color: rgb(255, 0, 0);
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>100</y>
+      <y>50</y>
       <width>280</width>
       <height>80</height>
      </rect>
@@ -144,8 +144,8 @@ background-color: rgb(255, 0, 0);
    <widget class="QLabel" name="about_icon_label">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>220</y>
+      <x>100</x>
+      <y>270</y>
       <width>80</width>
       <height>80</height>
      </rect>
@@ -166,7 +166,7 @@ border-radius: 35px;
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>100</y>
+      <y>50</y>
       <width>280</width>
       <height>80</height>
      </rect>
@@ -191,8 +191,8 @@ background-color: rgb(255, 0, 0);
    <widget class="QPushButton" name="btnAbout">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>220</y>
+      <x>100</x>
+      <y>270</y>
       <width>280</width>
       <height>80</height>
      </rect>
@@ -218,7 +218,7 @@ background-color: rgb(255, 0, 0);
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>220</y>
+      <y>160</y>
       <width>80</width>
       <height>80</height>
      </rect>
@@ -260,6 +260,53 @@ background-color: rgb(255, 0, 0);
      <string>返回</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnPer">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>160</y>
+      <width>280</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+font: 20pt &quot;宋体&quot;;
+border:4px solid rgb(0,0,0);
+background-color:#05abc2;
+border-radius: 35px;
+}
+
+QPushButton:pressed{
+background-color: rgb(255, 0, 0);
+}
+</string>
+    </property>
+    <property name="text">
+     <string>  权限设置</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="per_icon_label">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>160</y>
+      <width>80</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;幼圆&quot;;
+border:4px solid rgb(0,0,0);
+background-color: rgb(255, 255, 255);
+border-radius: 35px;
+
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>btnSet</zorder>
    <zorder>btnClear</zorder>
@@ -270,6 +317,8 @@ background-color: rgb(255, 0, 0);
    <zorder>clear_icon_label</zorder>
    <zorder>wifi_icon_label</zorder>
    <zorder>btnReturn</zorder>
+   <zorder>btnPer</zorder>
+   <zorder>per_icon_label</zorder>
   </widget>
  </widget>
  <resources/>
