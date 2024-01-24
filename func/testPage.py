@@ -133,7 +133,7 @@ class testPage(Ui_Form, QWidget):
     def mytest(self):
         name_list = ["佚名", "00", "检验", "佚名"]
         self.ui.nameLine.setText(name_list[0])
-        self.ui.docCb.setText(name_list[4])
+        self.ui.docCb.setText(name_list[3])
         self.ui.ageLine.setText(name_list[1])
         self.ui.departCb.setText(name_list[2])
 
@@ -214,7 +214,7 @@ class testPage(Ui_Form, QWidget):
 
     def setAllergenTableView(self):
         f_name = self.ui.modeBox_1.currentText()
-        path = frozen.app_path() + r"\\res\\allergen\\"
+        path = frozen.app_path() + r"/res/allergen/"
         f = open(path + f_name, "r", encoding="utf-8")
         lines = f.readlines()
         f.close()

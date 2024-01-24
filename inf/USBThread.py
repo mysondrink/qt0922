@@ -4,6 +4,8 @@ import traceback
 import os
 import cv2 as cv
 import pandas as pd
+import time
+import openpyxl
 
 
 import frozen as frozen
@@ -78,6 +80,7 @@ class CheckUSBThread(QThread):
             else:
                 u_name = r"/media/orangepi/" + os.listdir(target_dir)[0] + "/"
         except Exception as e:
+            print(e)
             self.sendException()
             self.update_json.emit(failed_code)
             return
@@ -90,6 +93,7 @@ class CheckUSBThread(QThread):
                 os.system(delete_cmd)
                 return
         except Exception as e:
+            print(e)
             self.sendException()
             self.update_json.emit(failed_code)
             return
@@ -124,6 +128,7 @@ class CheckUSBThread(QThread):
                 img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
                 flag_bool = cv.imwrite(save_img_path_2, img_final)
             except Exception as e:
+                print(e)
                 self.sendException()
                 self.update_json.emit(failed_code + 1)
                 return
@@ -142,41 +147,54 @@ class CheckUSBThread(QThread):
                 reagent_matrix_info = self.allergy_info
                 reagent_matrix_info_copy = reagent_matrix_info
                 if type(reagent_matrix_info) == str:
-                    reagent_matrix_info = reagent_matrix_info.split(',')[1:]
+                    reagent_matrix_info = reagent_matrix_info.split(',')
                 row = reagent_matrix[0]
                 col = int(reagent_matrix[2])
                 reagent_matrix_info = self.split_string(reagent_matrix_info, col)
                 k = ["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
                     "阵列", "病人名", "病人性别", "病人年龄", "数据"]
+                k_2 = ["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
+                    "阵列", "病人名", "病人性别", "病人年龄", "数据", "status"]
+                status = 0
                 v = [id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
                     reagent_matrix, name, gender, age, reagent_matrix_info]
                 v_2 = [id_num, name_pic, cur_time, code_num, doctor, reagent_type, 
-                    reagent_matrix, name, gender, age, reagent_matrix_info_copy]
+                    reagent_matrix, name, gender, age, reagent_matrix_info_copy, status]
                 data = dict(zip(k, v))
-                data_2 = dict(zip(k, v_2))
+                data_2 = dict(zip(k_2, v_2))
                 dataframe = pd.DataFrame(data)
-                datatwo = pd.DataFrame(data_2)
+                datatwo = pd.DataFrame(data_2, index=[0])
                 info_data = dataframe['数据'].str.split(',', expand=True) # 将list数据分割
                 dataframe = dataframe[:1].drop(columns='数据')
                 newdata = pd.merge(dataframe, info_data, left_index=True, right_index=True, how='outer')
-                datanone = pd.DataFrame([['', '', '', '', '', '', '', '', '', '', '']], 
-                                        columns=["序号", "图片名称", "时间", "样本条码", "医生", "类别", 
-                                                 "阵列", "病人名", "病人性别", "病人年龄", "数据"])
                 if os.path.exists(save_path):
-                    new_data = pd.concat([newdata, datanone], axis=0)
-                    # new_data.to_csv(save_path, mode='a', encoding='utf-8-sig', index=False, header=False)
+                    df1 = pd.read_excel(save_path, sheet_name='Sheet1')
+                    row1 = df1.shape[0]	# 获取原数据的行数
+                    df2 = pd.read_excel(save_path, sheet_name='Sheet2')
+                    row2 = df2.shape[0]	# 获取原数据的行数
                     with pd.ExcelWriter(save_path, mode='a', engine='openpyxl', if_sheet_exists='overlay') as writer:
                     # 追加
-                        new_data.to_excel(writer, sheet_name='Sheet1', index=False, header=False)
-                        datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=False)
+                        newdata.to_excel(writer, sheet_name='Sheet1', index=False, startrow=row1 + 2, header=False)
+                        datatwo.to_excel(writer, sheet_name='Sheet2', index=False, startrow=row2 + 1, header=False)
+                        writer.book.close()
+                    # writer =  pd.ExcelWriter(save_path, mode='a', engine='openpyxl', if_sheet_exists='overlay')
+                    # # 追加
+                    # newdata.to_excel(writer, sheet_name='Sheet1', index=False, startrow=row1 + 2, header=False)
+                    # datatwo.to_excel(writer, sheet_name='Sheet2', index=False, startrow=row2 + 1, header=False)
+                    # writer.close()
                 else:
-                    new_data = pd.concat([newdata, datanone], axis=0)
-                    # new_data.to_csv(save_path, mode='w', encoding='utf-8-sig', index=False)
                     with pd.ExcelWriter(save_path, mode='w', engine='openpyxl') as writer:
                     # 新建
-                        new_data.to_excel(writer, sheet_name='Sheet1', index=False)
-                        datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=k)
+                        newdata.to_excel(writer, sheet_name='Sheet1', index=False)
+                        datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=k_2)
+                        writer.book.close()
+                    # writer = pd.ExcelWriter(save_path, mode='w', engine='openpyxl')
+                    # # 新建
+                    # newdata.to_excel(writer, sheet_name='Sheet1', index=False)
+                    # datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=k_2)
+                    # writer.close()
             except Exception as e:
+                print(e)
                 self.update_json.emit(failed_code)
                 return
             self.update_json.emit(succeed_code)

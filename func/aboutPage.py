@@ -5,7 +5,15 @@ import os
 import shutil
 import sys
 import traceback
+from inf.uploadThread import UploadThread
+from func.testinfo import MyTestInfo
 
+
+time_to_sleep = 2
+trylock_time = -1
+failed_code = 404
+succeed_code = 202
+mutex = QMutex()
 
 class aboutPage(Ui_Form, QWidget):
     next_page = Signal(str)
@@ -23,7 +31,7 @@ class aboutPage(Ui_Form, QWidget):
         self.ui.setupUi(self)
         self.InitUI()
 
-        """
+    """
     @detail 捕获及输出异常类
     @param excType: 异常类型
     @param excValue: 异常对象
@@ -63,14 +71,15 @@ class aboutPage(Ui_Form, QWidget):
     """
     @detail u盘上传信息到软件
     @detail 默认上传文件为example.txt，上传内容为6个数字，每个数字各占一行
+    @detail 弃用
     """
     def uploadFromUSB(self):
         # 指定目标目录
-        target_dir = '/media/orangepi/orangepi/'
+        target_dir = '/media/xiao/'
 
         # 获取U盘设备路径
         try:
-            filename = r"/media/orangepi/orangepi/" + os.listdir(target_dir)[0] + "/"
+            filename = r"/media/xiao/" + os.listdir(target_dir)[0]
         except Exception as e:
             m_title = ""
             m_info = "U盘未插入或无法访问！"
@@ -83,14 +92,11 @@ class aboutPage(Ui_Form, QWidget):
             file_path = os.path.join(filename, "example.txt")
             if os.path.exists(file_path):
                 # 读取文件内容并打印到控制台
-                f = open(file_path, 'r', encoding="utf-8")
-                lines = f.readlines()
-                for i in range(len(lines)):
-                    num = float(lines[i])
-                    print(num)
-                m_title = ""
-                m_info = "上传成功"
-                infoMessage(m_info, m_title, 300)
+                with open(file_path, "r") as f:
+                    # print(f.read())
+                    m_title = ""
+                    m_info = f.read()
+                    infoMessage(m_info, m_title)
             else:
                 # print("文件不存在")
                 m_title = ""
@@ -108,17 +114,69 @@ class aboutPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnUpload_clicked(self):
-        m_title = ""
-        m_info = "上传中..."
-        infoMessage(m_info, m_title, 380)
-        # 创建定时器
-        self.change_timer = QTimer()
-        self.change_timer.timeout.connect(self.uploadFromUSB)
-        self.change_timer.timeout.connect(self.change_timer.stop)
-        # 设置定时器延迟时间，单位为毫秒
-        # 延迟2秒跳转
-        delay_time = 2000
-        self.change_timer.start(delay_time)
+        self.testinfo = MyTestInfo()
+        m_info = "数据上传中。。。"
+        self.testinfo.setInfo(m_info)
+        self.testinfo.setWindowModality(Qt.ApplicationModal)
+        self.testinfo.show()
+
+        # 指定目标目录
+        target_dir = '/media/orangepi/'
+        # target_dir = '/media/xiao/'
+        # 获取U盘设备路径
+        try:
+            if len(os.listdir(target_dir)) == 0:
+                self.update_json.emit(failed_code)
+                return
+            else:
+                u_name = r"/media/orangepi/" + os.listdir(target_dir)[0] + "/"
+        except Exception as e:
+            print(e)
+            self.sendException()
+            self.update_json.emit(failed_code)
+            return
+        try:
+            cmd = 'su orangepi -c "cd %s"' % u_name
+            flag = os.system(cmd)
+            if flag != 0:
+                self.update_json.emit(failed_code)
+                delete_cmd = 'echo %s | sudo rm -rf %s' % ('orangepi', u_name)
+                os.system(delete_cmd)
+                return
+        except Exception as e:
+            print(e)
+            self.sendException()
+            self.update_json.emit(failed_code)
+            return
+
+        dir_list = os.listdir(u_name)
+        upload_file_list = []
+        for i in dir_list:
+            path = u_name + i + "/new_data.xlsx"
+            print(path)
+            if os.path.exists(path):
+                print("True")
+                upload_file_list.append(path)
+            else:
+                print("False")
+
+        if not upload_file_list:
+            return
+
+        self.upload_thread_list = []
+        for i in upload_file_list:
+            thread = UploadThread(i)
+            self.upload_thread_list.append(thread)
+            thread.update_json.connect(self.countUploadThread)
+            thread.finished.connect(thread.deleteLater)
+            thread.start()
+
+    def countUploadThread(self):
+        mutex.lock()
+        # self.count_num = self.count_num + 1
+        if not self.upload_thread_list:
+            self.testinfo.closeWin()
+        mutex.unlock()
 
     """
     @detail 返回按钮操作

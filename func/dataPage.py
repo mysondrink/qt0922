@@ -224,7 +224,7 @@ class dataPage(Ui_Form, QWidget):
         elif self.info == 202:
             self.allergy_info = reagent_matrix_info
             point_str = self.data['point_str']
-            self.showDataView(point_str + reagent_matrix_info)
+            self.showDataView(point_str + ',' + reagent_matrix_info)
             # reagent_matrix_info = re.split(r",", reagent_matrix_info)[1:]
             # self.allergy_info = reagent_matrix_info
             # for i in range(self.row_exetable + int(self.row_exetable / 2)):
@@ -278,7 +278,7 @@ class dataPage(Ui_Form, QWidget):
     def insertMysql(self, name_pic, cur_time):
         reagent_matrix_info = str(self.readPixtable())
         point_str = self.data['point_str']
-        self.showDataView(point_str + reagent_matrix_info)
+        self.showDataView(point_str + ',' + reagent_matrix_info)
         self.allergy_info = reagent_matrix_info
         patient_id = self.data['patient_id']
         
@@ -350,13 +350,13 @@ class dataPage(Ui_Form, QWidget):
     @detail 读取表格内容，同时以list形式保存到数据库
     """
     def readPixtable(self):
-        reagent_matrix_info = ""
+        reagent_matrix_info = []
         for i in range(self.row_exetable + int(self.row_exetable / 2)):
             for j in range(self.column_exetable):
                 index = self.pix_table_model.index(i, j)
                 data = self.pix_table_model.data(index)
-                reagent_matrix_info += "," + str(data)
-        return reagent_matrix_info
+                reagent_matrix_info.append(str(data))
+        return ",".join(reagent_matrix_info)
 
     """
     @detail u盘提示信息
@@ -504,7 +504,7 @@ class dataPage(Ui_Form, QWidget):
         name = self.data['name_pic']
         path = self.data['pic_path']
         data = self.data
-        self.usbthread = CheckUSBThread(name, path, data, ',' + self.data['point_str'] + self.allergy_info)
+        self.usbthread = CheckUSBThread(name, path, data, self.data['point_str'] + ',' + self.allergy_info)
         self.usbthread.update_json.connect(self.getUSBInfo)
         # 创建定时器
         self.download_timer = QTimer()

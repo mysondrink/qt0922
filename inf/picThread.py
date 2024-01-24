@@ -87,12 +87,12 @@ class MyPicThread(QThread):
         print(w, h)
         self.antibody_test_results = []
         self.antibody_test_points = []
-        self.nature_aver_str = ""
-        self.gray_aver_str = ""
+        nature_aver_list = []
+        gray_aver_list = []
         for i in range(w):
             for j in range(h):
-                self.nature_aver_str += "," + self.nature_aver[i][j] 
-                self.gray_aver_str += "," + str(self.gray_aver[i][j])
+                nature_aver_list.append(self.nature_aver[i][j])
+                gray_aver_list.append(str(self.gray_aver[i][j]))
                 # if (i * h + j) % 2 != 0:
                 #     self.antibody_test_points.append(self.gray_aver[i + 1][j])
                 # else:
@@ -103,6 +103,8 @@ class MyPicThread(QThread):
         #     self.gray_aver_str += "," + str(self.gray_aver[w][k])
         # print(self.nature_aver_str)
         # print(self.gray_aver_str)
+        self.nature_aver_str = ",".join(nature_aver_list)
+        self.gray_aver_str = ",".join(gray_aver_list)
         print("finished!")
         self.finished.emit(time_now)
         self.judge_flag = judge_flag

@@ -13,8 +13,8 @@ class MyTestInfo(Ui_Form, QWidget):
         self.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.ui.progressBar.setRange(0, 0)
         self.move(320, 180)
+        self.ui.progressBar.setRange(0, 0)
         # self.info_timer = QTimer()
         # self.info_timer.timeout.connect(self.closeWin)
         # self.info_timer.start(2000)
@@ -24,3 +24,6 @@ class MyTestInfo(Ui_Form, QWidget):
         print("close!")
         self.close()
         # self.info_timer.stop()
+
+    def setInfo(self, msg):
+        self.ui.label.setText(msg)
