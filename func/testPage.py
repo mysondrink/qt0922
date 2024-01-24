@@ -33,7 +33,6 @@ class testPage(Ui_Form, QWidget):
     def __init__(self):
         super().__init__()
         sys.excepthook = self.HandleException
-        self.genderCb = None
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
@@ -74,10 +73,11 @@ class testPage(Ui_Form, QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.genderCb = QButtonGroup()
+        self.ui.radioButton_2.setChecked(True)
         self.genderCb.addButton(self.ui.radioButton)
         self.genderCb.addButton(self.ui.radioButton_2)
-        self.genderCb.setId(self.ui.radioButton, 0)
-        self.genderCb.setId(self.ui.radioButton_2, 1)
+        self.genderCb.setId(self.ui.radioButton, 1)
+        self.genderCb.setId(self.ui.radioButton_2, 2)
 
         # self.ui.modeBox_1.currentIndexChanged.connect(self.changeType)
         self.ui.modeBox_1.setCurrentIndex(4)
@@ -374,7 +374,7 @@ class testPage(Ui_Form, QWidget):
                        ['0.0' '强阳性' '0.0' '弱阳性' '0.0'],
                        ['阴性' '0.0' '弱阳性' '0.0' '弱阳性'],
                        ['0.0' '弱阳性' '0.0' '强阳性' '0.0']]
-        gray_aver_str = ",1323184,-349869,1323181,-349869,1323186" \
+        gray_aver_str = "1323184,-349869,1323181,-349869,1323186" \
                         ",100528,1323179,1323186,1323157,104541" \
                         ",64049,1323186,1323186,1323186,84718" \
                         ",26193,130751,1323186,1323186,69341" \
@@ -383,7 +383,7 @@ class testPage(Ui_Form, QWidget):
                         ",44898,1323186,75788,64454,0" \
                         ",24805,66857,113782,1323181,85446" \
                         ",1323106,77360,1323186,1323186,1323175"
-        nature_aver_str = ",弱阳性,0,强阳性,0,弱阳性" \
+        nature_aver_str = "弱阳性,0,强阳性,0,弱阳性" \
                           ",0,强阳性,0,强阳性,0" \
                           ",阴性,0,强阳性,0,弱阳性" \
                           ",0,弱阳性,0,强阳性,0" \
@@ -425,10 +425,7 @@ class testPage(Ui_Form, QWidget):
         patient_name = self.ui.nameLine.text()
         patient_age = self.ui.ageLine.text()
         id_num = self.genderCb.checkedId()
-        if id_num == 0:
-            patient_gender = "男"
-        else:
-            patient_gender = "女"
+        patient_gender = "男" if id_num == 1 else "女"
 
         # patient_gender = self.ui.genderCb.currentText()
 

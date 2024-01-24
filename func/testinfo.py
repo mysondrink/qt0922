@@ -24,3 +24,6 @@ class MyTestInfo(Ui_Form, QWidget):
         print("close!")
         self.close()
         # self.info_timer.stop()
+
+    def setInfo(self, msg):
+        self.ui.label.setText(msg)
