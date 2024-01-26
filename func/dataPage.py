@@ -72,7 +72,6 @@ class dataPage(Ui_Form, QWidget):
         self.setBtnIcon()
         self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableView_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.setTableWidget()
         self.ui.photoLabel.setText("")
         self.ui.picLabel.setText("")
     
@@ -233,6 +232,9 @@ class dataPage(Ui_Form, QWidget):
             #         item.setTextAlignment(Qt.AlignCenter)
             #         self.pix_table_model.setItem(i, j, item)
 
+        self.setTableWidget()
+
+
     """
     @detail 调整图片自适应label大小
     @param img_right: opencv图片
@@ -335,13 +337,14 @@ class dataPage(Ui_Form, QWidget):
     """
     def setTableWidget(self):
         v = QVBoxLayout()
-        text = MyReport().gethtml()
+        text = MyReport().gethtml(self.data['item_type'], self.allergy_info, self.data['nature_aver_str'])
         self.myreport = QTextEdit()
-
-        str_list = []
-        for i in range(16):
-            str_list.append(str(i))
-        self.myreport.setHtml(text % tuple(str_list))
+        # 姓名，性别，样本号，条码号，样本类型，测试时间，【结果】，打印时间
+        # cur_time[0] + ' ' + cur_time[1]
+        str_list = [self.data['patient_name'], self.data['patient_gender'], self.data['patient_id'], 
+                    self.data['code_num'], self.data['item_type'], self.data['time'][0] + ' ' + self.data['time'][1],
+                    text[1], '']
+        self.myreport.setHtml(text[0] % tuple(str_list))
 
         v.addWidget(self.myreport)
         self.ui.tableWidget.setLayout(v)
@@ -480,8 +483,8 @@ class dataPage(Ui_Form, QWidget):
         test_time = self.test_time
         Data_Base = [self.data['patient_name'], self.data['patient_gender'], self.data['patient_id'],
                     self.data['code_num'], '检测组合' + self.data['item_type'], test_time, time_now]
-        gray_aver_str = self.data['gray_aver_str'].split(",")[1:]
-        nature_aver_str = self.data['nature_aver_str'].split(",")[1:]
+        gray_aver_str = self.data['gray_aver_str'].split(",")
+        nature_aver_str = self.data['nature_aver_str'].split(",")
         array_gray_aver = np.array(gray_aver_str)
         array_nature_aver = np.array(nature_aver_str)
         matrix_gray_aver = array_gray_aver.reshape(9, 5)

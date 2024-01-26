@@ -19,6 +19,7 @@ succeed_code = 202
 
 class UploadThread(QThread):
     update_json = Signal()
+    finished = Signal()
 
 
     def __init__(self, file_path='./res/new_data.xlsx'):
@@ -121,3 +122,7 @@ class UploadThread(QThread):
 
         cursor.close()  # 关闭游标
         db.close()  # 关闭数据库连接
+        self.finished.emit()
+
+    def deleteFile(self):
+        os.remove(self.file_path)

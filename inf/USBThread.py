@@ -6,6 +6,7 @@ import cv2 as cv
 import pandas as pd
 import time
 import openpyxl
+import shutil
 
 
 import frozen as frozen
@@ -105,6 +106,7 @@ class CheckUSBThread(QThread):
         filename = str(int((len(os.listdir(save_dir)) - 1)/2) + 1).zfill(4)
         save_path = save_dir + timenow + ".csv"
         save_path = save_dir + timenow + ".xlsx"
+        save_path = '%s/img/%s/%s.xlsx' % (frozen.app_path(), self.pic_path, self.pic_path)
         dirs.makedir(save_path)
         save_img_path_1 = save_dir + filename + "-" + self.name_pic + "生成图.jpeg"
         save_img_path_2 = save_dir + filename + "-" + self.name_pic + "检疫图.jpeg"
@@ -118,15 +120,15 @@ class CheckUSBThread(QThread):
             #     f.write(str(msg) + "\n")
            
             try:
-                # name_pic = self.data['name_pic']
-                # pic_path = self.data['pic_path']
-                # img_origin = cv.imread('%s\\img\\%s\\%s-1.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # windows
-                img_origin = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
-                flag_bool = cv.imwrite(save_img_path_1, img_origin)
+                img_origin = '%s/img/%s/%s-1.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)
+                shutil.copy(img_origin, save_img_path_1)
+                # img_origin = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
+                # flag_bool = cv.imwrite(save_img_path_1, img_origin)
 
-                # img_final = cv.imread('%s\\img\\%s\\%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # windows
-                img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
-                flag_bool = cv.imwrite(save_img_path_2, img_final)
+                img_final = '%s/img/%s/%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)
+                shutil.copy(img_final, save_img_path_2)
+                # img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
+                # flag_bool = cv.imwrite(save_img_path_2, img_final)
             except Exception as e:
                 print(e)
                 self.sendException()
@@ -193,10 +195,18 @@ class CheckUSBThread(QThread):
                     # newdata.to_excel(writer, sheet_name='Sheet1', index=False)
                     # datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=k_2)
                     # writer.close()
+                    path_usb = save_dir + timenow +".xlsx"
+                    shutil.copy(save_path, path_usb)
             except Exception as e:
                 print(e)
                 self.update_json.emit(failed_code)
                 return
+            src_path = '%s/res/test.zip' % frozen.app_path()
+            dst_path = u_name + '/test.zip'
+            if os.path.exists(dst_path):
+                pass
+            else:
+                shutil.copy(src_path, dst_path)
             self.update_json.emit(succeed_code)
         else:
             self.update_json.emit(failed_code)
@@ -206,7 +216,12 @@ class CheckUSBThread(QThread):
         data = [obj[i:i+sec] for i in range(0,len(obj),sec)]
         for i in range(len(data)):
             _s = ''
-            for j in range(len(data[i])):
-                _s += data[i][j] + ','
-            result.append(_s[:-1])
+            if i % 3 == 0 :
+                for j in range(len(data[i])):
+                    _s += '' + ','
+                result.append(_s[:-1])
+            else:
+                for j in range(len(data[i])):
+                    _s += data[i][j] + ','
+                result.append(_s[:-1])
         return result 
