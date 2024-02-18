@@ -7,7 +7,7 @@ import pandas as pd
 import time
 import openpyxl
 import shutil
-
+from inf.mount_move import Mount_move
 
 import frozen as frozen
 from utils import dirs
@@ -71,6 +71,7 @@ class CheckUSBThread(QThread):
     @detail 下载内容包括图片、数据库信息
     """
     def downLoadToUSB(self):
+        """
         # 指定目标目录
         target_dir = '/media/orangepi/'
         # 获取U盘设备路径
@@ -103,13 +104,15 @@ class CheckUSBThread(QThread):
         timenow = self.data['time'][0]
         save_dir = u_name + timenow + "/"
         dirs.makedir(save_dir)
-        filename = str(int((len(os.listdir(save_dir)) - 1)/2) + 1).zfill(4)
+        # filename = str(int((len(os.listdir(save_dir)) - 1)/2) + 1).zfill(4)
         save_path = save_dir + timenow + ".csv"
         save_path = save_dir + timenow + ".xlsx"
+        """
         save_path = '%s/img/%s/%s.xlsx' % (frozen.app_path(), self.pic_path, self.pic_path)
         dirs.makedir(save_path)
-        save_img_path_1 = save_dir + filename + "-" + self.name_pic + "生成图.jpeg"
-        save_img_path_2 = save_dir + filename + "-" + self.name_pic + "检疫图.jpeg"
+        save_dir = save_path
+        # save_img_path_1 = save_dir + filename + "-" + self.name_pic + "生成图.jpeg"
+        # save_img_path_2 = save_dir + filename + "-" + self.name_pic + "检疫图.jpeg"
         if os.path.exists(save_dir):
             # 在U盘根目录下创建示例文件
             # print(filename + file_name)
@@ -121,12 +124,12 @@ class CheckUSBThread(QThread):
            
             try:
                 img_origin = '%s/img/%s/%s-1.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)
-                shutil.copy(img_origin, save_img_path_1)
+                # shutil.copy(img_origin, save_img_path_1)
                 # img_origin = cv.imread('%s/img/%s/%s-1.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
                 # flag_bool = cv.imwrite(save_img_path_1, img_origin)
 
                 img_final = '%s/img/%s/%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)
-                shutil.copy(img_final, save_img_path_2)
+                # shutil.copy(img_final, save_img_path_2)
                 # img_final = cv.imread('%s/img/%s/%s-2.jpeg' % (frozen.app_path(), self.pic_path, self.name_pic)) # linux
                 # flag_bool = cv.imwrite(save_img_path_2, img_final)
             except Exception as e:
@@ -135,7 +138,13 @@ class CheckUSBThread(QThread):
                 self.update_json.emit(failed_code + 1)
                 return
             try:
-                id_num = "\t" + filename.zfill(4)
+                if os.path.exists(save_path):
+                    df2 = pd.read_excel(save_path, sheet_name='Sheet2')
+                    row2 = df2.shape[0]	# 获取原数据的行数
+                    id_num = row2 + 1
+                else:
+                    id_num = 1
+                id_num = "\t" + str(id_num).zfill(4)
                 name_pic = self.name_pic
                 test_time = self.data['time']
                 cur_time = test_time[0] + ' ' + test_time[1]
@@ -195,18 +204,15 @@ class CheckUSBThread(QThread):
                     # newdata.to_excel(writer, sheet_name='Sheet1', index=False)
                     # datatwo.to_excel(writer, sheet_name='Sheet2', index=False, header=k_2)
                     # writer.close()
-                    path_usb = save_dir + timenow +".xlsx"
-                    shutil.copy(save_path, path_usb)
+                    # path_usb = save_dir + timenow +".xlsx"
+                    # shutil.copy(save_path, path_usb)
+                src_path = '%s/res/test.zip' % frozen.app_path()
+                mMove = Mount_move()
+                mMove.Mount_Move(img_origin, img_final, save_path, src_path)
             except Exception as e:
                 print(e)
                 self.update_json.emit(failed_code)
                 return
-            src_path = '%s/res/test.zip' % frozen.app_path()
-            dst_path = u_name + '/test.zip'
-            if os.path.exists(dst_path):
-                pass
-            else:
-                shutil.copy(src_path, dst_path)
             self.update_json.emit(succeed_code)
         else:
             self.update_json.emit(failed_code)
@@ -214,9 +220,10 @@ class CheckUSBThread(QThread):
     def split_string(self, obj, sec):
         result = []
         data = [obj[i:i+sec] for i in range(0,len(obj),sec)]
+        num_list = [1, 4, 7 ,10]
         for i in range(len(data)):
             _s = ''
-            if i % 3 == 0 :
+            if i in num_list :
                 for j in range(len(data[i])):
                     _s += '' + ','
                 result.append(_s[:-1])
@@ -224,4 +231,4 @@ class CheckUSBThread(QThread):
                 for j in range(len(data[i])):
                     _s += data[i][j] + ','
                 result.append(_s[:-1])
-        return result 
+        return result

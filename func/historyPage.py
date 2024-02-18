@@ -78,7 +78,7 @@ class historyPage(Ui_Form, QWidget):
         self.ui.btnReport.hide()
         self.setAllergenCb()
         # self.setReagentCb()
-        self.setTableWidget()
+        # self.setTableWidget()
 
     """
     @detail 安装事件监听
@@ -657,23 +657,20 @@ class historyPage(Ui_Form, QWidget):
     """
     @Slot()
     def on_btnPrint_clicked(self):
+        reagent_id = self.ui.historyTable.currentIndex().row() + self.page_size * self.current_page
+
         time_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        test_time = self.test_time
-        Data_Base = [self.data['patient_name'], self.data['patient_gender'], self.data['patient_id'],
-                    self.data['code_num'], '检测组合' + self.data['item_type'], test_time, time_now]
-        gray_aver_str = self.data['gray_aver_str'].split(",")[1:]
-        nature_aver_str = self.data['nature_aver_str'].split(",")[1:]
-        array_gray_aver = np.array(gray_aver_str)
-        array_nature_aver = np.array(nature_aver_str)
-        matrix_gray_aver = array_gray_aver.reshape(9, 5)
-        matrix_nature_aver = array_nature_aver.reshape(9, 5)
-        Data_Nature = matrix_gray_aver
-        Data_Light = matrix_nature_aver
-        myEm5822_Print = Em5822_Print()
-        myEm5822_Print.em5822_print(Data_Base, Data_Nature, Data_Light)
+        # detailwin = childWindow(self.reagent_info[reagent_id], self.time_list[reagent_id], time_now)
+        # reagent_info = self.reagent_info[reagent_id]
+        test_time = self.time_list[reagent_id]
+
+        myEm5822_Print = Em5822_Print(test_time, time_now)
+        myEm5822_Print.em5822_print()
+        # myEm5822_Print = Em5822_Print()
+        # myEm5822_Print.em5822_print(test_time, time_now)
         m_title = ""
         m_info = "输出表格成功!"
-        infoMessage(m_info, m_title, 300)
+        infoMessage(m_title, m_info, 300)
 
     """
     @detail 报告单按钮操作

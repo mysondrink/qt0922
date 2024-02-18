@@ -488,9 +488,9 @@ class dataPage(Ui_Form, QWidget):
         array_gray_aver = np.array(gray_aver_str)
         array_nature_aver = np.array(nature_aver_str)
         matrix_gray_aver = array_gray_aver.reshape(9, 5)
-        matrix_nature_aver = array_nature_aver.reshape(8, 5)
-        Data_Nature = matrix_gray_aver
-        Data_Light = matrix_nature_aver
+        matrix_nature_aver = array_nature_aver.reshape(9, 5)
+        Data_Light = matrix_gray_aver
+        Data_Nature = matrix_nature_aver
         myEm5822_Print = Em5822_Print()
         
         myEm5822_Print.em5822_print(Data_Base, Data_Nature, Data_Light)
@@ -519,7 +519,7 @@ class dataPage(Ui_Form, QWidget):
         self.download_timer.start(delay_time)
         m_title = ""
         m_info = "下载中..."
-        infoMessage(m_info, m_title, 380)
+        infoMessage(m_info, m_title, 300)
 
     """
     @detail 数据按钮操作

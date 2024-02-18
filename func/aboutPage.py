@@ -9,6 +9,7 @@ from inf.uploadThread import UploadThread
 from func.testinfo import MyTestInfo
 
 
+
 time_to_sleep = 2
 trylock_time = -1
 failed_code = 404
@@ -30,6 +31,7 @@ class aboutPage(Ui_Form, QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.InitUI()
+        self.count_num = 0
 
     """
     @detail 捕获及输出异常类
@@ -120,6 +122,7 @@ class aboutPage(Ui_Form, QWidget):
         self.testinfo.setWindowModality(Qt.ApplicationModal)
         self.testinfo.show()
 
+        """
         # 指定目标目录
         target_dir = '/media/orangepi/'
         # target_dir = '/media/xiao/'
@@ -148,7 +151,13 @@ class aboutPage(Ui_Form, QWidget):
             self.sendException()
             self.update_json.emit(failed_code)
             return
-
+        """
+        try:
+            os.system("sudo mount /dev/sda1 /mnt/mydev")
+        except Exception as e:
+            print("aboutPage :", e)
+            return False
+        u_name = "/mnt/mydev/"
         dir_list = os.listdir(u_name)
         upload_file_list = []
         for i in dir_list:
@@ -159,23 +168,34 @@ class aboutPage(Ui_Form, QWidget):
                 upload_file_list.append(path)
             else:
                 print("False")
-
         if not upload_file_list:
+            try:
+                self.testinfo.closeWin()
+                m_title = ""
+                m_info = "上传完成!"
+                infoMessage(m_info, m_title, 300)
+                os.system("sudo umount /mnt/mydev")
+            except Exception as e:
+                print("aboutPage：", e)
             return
-
         self.upload_thread_list = []
         for i in upload_file_list:
             thread = UploadThread(i)
             self.upload_thread_list.append(thread)
-            thread.update_json.connect(self.countUploadThread)
-            thread.finished.connect(thread.deleteLater)
+            thread.finished.connect(lambda: thread.deleteLater())
+            thread.finished.connect(self.countUploadThread)
             thread.start()
 
     def countUploadThread(self):
         mutex.lock()
-        # self.count_num = self.count_num + 1
-        if not self.upload_thread_list:
+        self.count_num = self.count_num + 1
+        if len(self.upload_thread_list) <= self.count_num:
+            try:
+                os.system("sudo umount /mnt/mydev")
+            except Exception as e:
+                print("aboutPage：", e)
             self.testinfo.closeWin()
+            return
         mutex.unlock()
 
     """
@@ -187,3 +207,5 @@ class aboutPage(Ui_Form, QWidget):
         page_msg = 'sysPage'
         self.next_page.emit(page_msg)
 
+    def getData(self):
+        pass

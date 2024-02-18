@@ -10,6 +10,7 @@ import pymysql
 import pandas as pd
 import numpy as np
 import os
+import time
 
 time_to_sleep = 2
 trylock_time = -1
@@ -20,6 +21,7 @@ succeed_code = 202
 class UploadThread(QThread):
     update_json = Signal()
     finished = Signal()
+    update_log = Signal()
 
 
     def __init__(self, file_path='./res/new_data.xlsx'):
@@ -114,7 +116,7 @@ class UploadThread(QThread):
                 cursor.execute(sql, [reagent_info_list[j], gray_aver_list[j], points_list[j], i])  # 执行sql语句
 
                 db.commit()  # COMMIT命令用于把事务所做的修改保存到数据库
-                print('新增' + str(j) + "数据")
+                print('新增' + str(j + 1) + "数据")
             except Exception as e:
                 print(e)
                 db.rollback()  # 发生错误时回滚
@@ -122,6 +124,8 @@ class UploadThread(QThread):
 
         cursor.close()  # 关闭游标
         db.close()  # 关闭数据库连接
+        time.sleep(0.5)
+        self.deleteFile()
         self.finished.emit()
 
     def deleteFile(self):

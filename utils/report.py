@@ -109,11 +109,12 @@ class MyReport():
         temp = '<tr align="center">\
                 <td>%s</td>\
                 <td>%s</td>\
-                <td><0.35</td>\
+                <td>%s</td>\
                 <td>%s</td>\
                 </tr>'
         temp_str = ""
+        temp_para = "0.35"
         for j in range(item_len):
             str_temp = temp
-            temp_str = temp_str + str_temp % (reagent_info_list_3[j], result_list_3[j], result_list_4[j])
+            temp_str = temp_str + str_temp % (str(j) + reagent_info_list_3[j], result_list_3[j], temp_para, result_list_4[j])
         return self.html_content, temp_str

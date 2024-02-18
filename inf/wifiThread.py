@@ -77,11 +77,13 @@ class WifiThread(QThread):
                 p = result.wait()
                 if p == 0:
                     self.update_json.emit(203)
+                    return
                 else: 
                     self.update_json.emit(403)
+                    return
             else:
                 self.update_json.emit(failed_code)
-            time.sleep(0.5)
+                return
         except Exception as e:
             self.update_json.emit(404)
             self.sendException()

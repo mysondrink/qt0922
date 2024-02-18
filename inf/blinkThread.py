@@ -50,9 +50,10 @@ class CheckBlinkThread(QThread):
         try:
             wifi_interface = "wlan0"
             flag = 1
-            print("connect assess")
+            # print("connect assess")
             interfaces = QNetworkInterface.allInterfaces()
             for interface in interfaces:
+                # print(interface.name())
                 if interface.name() == wifi_interface:
                     for entry in interface.addressEntries():
                         if entry.ip().protocol() == QAbstractSocket.NetworkLayerProtocol.IPv4Protocol:
@@ -68,13 +69,13 @@ class CheckBlinkThread(QThread):
                 else:
                     flag = 0
             if flag == 1:
-                print("True")
+                # print("True")
                 info_msg = "connected"
                 code_msg = succeed_code
                 status_msg = 1
                 self.update_json.emit(dict(info=info_msg, code=code_msg, status=status_msg))
             else:
-                print("False")
+                # print("False")
                 info_msg = "not connected"
                 code_msg = failed_code
                 status_msg = 1
