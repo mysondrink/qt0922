@@ -35,6 +35,11 @@ qss = "QLineEdit {                    \
         }                              \
         "
 
+"""
+@detail 键盘输入框信息类
+@detail 父类
+"""
+
 class ChineseWidget(QListWidget):
     pressedChanged = Signal(int, str)
     def __init__(self):
@@ -169,6 +174,12 @@ class ChineseWidget(QListWidget):
 
     def loadGoogleChineseLib(self):
         pass
+
+"""
+@detail 键盘实现类
+@detail 子类
+"""
+
 
 class MyKeyBoard(abstractkeyboard):
     info_msg = Signal(str)

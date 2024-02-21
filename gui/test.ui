@@ -109,9 +109,9 @@ background-color: rgb(255, 0, 0);
    <widget class="QPushButton" name="btnSwitch">
     <property name="geometry">
      <rect>
-      <x>275</x>
+      <x>404</x>
       <y>10</y>
-      <width>254</width>
+      <width>187</width>
       <height>80</height>
      </rect>
     </property>
@@ -134,9 +134,9 @@ background-color: rgb(255, 0, 0);
    <widget class="QPushButton" name="btnPrint">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>207</x>
       <y>10</y>
-      <width>254</width>
+      <width>187</width>
       <height>80</height>
      </rect>
     </property>
@@ -156,6 +156,31 @@ background-color: rgb(255, 0, 0);
      <string>打印</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnDownload">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>187</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+font: 20pt &quot;宋体&quot;;
+border:4px solid rgb(0,0,0);
+background-color:#05abc2;
+}
+
+QPushButton:pressed{
+background-color: rgb(255, 0, 0);
+}
+</string>
+    </property>
+    <property name="text">
+     <string>下载</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
@@ -167,7 +192,7 @@ background-color: rgb(255, 0, 0);
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLineEdit" name="paraLine">
@@ -367,10 +392,11 @@ color: rgb(255,255,255);
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+      <string notr="true">font: 20pt &quot;宋体&quot;;
+</string>
      </property>
      <property name="text">
-      <string>试剂卡规格</string>
+      <string>规格</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_3">
@@ -519,7 +545,7 @@ QComboBox QAbstractItemView {
 </string>
      </property>
      <property name="text">
-      <string>试剂卡型号</string>
+      <string>检测组合</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -657,7 +683,7 @@ color: rgb(255,255,255);
     <widget class="QTableView" name="exeTable">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>15</x>
        <y>0</y>
        <width>771</width>
        <height>350</height>
@@ -674,7 +700,6 @@ QComboBox {
     font: 20pt &quot;宋体&quot;;
 	color: rgb(255, 255, 255);
 	background-color: rgb(0,0,0);
-	align: center;
 }
 
 QComboBox QAbstractItemView {
@@ -686,29 +711,13 @@ QComboBox QAbstractItemView {
     </widget>
    </widget>
    <widget class="QWidget" name="page_3">
-    <widget class="QLabel" name="pic_info_label">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>10</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
     <widget class="QLabel" name="photoLabel">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>10</y>
-       <width>351</width>
-       <height>331</height>
+       <x>440</x>
+       <y>0</y>
+       <width>350</width>
+       <height>350</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -719,24 +728,128 @@ QComboBox QAbstractItemView {
      </property>
      <property name="minimumSize">
       <size>
-       <width>351</width>
-       <height>331</height>
+       <width>350</width>
+       <height>350</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>351</width>
-       <height>331</height>
+       <width>350</width>
+       <height>350</height>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;幼圆&quot;;</string>
+      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="picLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>350</width>
+       <height>350</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>350</width>
+       <height>350</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>350</width>
+       <height>350</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+     </property>
+     <property name="text">
+      <string>origin_photo</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="leftLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>350</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="rightLabel">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>0</y>
+       <width>350</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 20pt &quot;宋体&quot;;</string>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+    <zorder>photoLabel</zorder>
+    <zorder>picLabel</zorder>
+    <zorder>rightLabel</zorder>
+    <zorder>leftLabel</zorder>
+   </widget>
+   <widget class="QWidget" name="page_4">
+    <widget class="QTableView" name="tableView">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>0</y>
+       <width>771</width>
+       <height>350</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QTableView {
+	font: 20pt &quot;宋体&quot;;
+border:4px solid rgb(0,0,0);
+background-color:rgb(255,255,255);
+}
+
+QComboBox {
+    font: 20pt &quot;宋体&quot;;
+	color: rgb(255, 255, 255);
+	background-color: rgb(0,0,0);
+}
+
+QComboBox QAbstractItemView {
+	background-color: rgb(0, 0, 0);/*背景颜色*/
+    padding: 1px 2px 1px 2px;  /*针对于组合框中的文本内容*/
+	color: rgb(255,255,255)
+}</string>
      </property>
     </widget>
    </widget>
